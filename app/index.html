@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#231942">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MIMO Saya">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>MIMO Saya</title>
+<style>
+:root{
+  --plum:#231942;--plum2:#3a2a6b;--ink:#1d1838;--soft:#6c6789;--line:#e8e5f3;--bg:#f5f3fb;--card:#fff;
+  --pandan:#22b07d;--mango:#ffb627;--chilli:#ff5a5f;--lilac:#8e7dff;--sky:#3fa7f5;
+  --r-xl:30px;--r-l:22px;--r-m:16px;--r-s:12px;
+  --sh:0 1px 2px rgba(35,25,66,.05),0 8px 24px -12px rgba(35,25,66,.18);
+  --f:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%}
+body{font:500 15px/1.5 var(--f);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--lilac);outline-offset:2px}
+.wrap{max-width:480px;margin:0 auto;padding-bottom:120px;min-height:100vh}
+h1,h2,h3{margin:0;letter-spacing:-.02em}
+.soft{color:var(--soft)}.small{font-size:13px}
+
+/* hero / top */
+.hero{background:radial-gradient(120% 90% at 85% 0%,#4b3590 0%,var(--plum) 55%);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 20px 26px;border-radius:0 0 var(--r-xl) var(--r-xl);position:relative;overflow:hidden}
+.hero .bar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hero h1{font-size:26px;font-weight:800;line-height:1.15}
+.hero .date{color:#cfc7f3;font-size:14px;margin-top:2px}
+.sync{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:99px;padding:6px 11px;font-size:12px;font-weight:600;background:rgba(255,255,255,.12);color:#fff;white-space:nowrap}
+.sync i{width:7px;height:7px;border-radius:50%;background:var(--pandan);box-shadow:0 0 0 3px rgba(34,176,125,.25)}
+.sync.off i{background:var(--mango);box-shadow:0 0 0 3px rgba(255,182,39,.25)}
+.top{background:var(--plum);color:#fff;padding:calc(16px + env(safe-area-inset-top)) 20px 20px;border-radius:0 0 var(--r-l) var(--r-l)}
+.top .bar{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.top h1{font-size:23px;font-weight:800}.top p{margin:3px 0 0;color:#cfc7f3;font-size:14px}
+
+/* plate dial */
+.plate{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:center;margin-top:16px}
+.dial{position:relative;width:200px;height:200px}
+.dial svg{width:100%;height:100%;overflow:visible}
+.dial .arc{transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)}
+.dial .ctr{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.dial .ctr b{font-size:40px;font-weight:800;line-height:1;letter-spacing:-.03em}.dial .ctr span{font-size:12px;color:#cfc7f3;margin-top:4px}
+.legend{display:grid;gap:9px}
+.legend button{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-s);padding:8px 10px;color:#fff;text-align:left}
+.legend .sw{width:10px;height:10px;border-radius:3px;flex:none}
+.legend .t{flex:1;font-size:13px;line-height:1.2}.legend .v{font-size:13px;font-weight:700}
+@media(max-width:380px){.plate{grid-template-columns:1fr;justify-items:center}.legend{width:100%}}
+
+/* layout */
+main section{padding:0 16px}
+.card{background:var(--card);border-radius:var(--r-l);padding:18px;margin-top:14px;box-shadow:var(--sh)}
+.card h2{font-size:17px;font-weight:700}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.link{border:0;background:none;color:var(--plum2);font-weight:700;font-size:13px;padding:0}
+
+/* weight journey */
+.wj{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.wj .now{font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1}.wj .now small{font-size:16px;font-weight:600;color:var(--soft);margin-left:4px}
+.delta{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:5px 10px;font-weight:700;font-size:13px}
+.delta.dn{background:#e3f7ef;color:#13805a}.delta.up{background:#ffe9ea;color:#c4373b}
+.track{position:relative;height:12px;border-radius:99px;background:#efedf7;margin:16px 0 6px}
+.track i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--lilac),var(--pandan))}
+.track em{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#fff;border:4px solid var(--pandan);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--soft)}
+.chart{width:100%;height:auto;display:block;margin-top:10px}
+
+/* chips row */
+.scroll{display:flex;gap:10px;overflow-x:auto;padding:2px 16px 4px;margin:14px -16px 0;scrollbar-width:none}.scroll::-webkit-scrollbar{display:none}
+.qa{flex:none;display:flex;align-items:center;gap:8px;border:0;border-radius:99px;padding:11px 16px 11px 12px;font-weight:700;font-size:14px;background:#fff;box-shadow:var(--sh)}
+.qa span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:16px}
+
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bdg{text-align:center;font-size:11px;line-height:1.25;color:var(--soft)}
+.bdg .m{width:56px;height:56px;margin:0 auto 6px;border-radius:18px;display:grid;place-items:center;font-size:26px;background:#f0eef8;filter:grayscale(1);opacity:.45}
+.bdg.on{color:var(--ink);font-weight:600}.bdg.on .m{filter:none;opacity:1;background:linear-gradient(145deg,#fff3d1,#ffe0a3);box-shadow:inset 0 0 0 2px #ffcf6b}
+
+/* appointment ticket */
+.ticket{display:flex;align-items:stretch;border-radius:var(--r-m);overflow:hidden;background:linear-gradient(120deg,#efeaff,#e6f6ff);margin-top:10px}
+.ticket .d{background:var(--plum);color:#fff;width:70px;display:grid;place-content:center;text-align:center;padding:10px 0}
+.ticket .d b{font-size:24px;line-height:1}.ticket .d span{font-size:12px;color:#cfc7f3}
+.ticket .i{padding:11px 14px;flex:1}.ticket .i b{display:block;font-size:14px}.ticket .i span{font-size:12px;color:var(--soft)}
+.ticket.past{opacity:.5}
+
+/* date strip */
+.days{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 2px;margin:0 -16px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:52px;border:0;border-radius:var(--r-m);padding:8px 0 9px;background:#fff;box-shadow:var(--sh);text-align:center}
+.day small{display:block;font-size:11px;color:var(--soft);font-weight:600}.day b{display:block;font-size:18px;font-weight:800}
+.day i{display:block;width:6px;height:6px;margin:3px auto 0;border-radius:50%;background:transparent}.day.has i{background:var(--pandan)}
+.day.on{background:var(--plum);color:#fff}.day.on small{color:#cfc7f3}
+
+/* meal tabs */
+.mtabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px}
+.mtab{border:0;background:#fff;border-radius:var(--r-m);padding:10px 2px 8px;box-shadow:var(--sh);font-size:11px;font-weight:600;color:var(--soft);position:relative;line-height:1.2}
+.mtab .e{display:block;font-size:24px;margin-bottom:4px}
+.mtab.ok::after{content:'';position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--pandan)}
+.mtab.on{background:var(--plum);color:#fff;transform:translateY(-2px)}
+textarea,input,select{width:100%;border:1.5px solid var(--line);border-radius:var(--r-s);padding:12px 13px;background:#fbfaff;font-weight:500}
+textarea{resize:vertical;min-height:72px}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--lilac);background:#fff;box-shadow:0 0 0 4px rgba(142,125,255,.15)}
+.lbl{display:block;font-size:13px;font-weight:700;margin:16px 0 8px}
+.hunger{display:flex;align-items:center;gap:12px}
+.hunger .face{width:52px;height:52px;flex:none;border-radius:16px;background:#f3f0ff;display:grid;place-items:center;font-size:28px}
+.hunger input{padding:0;border:0;background:none;box-shadow:none;-webkit-appearance:none;appearance:none;height:28px}
+.hunger input::-webkit-slider-runnable-track{height:10px;border-radius:99px;background:linear-gradient(90deg,var(--chilli),var(--mango),var(--pandan),var(--sky),var(--lilac))}
+.hunger input::-moz-range-track{height:10px;border-radius:99px;background:linear-gradient(90deg,var(--chilli),var(--mango),var(--pandan),var(--sky),var(--lilac))}
+.hunger input::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-8px;border-radius:50%;background:#fff;border:5px solid var(--plum);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.hunger input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:5px solid var(--plum)}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--soft);margin-top:2px;padding-left:64px}
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.moods button{border:1.5px solid var(--line);background:#fff;border-radius:var(--r-m);padding:10px 4px;font-size:12px;font-weight:600;color:var(--soft)}
+.moods button .e{display:block;font-size:26px;margin-bottom:2px}
+.moods button.on{border-color:var(--lilac);background:#f1eeff;color:var(--plum2)}
+.glasses{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.glass{width:34px;height:44px;border:0;background:none;padding:0}
+.glass svg{width:100%;height:100%}
+.tip{border-radius:var(--r-m);padding:12px 14px;font-size:13px;background:#eaf8f2;color:#145c43;margin-top:14px;display:flex;gap:10px;line-height:1.45}
+.tip.warn{background:#fff4e0;color:#6b4300}.tip.care{background:#f1eeff;color:#3b2d78}
+.plateico{flex:none;width:38px;height:38px}
+
+/* buttons */
+.btn{border:0;border-radius:99px;padding:14px 18px;font-weight:700;background:#efedf7;color:var(--ink)}
+.btn.pri{background:var(--plum);color:#fff;box-shadow:0 10px 20px -10px rgba(35,25,66,.6)}
+.btn.full{width:100%}.btn.sm{padding:8px 14px;font-size:13px}
+
+/* exercise */
+.ring{display:flex;align-items:center;gap:16px}
+.ring svg{width:92px;height:92px;flex:none}
+.week{display:flex;gap:6px;margin-top:14px;align-items:flex-end;height:74px}
+.week div{flex:1;text-align:center;font-size:11px;color:var(--soft);font-weight:600}
+.week i{display:block;margin:0 auto 5px;width:100%;max-width:26px;border-radius:8px;background:#efedf7}
+.week .ok i{background:linear-gradient(180deg,var(--pandan),#19936a)}
+.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.acts button{border:1.5px solid var(--line);background:#fff;border-radius:var(--r-m);padding:12px 4px 10px;font-size:12px;font-weight:600;color:var(--soft);line-height:1.2}
+.acts button .e{display:block;font-size:24px;margin-bottom:4px}.acts button.on{border-color:var(--pandan);background:#eaf8f2;color:#13805a}
+.seg{display:flex;background:#efedf7;border-radius:99px;padding:4px}
+.seg button{flex:1;border:0;background:none;border-radius:99px;padding:9px 0;font-weight:700;font-size:13px;color:var(--soft)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:var(--sh)}
+.mins{display:flex;gap:8px;flex-wrap:wrap}
+.mins button{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font-weight:700;font-size:13px}
+.mins button.on{background:var(--plum);border-color:var(--plum);color:#fff}
+.done{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.done:first-child{border-top:0}
+.done .e{width:42px;height:42px;border-radius:14px;background:#eaf8f2;display:grid;place-items:center;font-size:20px}
+.done .x{border:0;background:#f5f3fb;border-radius:50%;width:32px;height:32px;color:var(--soft)}
+
+/* reflection as coach chat */
+.bubble{background:#fff;border-radius:6px var(--r-l) var(--r-l) var(--r-l);padding:13px 15px;box-shadow:var(--sh);margin:14px 0 8px;max-width:92%;font-weight:600}
+.coach{display:flex;gap:10px;align-items:flex-start}.coach .av{width:34px;height:34px;flex:none;border-radius:50%;background:linear-gradient(145deg,var(--lilac),var(--plum2));display:grid;place-items:center;color:#fff;font-size:16px;margin-top:14px}
+.ans{margin-left:44px}
+
+/* list menu */
+.row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line)}.row:first-child{border-top:0}
+.row .ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:19px;flex:none}
+details.g{border-top:1px solid var(--line)}details.g:first-of-type{border-top:0}
+details.g summary{list-style:none;display:flex;align-items:center;gap:12px;padding:13px 0;font-weight:700;cursor:pointer}
+details.g summary::-webkit-details-marker{display:none}
+details.g summary::after{content:'';margin-left:auto;width:8px;height:8px;border-right:2px solid var(--soft);border-bottom:2px solid var(--soft);transform:rotate(45deg);transition:transform .2s}
+details.g[open] summary::after{transform:rotate(-135deg)}
+details.g .body{padding:0 0 14px}
+.ok-tag{font-size:11px;font-weight:700;color:#13805a;background:#e3f7ef;border-radius:99px;padding:2px 8px}
+
+/* nav */
+nav[hidden]{display:none}
+nav{position:fixed;left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:20;pointer-events:none}
+nav .in{pointer-events:auto;display:flex;align-items:center;gap:2px;background:rgba(35,25,66,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:26px;padding:7px;box-shadow:0 14px 30px -10px rgba(35,25,66,.6)}
+nav button{border:0;background:none;color:#a9a0d6;width:58px;height:50px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;font-weight:700}
+nav button svg{width:22px;height:22px}
+nav button.on{color:#fff;background:rgba(255,255,255,.1)}
+nav .plus{width:54px;height:54px;border-radius:19px;background:linear-gradient(145deg,var(--mango),#ff8f3a);color:var(--plum);margin:0 4px;box-shadow:0 8px 18px -6px rgba(255,143,58,.7)}
+nav .plus svg{width:26px;height:26px}
+
+/* sheet */
+.sheetbg{position:fixed;inset:0;background:rgba(20,14,40,.45);z-index:40;display:flex;align-items:flex-end;justify-content:center;animation:fd .2s}
+.sheet{background:#fff;width:100%;max-width:480px;border-radius:var(--r-xl) var(--r-xl) 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom));animation:up .28s cubic-bezier(.2,.8,.2,1)}
+.sheet .grab{width:40px;height:5px;border-radius:99px;background:#dcd8ea;margin:0 auto 14px}
+.sheet .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.sheet .grid button{border:0;border-radius:var(--r-l);padding:16px;text-align:left;font-weight:700;display:flex;flex-direction:column;gap:10px}
+.sheet .grid button span{font-size:28px}
+@keyframes up{from{transform:translateY(100%)}}@keyframes fd{from{opacity:0}}
+
+/* login */
+.login{min-height:100vh;background:radial-gradient(120% 70% at 80% 0%,#4b3590,var(--plum) 60%);color:#fff;padding:calc(48px + env(safe-area-inset-top)) 24px 30px;display:flex;flex-direction:column}
+.login h1{font-size:36px;font-weight:800;line-height:1.05;margin-top:22px}
+.login p{color:#cfc7f3}.login .box p{color:var(--soft)}.login .box b{color:var(--plum2)}
+.login .box{background:#fff;color:var(--ink);border-radius:var(--r-l);padding:20px;margin-top:auto}
+.code{font-size:26px;letter-spacing:6px;text-align:center;text-transform:uppercase;font-weight:800}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:99px;font-size:13px;font-weight:600;z-index:60;white-space:nowrap;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav id="nav" hidden><div class="in">
+  <button data-v="utama" class="on" aria-label="Utama"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Utama</button>
+  <button data-v="makan" aria-label="Makan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg>Makan</button>
+  <button class="plus" id="plus" aria-label="Catat pantas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button data-v="senaman" aria-label="Gerak"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4a1.5 1.5 0 1 0 0 .01M7 21l3-6 3 2v4M10 15l1-5 4 3 3-1M8 11l3-1"/></svg>Gerak</button>
+  <button data-v="lagi" aria-label="Saya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Saya</button>
+</div></nav>
+<script>
+/* ======================= KONFIGURASI ======================= */
+var API_URL = '';   // URL Web App Apps Script (…/exec). Kosong = MOD DEMO
+/* =========================================================== */
+</script>
+<script>/* ===== SKEMA LAJUR KKM MIMO (202 lajur, susunan ikut data sebenar sheet KKM) =====
+ * Jika susunan sheet KKM berubah, ubah di sini sahaja.
+ * NOTA: Bagi BASELINE, data sebenar KKM meletakkan Komposisi Tubuh (lajur 26-29) SEBELUM
+ * ujian makmal, walaupun tajuk sheet menunjukkan sebaliknya. Susunan di bawah ikut DATA.
+ * Bagi 6 BULAN / 12 BULAN tiada data untuk disemak — susunan ikut TAJUK sheet.
+ */
+var YT = ['YA', 'TIDAK'];
+var ST = ['SELESAI', 'TIDAK DILAKUKAN'];
+var KKM_SCHEMA = (function () {
+  var c = [];
+  function A(k, l, g, o, t) { c.push({ k: k, l: l, g: g, o: o || null, t: t || 'text' }); }
+  // --- Maklumat fasiliti / rujukan / pesakit (0-17)
+  A('NEGERI', 'Negeri', 'Fasiliti', ['KEDAH']);
+  A('DAERAH', 'Daerah', 'Fasiliti', ['KOTA SETAR', 'KUBANG PASU', 'PADANG TERAP', 'POKOK SENA', 'PENDANG', 'YAN', 'KUALA MUDA', 'SIK', 'BALING', 'KULIM', 'BANDAR BAHARU', 'LANGKAWI']);
+  A('FASILITI', 'Fasiliti', 'Fasiliti');
+  A('SUMBER_RUJUKAN', 'Sumber rujukan', 'Rujukan', ['KLINIK KESIHATAN', 'HOSPITAL', 'KOSPEN', 'SARINGAN KOMUNITI', 'LAIN-LAIN']);
+  A('SUMBER_RUJUKAN_2', 'Sumber rujukan (perincian)', 'Rujukan');
+  A('STATUS_RUJUKAN', 'Status rujukan', 'Rujukan', ['SETUJU SERTAI MIMO', 'TIDAK SETUJU SERTAI MIMO']);
+  A('NAMA', 'Nama', 'Pesakit');
+  A('NOKP', 'No. KP / Polis / Tentera', 'Pesakit');
+  A('TARIKH_LAHIR', 'Tarikh lahir (DD/MM/YYYY)', 'Pesakit', null, 'date');
+  A('UMUR', 'Umur', 'Pesakit', null, 'num');
+  A('BANGSA', 'Bangsa', 'Pesakit', ['MELAYU', 'CINA', 'INDIA', 'BUMIPUTERA SABAH', 'BUMIPUTERA SARAWAK', 'ORANG ASLI', 'LAIN-LAIN']);
+  A('JANTINA', 'Jantina', 'Pesakit', ['LELAKI', 'PEREMPUAN']);
+  A('TELEFON', 'No. telefon', 'Pesakit');
+  A('SP_DM', 'Diabetes', 'Sejarah perubatan', YT);
+  A('SP_HPT', 'Hipertensi', 'Sejarah perubatan', YT);
+  A('SP_DLP', 'Dislipidemia', 'Sejarah perubatan', YT);
+  A('SP_CVD', 'Penyakit kardiovaskular', 'Sejarah perubatan', YT);
+  A('SP_LAIN', 'Lain-lain', 'Sejarah perubatan');
+  // --- Baseline (18-58)
+  var G = 'Baseline';
+  A('B_TINGGI', 'Tinggi (cm)', G, null, 'num');
+  A('B_BERAT', 'Berat (kg)', G, null, 'num');
+  A('B_BMI', 'BMI', G, null, 'calc');
+  A('B_KATBMI', 'Kategori BMI', G, null, 'calc');
+  A('B_WC', 'Lilit pinggang (cm)', G, null, 'num');
+  A('B_SIS', 'BP sistolik', G, null, 'num');
+  A('B_DIA', 'BP diastolik', G, null, 'num');
+  A('B_BCA_PLEMAK', 'Peratus lemak badan (%)', 'Baseline – Komposisi tubuh', null, 'num');
+  A('B_BCA_VISC', 'Lemak viseral (level)', 'Baseline – Komposisi tubuh', null, 'num');
+  A('B_BCA_JLEMAK', 'Jisim lemak badan (kg)', 'Baseline – Komposisi tubuh', null, 'num');
+  A('B_BCA_SMM', 'Jisim otot rangka (kg)', 'Baseline – Komposisi tubuh', null, 'num');
+  G = 'Baseline – Makmal';
+  A('B_FBS_ST', 'FBS (status)', G, ST);
+  A('B_FBS', 'FBS keputusan', G, null, 'num');
+  A('B_2HPP_ST', '2HPP (status)', G, ST);
+  A('B_2HPP', '2HPP keputusan', G, null, 'num');
+  A('B_HBA1C', 'HbA1c (%)', G, null, 'num');
+  A('B_TC_ST', 'Total kolesterol (status)', G, ST);
+  A('B_TC', 'Total kolesterol', G, null, 'num');
+  A('B_TG_ST', 'TG (status)', G, ST);
+  A('B_TG', 'TG', G, null, 'num');
+  A('B_LDL_ST', 'LDL (status)', G, ST);
+  A('B_LDL', 'LDL', G, null, 'num');
+  A('B_HDL_ST', 'HDL (status)', G, ST);
+  A('B_HDL', 'HDL', G, null, 'num');
+  A('B_RP', 'Fungsi ginjal (RP)', G, ST);
+  A('B_LFT', 'Fungsi hati (LFT)', G, ST);
+  A('B_AST', 'AST (U/L)', G, null, 'num');
+  A('B_ALT', 'ALT (U/L)', G, null, 'num');
+  A('B_FBC', 'FBC', G, ST);
+  A('B_HB', 'Hemoglobin (g/dL)', G, null, 'num');
+  A('B_PLT', 'Platelet (x10³/uL)', G, null, 'num');
+  A('B_UPRO', 'Protein urin', G, ST);
+  A('B_TFT', 'Fungsi tiroid (jika perlu)', G, ST);
+  A('B_KORTISOL', 'Kortisol (jika perlu)', G, ST);
+  G = 'Baseline – Penilaian lain';
+  A('B_MENTAL_ST', 'Penilaian kesihatan mental', G, ST);
+  A('B_MENTAL_KEP', 'Keputusan penilaian mental', G, ['PERLU DIRUJUK', 'TIDAK PERLU DIRUJUK']);
+  A('B_FIB4_ST', 'FIB-4 (status)', G, ST);
+  A('B_FIB4', 'FIB-4 keputusan', G, null, 'calc');
+  A('B_STOPBANG', 'STOP-BANG skor', G, null, 'num');
+  A('B_STOPBANG_KAT', 'STOP-BANG kategori', G, ['RISIKO RENDAH', 'RISIKO SEDERHANA', 'RISIKO TINGGI']);
+  A('B_USG', 'Ultrasound (USG)', G, ST);
+  function rawatan(p, gl) {
+    A(p + 'MNT_ST', 'MNT – status', gl, YT); A(p + 'MNT_TRK', 'MNT – tarikh', gl, null, 'date');
+    A(p + 'SEN_ST', 'Senaman fizikal – status', gl, YT); A(p + 'SEN_TRK', 'Senaman – tarikh', gl, null, 'date');
+    A(p + 'TT_ST', 'Terapi tingkah laku – status', gl, YT); A(p + 'TT_TRK', 'Terapi tingkah laku – tarikh', gl, null, 'date');
+    A(p + 'UBAT_JENIS', 'Farmakologi – jenis ubat', gl, ['ORLISTAT', 'LIRAGLUTIDE', 'SEMAGLUTIDE', 'TIRZEPATIDE', 'METFORMIN', 'LAIN-LAIN']);
+    A(p + 'UBAT_TRK', 'Farmakologi – tarikh', gl, null, 'date');
+    A(p + 'UBAT_SUMBER', 'Farmakologi – sumber', gl, ['KKM', 'SENDIRI', 'LAIN-LAIN']);
+    A(p + 'UBAT_FAS', 'Farmakologi – fasiliti', gl);
+    A(p + 'BAR_ST', 'Bariatrik – status', gl, YT); A(p + 'BAR_TRK', 'Bariatrik – tarikh', gl, null, 'date'); A(p + 'BAR_FAS', 'Bariatrik – fasiliti', gl);
+    A(p + 'RUJ', 'Rujukan kepada', gl, ['PAKAR PERUBATAN', 'PAKAR ENDOKRIN', 'PAKAR BEDAH', 'PAKAR PSIKIATRI', 'PEGAWAI DIETETIK', 'FISIOTERAPI', 'TERAPI CARA KERJA', 'KAUNSELOR', 'LAIN-LAIN']);
+    A(p + 'RUJ_TRK', 'Rujukan – tarikh janji temu', gl, null, 'date'); A(p + 'RUJ_FAS', 'Rujukan – fasiliti', gl);
+  }
+  function susulan(p, gl) {
+    A(p + 'BERAT', 'Berat (kg)', gl, null, 'num'); A(p + 'BMI', 'BMI', gl, null, 'calc'); A(p + 'KATBMI', 'Kategori BMI', gl, null, 'calc');
+    A(p + 'WC', 'Lilit pinggang (cm)', gl, null, 'num'); A(p + 'SIS', 'BP sistolik', gl, null, 'num'); A(p + 'DIA', 'BP diastolik', gl, null, 'num');
+    A(p + 'FBS_ST', 'FBS (status)', gl, ST); A(p + 'FBS', 'FBS keputusan', gl, null, 'num'); A(p + 'HBA1C', 'HbA1c (%)', gl, null, 'num');
+    A(p + 'TC_ST', 'Total kolesterol (status)', gl, ST); A(p + 'TC', 'Total kolesterol', gl, null, 'num');
+    A(p + 'TG_ST', 'TG (status)', gl, ST); A(p + 'TG', 'TG', gl, null, 'num');
+    A(p + 'LDL_ST', 'LDL (status)', gl, ST); A(p + 'LDL', 'LDL', gl, null, 'num');
+    A(p + 'HDL_ST', 'HDL (status)', gl, ST); A(p + 'HDL', 'HDL', gl, null, 'num');
+    A(p + 'BCA_PLEMAK', 'Peratus lemak badan (%)', gl, null, 'num'); A(p + 'BCA_VISC', 'Lemak viseral (level)', gl, null, 'num');
+    A(p + 'BCA_JLEMAK', 'Jisim lemak badan (kg)', gl, null, 'num'); A(p + 'BCA_SMM', 'Jisim otot rangka (kg)', gl, null, 'num');
+  }
+  function beza(p, gl) {
+    ['BERAT|Penurunan berat (kg)', 'PBERAT|Penurunan berat (%)', 'WC|Perubahan lilit pinggang', 'FBS|Perubahan FBS', 'SIS|Perubahan sistolik', 'DIA|Perubahan diastolik',
+      'TC|Perubahan TC', 'TG|Perubahan TG', 'LDL|Perubahan LDL', 'HDL|Perubahan HDL', 'PLEMAK|Perubahan % lemak', 'VISC|Perubahan lemak viseral',
+      'JLEMAK|Perubahan jisim lemak', 'SMM|Perubahan jisim otot', 'HBA1C|Perubahan HbA1c (%)', 'HBA1C_ST|Status HbA1c'].forEach(function (s) {
+        var x = s.split('|'); A(p + x[0], x[1], gl, null, 'calc');
+      });
+  }
+  rawatan('R0_', 'Rawatan (baseline)');           // 59-74
+  susulan('F6_', '6 bulan');                       // 75-95
+  rawatan('R6_', 'Rawatan (6 bulan)');             // 96-111
+  susulan('F12_', '12 bulan');                     // 112-132
+  rawatan('R12_', 'Rawatan (12 bulan)');           // 133-148
+  beza('P06_', 'Perbezaan baseline → 6 bulan');    // 149-164
+  beza('P612_', 'Perbezaan 6 → 12 bulan');         // 165-180
+  beza('P012_', 'Perbezaan baseline → 12 bulan');  // 181-196
+  A('TARIKH_DAFTAR', 'Tarikh daftar', 'Rekod', null, 'ro');
+  A('ID', 'ID (emel fasiliti)', 'Rekod');
+  A('STATUS', 'Status', 'Rekod', ['AKTIF', 'TIDAK AKTIF', 'TAMAT PROGRAM', 'KELUAR PROGRAM']);
+  A('TARIKH_KEMASKINI', 'Tarikh kemaskini', 'Rekod', null, 'ro');
+  A('CATATAN', 'Catatan', 'Rekod');
+  return c;
+})();
+var KKM_N = 202;
+var KKM_IDX = {}; KKM_SCHEMA.forEach(function (c, i) { KKM_IDX[c.k] = i; });
+
+/* ===== Logik klinikal dikongsi ===== */
+function num(v) { if (v === '' || v == null) return null; var n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? null : n; }
+function r1(n) { return Math.round(n * 10) / 10; }
+function r2(n) { return Math.round(n * 100) / 100; }
+function bmiOf(berat, tinggi) { var b = num(berat), t = num(tinggi); if (!b || !t) return null; return r1(b / Math.pow(t / 100, 2)); }
+/* Kategori BMI ikut data KKM MIMO (CPG Pengurusan Obesiti 2023) */
+function katBmi(bmi) {
+  if (bmi == null) return '';
+  if (bmi < 18.5) return 'KURANG BERAT BADAN';
+  if (bmi < 23) return 'NORMAL';
+  if (bmi < 27.5) return 'OVERWEIGHT';
+  if (bmi < 32.5) return 'OBES I';
+  if (bmi < 37.5) return 'OBES II';
+  return 'OBES III';
+}
+function fib4(umur, ast, alt, plt) { var a = num(umur), s = num(ast), l = num(alt), p = num(plt); if (!a || !s || !l || !p) return null; return r2(a * s / (p * Math.sqrt(l))); }
+function umurDari(tl) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(tl || ''); if (!m) return null; var d = new Date(+m[3], +m[2] - 1, +m[1]), n = new Date(); var u = n.getFullYear() - d.getFullYear(); if (n.getMonth() < d.getMonth() || (n.getMonth() == d.getMonth() && n.getDate() < d.getDate())) u--; return u; }
+/* Kira semua lajur 'calc' dalam rekod (objek kunci→nilai) */
+function kiraKkm(o) {
+  var t = o.B_TINGGI;
+  [['B_', 'B_BERAT'], ['F6_', 'F6_BERAT'], ['F12_', 'F12_BERAT']].forEach(function (p) {
+    var b = bmiOf(o[p[1]], t); if (b != null) { o[p[0] + 'BMI'] = String(b); o[p[0] + 'KATBMI'] = katBmi(b); }
+  });
+  if (!num(o.UMUR) && o.TARIKH_LAHIR) { var u = umurDari(o.TARIKH_LAHIR); if (u != null) o.UMUR = String(u); }
+  var f = fib4(o.UMUR, o.B_AST, o.B_ALT, o.B_PLT); if (f != null) o.B_FIB4 = String(f);
+  function beza(p, a, b) {
+    var TB = 'TIDAK BERKAITAN';
+    function d(x, y, rev) { var u = num(o[a + x]), v = num(o[b + y]); if (u == null || v == null) return TB; return String(r2(rev ? u - v : v - u)); }
+    var A_ = a == 'B_' ? 'B_BCA_' : a + 'BCA_', B_ = b + 'BCA_';
+    o[p + 'BERAT'] = d('BERAT', 'BERAT', true);
+    var bb = num(o[a + 'BERAT']), ab = num(o[b + 'BERAT']);
+    o[p + 'PBERAT'] = (bb && ab != null) ? String(r2((bb - ab) / bb * 100)) : TB;
+    o[p + 'WC'] = d('WC', 'WC'); o[p + 'FBS'] = d('FBS', 'FBS'); o[p + 'SIS'] = d('SIS', 'SIS'); o[p + 'DIA'] = d('DIA', 'DIA');
+    o[p + 'TC'] = d('TC', 'TC'); o[p + 'TG'] = d('TG', 'TG'); o[p + 'LDL'] = d('LDL', 'LDL'); o[p + 'HDL'] = d('HDL', 'HDL');
+    function dB(x) { var u = num(o[A_ + x]), v = num(o[B_ + x]); return (u == null || v == null) ? TB : String(r2(v - u)); }
+    o[p + 'PLEMAK'] = dB('PLEMAK'); o[p + 'VISC'] = dB('VISC'); o[p + 'JLEMAK'] = dB('JLEMAK'); o[p + 'SMM'] = dB('SMM');
+    var h = d('HBA1C', 'HBA1C'); o[p + 'HBA1C'] = h;
+    o[p + 'HBA1C_ST'] = h == TB ? TB : (num(h) < 0 ? 'MENURUN' : num(h) > 0 ? 'MENINGKAT' : 'TIADA PERUBAHAN');
+  }
+  beza('P06_', 'B_', 'F6_'); beza('P612_', 'F6_', 'F12_'); beza('P012_', 'B_', 'F12_');
+  return o;
+}
+function kkmToRow(o) { return KKM_SCHEMA.map(function (c) { return o[c.k] == null ? '' : String(o[c.k]); }); }
+function rowToKkm(r) { var o = {}; KKM_SCHEMA.forEach(function (c, i) { o[c.k] = r[i] == null ? '' : String(r[i]); }); return o; }
+
+/* ===== Tab tambahan ===== */
+var TAB_LAWATAN = ['LAWATAN_ID', 'MIMO_ID', 'TARIKH', 'MINGGU', 'SIS', 'DIA', 'NADI', 'BERAT', 'BMI', 'WC', 'BCA_PLEMAK', 'BCA_VISC', 'BCA_JLEMAK', 'BCA_SMM', 'CATATAN', 'OLEH', 'KEMASKINI'];
+var TAB_KEC = ['KEC_ID', 'MIMO_ID', 'FASA', 'TARIKH', 'BERAT', 'OTOT', 'LEMAK_PCT', 'GRIP_R', 'GRIP_L', 'STEP_PRE', 'STEP_PEAK', 'STEP_REC1', 'STEP_1', 'STEP_2', 'STEP_3', 'WALK_JARAK', 'WALK_PRE', 'WALK_PEAK', 'PUSHUP', 'SITUP_GRED', 'SITUP_REPS', 'PLANK', 'JUMP', 'STS5', 'SITREACH', 'OLEH', 'KEMASKINI'];
+var TAB_APP = ['MIMO_ID', 'TOKEN', 'NAMA_PANGGILAN', 'SASARAN_BERAT', 'TEMUJANJI_JSON', 'AKTIF', 'CIPTA'];
+var TAB_LOG = ['LOG_ID', 'MIMO_ID', 'JENIS', 'KUNCI', 'DATA_JSON', 'KEMASKINI'];
+var TAB_PETUGAS = ['USERNAME', 'NAMA', 'FASILITI', 'SALT', 'HASH', 'PERANAN', 'AKTIF'];
+var TAB_AUDIT = ['MASA', 'PENGGUNA', 'TINDAKAN', 'MIMO_ID', 'BUTIRAN'];
+var MINGGU_LIST = ['M1', 'M2', 'M4', 'M6', 'M8', 'M10', 'M12', 'M14', 'M16', 'M18', 'M20', 'M22', 'M24'];
+var DISIPLIN = ['Pakar / Pegawai Perubatan', 'Pegawai Dietetik', 'Pegawai Sains Pemakanan', 'Fisioterapi', 'Terapi Cara Kerja', 'Kaunselor', 'Wellness Hub'];
+
+/* ===== Tarikh ===== */
+function dmyToDate(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null; }
+function dateToDmy(d) { function z(n) { return (n < 10 ? '0' : '') + n; } return z(d.getDate()) + '/' + z(d.getMonth() + 1) + '/' + d.getFullYear(); }
+function isoToDmy(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : (s || ''); }
+function dmyToIso(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s || ''); return m ? m[3] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[1]).slice(-2) : ''; }
+
+/* Isi lajur susulan 6/12 bulan daripada lawatan paling hampir (±60 hari) dengan tarikh sasaran */
+function isiSusulan(o, lawatan, bulan) {
+  var rujuk = dmyToDate(o.TARIKH_DAFTAR) || (lawatan.length ? dmyToDate(lawatan.slice().sort(function (a, b) { return dmyToDate(a.TARIKH) - dmyToDate(b.TARIKH); })[0].TARIKH) : null);
+  if (!rujuk) return null;
+  var sasar = new Date(rujuk.getTime() + bulan * 30.44 * 864e5), terbaik = null, beza = 1e15;
+  lawatan.forEach(function (l) { var d = dmyToDate(l.TARIKH); if (!d) return; var x = Math.abs(d - sasar); if (x < beza && num(l.BERAT) != null) { beza = x; terbaik = l; } });
+  if (!terbaik || beza > 60 * 864e5) return null;
+  var p = bulan == 6 ? 'F6_' : 'F12_';
+  o[p + 'BERAT'] = terbaik.BERAT; o[p + 'WC'] = terbaik.WC || o[p + 'WC']; o[p + 'SIS'] = terbaik.SIS || o[p + 'SIS']; o[p + 'DIA'] = terbaik.DIA || o[p + 'DIA'];
+  ['PLEMAK', 'VISC', 'JLEMAK', 'SMM'].forEach(function (k) { if (terbaik['BCA_' + k]) o[p + 'BCA_' + k] = terbaik['BCA_' + k]; });
+  kiraKkm(o);
+  return terbaik;
+}
+
+function mingguIso(d) { var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); var day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); var y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return t.getUTCFullYear() + '-W' + ('0' + Math.ceil(((t - y) / 864e5 + 1) / 7)).slice(-2); }
+</script>
+<script>/* Mod demo: emulator + salinan backend + data palsu. Tidak digunakan apabila API_URL ditetapkan. */
+/* ===== Emulator Google Apps Script (MOD DEMO SAHAJA) =====
+ * Membolehkan kod backend sebenar (server.gs) berjalan dalam pelayar
+ * menggunakan localStorage, supaya demo berkelakuan sama seperti sistem sebenar.
+ */
+var GAS_EMU = (function () {
+  var KEY = 'mimo_demo_db_v1', db = null;
+  function load() { if (db) return db; try { db = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { db = null; } if (!db) db = { sheets: {}, order: [] }; return db; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { } }
+  function reset() { db = { sheets: {}, order: [] }; try { localStorage.removeItem(KEY); } catch (e) { } }
+  function Sheet(name) { this.name = name; }
+  Sheet.prototype = {
+    _d: function () { return load().sheets[this.name]; },
+    getLastRow: function () { var d = this._d(); for (var i = d.length - 1; i >= 0; i--) if (d[i].some(function (x) { return x !== ''; })) return i + 1; return 0; },
+    getMaxRows: function () { return Math.max(this._d().length, 1000); },
+    setFrozenRows: function () { return this; },
+    getDataRange: function () {
+      var d = this._d(), n = this.getLastRow(), w = d.reduce(function (m, r) { return Math.max(m, r.length); }, 1);
+      var v = d.slice(0, Math.max(n, 1)).map(function (r) { var x = r.slice(); while (x.length < w) x.push(''); return x; });
+      if (!v.length) v = [['']];
+      return { getDisplayValues: function () { return v; }, getValues: function () { return v; } };
+    },
+    getRange: function (row, col, nr, nc) {
+      var self = this; nr = nr || 1; nc = nc || 1;
+      var R = {
+        setValues: function (vals) {
+          var d = self._d();
+          for (var i = 0; i < nr; i++) { var r = row - 1 + i; while (d.length <= r) d.push([]); for (var j = 0; j < nc; j++) { while (d[r].length < col - 1 + j) d[r].push(''); d[r][col - 1 + j] = vals[i][j] == null ? '' : String(vals[i][j]); } }
+          return R;
+        },
+        setFontWeight: function () { return R; }, setBackground: function () { return R; }, setFontColor: function () { return R; }, setNumberFormat: function () { return R; }
+      };
+      return R;
+    },
+    appendRow: function (vals) { this.getRange(this.getLastRow() + 1, 1, 1, vals.length).setValues([vals]); },
+    deleteRow: function (r) { this._d().splice(r - 1, 1); }
+  };
+  var SS = {
+    getSheetByName: function (n) { return load().sheets[n] ? new Sheet(n) : null; },
+    insertSheet: function (n) { load().sheets[n] = []; db.order.push(n); return new Sheet(n); },
+    getSheets: function () { return load().order.map(function (n) { return new Sheet(n); }); },
+    deleteSheet: function (s) { delete db.sheets[s.name]; db.order = db.order.filter(function (n) { return n !== s.name; }); }
+  };
+  /* SHA-256 segerak (untuk hash kata laluan dalam demo) */
+  function sha256(bytes) {
+    var K = [], H = [], i, j, p = 2, isP;
+    function frac(x) { return (x - Math.floor(x)) * 4294967296 | 0; }
+    for (var c = 0; c < 64; p++) { isP = true; for (j = 2; j * j <= p; j++) if (p % j === 0) { isP = false; break; } if (isP) { if (c < 8) H[c] = frac(Math.pow(p, 1 / 2)); K[c++] = frac(Math.pow(p, 1 / 3)); } }
+    var l = bytes.length, m = bytes.concat([0x80]); while (m.length % 64 !== 56) m.push(0);
+    var bl = l * 8; for (i = 7; i >= 0; i--) m.push(i >= 4 ? 0 : (bl >>> (i * 8)) & 255);
+    function rr(x, n) { return (x >>> n) | (x << (32 - n)); }
+    for (i = 0; i < m.length; i += 64) {
+      var w = [], a = H.slice();
+      for (j = 0; j < 64; j++) {
+        if (j < 16) w[j] = (m[i + 4 * j] << 24) | (m[i + 4 * j + 1] << 16) | (m[i + 4 * j + 2] << 8) | m[i + 4 * j + 3];
+        else { var s0 = rr(w[j - 15], 7) ^ rr(w[j - 15], 18) ^ (w[j - 15] >>> 3), s1 = rr(w[j - 2], 17) ^ rr(w[j - 2], 19) ^ (w[j - 2] >>> 10); w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0; }
+        var S1 = rr(a[4], 6) ^ rr(a[4], 11) ^ rr(a[4], 25), ch = (a[4] & a[5]) ^ (~a[4] & a[6]), t1 = (a[7] + S1 + ch + K[j] + w[j]) | 0;
+        var S0 = rr(a[0], 2) ^ rr(a[0], 13) ^ rr(a[0], 22), mj = (a[0] & a[1]) ^ (a[0] & a[2]) ^ (a[1] & a[2]), t2 = (S0 + mj) | 0;
+        a = [(t1 + t2) | 0, a[0], a[1], a[2], (a[3] + t1) | 0, a[4], a[5], a[6]];
+      }
+      for (j = 0; j < 8; j++) H[j] = (H[j] + a[j]) | 0;
+    }
+    var out = []; H.forEach(function (h) { out.push((h >>> 24) & 255, (h >>> 16) & 255, (h >>> 8) & 255, h & 255); }); return out;
+  }
+  function utf8(s) { return Array.prototype.slice.call(new TextEncoder().encode(s)); }
+  var cache = {};
+  var api = {
+    SpreadsheetApp: { getActiveSpreadsheet: function () { return SS; } },
+    Utilities: {
+      DigestAlgorithm: { SHA_256: 1 }, Charset: { UTF_8: 1 },
+      computeDigest: function (a, s) { return sha256(utf8(s)); },
+      base64Encode: function (b) { return btoa(String.fromCharCode.apply(null, b)); },
+      getUuid: function () { return (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now()); },
+      formatDate: function (d, tz, f) {
+        function z(n) { return (n < 10 ? '0' : '') + n; }
+        return f.replace('yyyy', d.getFullYear()).replace('yy', String(d.getFullYear()).slice(2)).replace('MM', z(d.getMonth() + 1)).replace('dd', z(d.getDate()))
+          .replace('HH', z(d.getHours())).replace('mm', z(d.getMinutes())).replace('ss', z(d.getSeconds()));
+      }
+    },
+    CacheService: { getScriptCache: function () { return { get: function (k) { return cache[k] || null; }, put: function (k, v) { cache[k] = v; }, remove: function (k) { delete cache[k]; } }; } },
+    LockService: { getScriptLock: function () { return { waitLock: function () { }, releaseLock: function () { } }; } },
+    ContentService: { MimeType: { JSON: 1 }, createTextOutput: function (s) { return { s: s, setMimeType: function () { return this; } }; } },
+    Logger: { log: function () { } }
+  };
+  return { api: api, save: save, reset: reset, hasData: function () { return !!load().order.length; } };
+})();
+var SpreadsheetApp = GAS_EMU.api.SpreadsheetApp, Utilities = GAS_EMU.api.Utilities, CacheService = GAS_EMU.api.CacheService,
+  LockService = GAS_EMU.api.LockService, ContentService = GAS_EMU.api.ContentService, Logger = GAS_EMU.api.Logger;
+
+/* =====================================================================
+ * MIMO KEDAH — Backend Google Apps Script
+ * Pangkalan data: Google Sheet ini (tab dicipta oleh setup()).
+ *
+ * LANGKAH PEMASANGAN (ringkas — lihat README):
+ * 1. Ubah ADMIN_PASSWORD_AWAL di bawah.
+ * 2. Jalankan fungsi setup() sekali (Run ▸ setup), benarkan akses.
+ * 3. Deploy ▸ New deployment ▸ Web app
+ *      Execute as: Me   |   Who has access: Anyone
+ * 4. Salin URL web app (…/exec) ke API_URL dalam papan pemuka & app pesakit.
+ * ===================================================================== */
+var ADMIN_PASSWORD_AWAL = 'demo1234';
+var TZ = 'Asia/Kuala_Lumpur';
+var SESI_SAAT = 6 * 3600;
+
+/* ---------- Setup ---------- */
+function setup() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var kkmHead = KKM_SCHEMA.map(function (c, i) { return (i + 1) + '. ' + c.g + ' | ' + c.l; }).concat(['MIMO_ID']);
+  buatTab_(ss, 'PESAKIT_KKM', kkmHead);
+  buatTab_(ss, 'APP_PESAKIT', TAB_APP);
+  buatTab_(ss, 'LAWATAN', TAB_LAWATAN);
+  buatTab_(ss, 'KECERGASAN', TAB_KEC);
+  buatTab_(ss, 'LOG_PESAKIT', TAB_LOG);
+  buatTab_(ss, 'PETUGAS', TAB_PETUGAS);
+  buatTab_(ss, 'AUDIT', TAB_AUDIT);
+  if (!cariBaris_('PETUGAS', 'USERNAME', 'admin')) tambahPetugas('admin', 'Pentadbir Sistem', 'SEMUA', ADMIN_PASSWORD_AWAL, 'ADMIN');
+  var s1 = ss.getSheetByName('Sheet1'); if (s1 && s1.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(s1);
+  Logger.log('Setup selesai. Log masuk: admin / ' + ADMIN_PASSWORD_AWAL + ' (tukar selepas log masuk pertama).');
+}
+function buatTab_(ss, nama, head) {
+  var sh = ss.getSheetByName(nama) || ss.insertSheet(nama);
+  sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight('bold').setBackground('#0f4c5c').setFontColor('#ffffff');
+  sh.setFrozenRows(1);
+  sh.getRange(1, 1, Math.max(sh.getMaxRows(), 1000), head.length).setNumberFormat('@'); // teks: kekal sifar di depan No. KP / telefon
+  return sh;
+}
+/* Tambah / kemas kini petugas. fasiliti = nama fasiliti tepat seperti lajur FASILITI, atau 'SEMUA' */
+function tambahPetugas(username, nama, fasiliti, password, peranan) {
+  var salt = Utilities.getUuid();
+  upsert_('PETUGAS', TAB_PETUGAS, { USERNAME: String(username).toLowerCase(), NAMA: nama, FASILITI: fasiliti, SALT: salt, HASH: hash_(salt, password), PERANAN: peranan || 'PETUGAS', AKTIF: 'YA' }, 'USERNAME');
+}
+
+/* ---------- Helper sheet ---------- */
+function sh_(n) { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(n); }
+function semua_(n) { var v = sh_(n).getDataRange().getDisplayValues(); return { head: v[0], rows: v.slice(1) }; }
+function objs_(n) { var d = semua_(n); return d.rows.filter(function (r) { return r[0] !== ''; }).map(function (r) { var o = {}; d.head.forEach(function (h, i) { o[h] = r[i]; }); return o; }); }
+function cariBaris_(n, kol, nilai) {
+  var d = semua_(n), i = d.head.indexOf(kol);
+  for (var r = 0; r < d.rows.length; r++) if (d.rows[r][i] === String(nilai)) return { baris: r + 2, data: d.rows[r], head: d.head };
+  return null;
+}
+function upsert_(n, head, obj, kunci) {
+  var f = cariBaris_(n, kunci, obj[kunci]), s = sh_(n);
+  var row = head.map(function (h, i) { return obj[h] !== undefined ? String(obj[h]) : (f ? f.data[i] : ''); });
+  if (f) s.getRange(f.baris, 1, 1, head.length).setValues([row]);
+  else s.getRange(s.getLastRow() + 1, 1, 1, head.length).setNumberFormat('@').setValues([row]);
+  return row;
+}
+function padam_(n, kol, nilai) { var f = cariBaris_(n, kol, nilai); if (f) sh_(n).deleteRow(f.baris); return !!f; }
+function kini_() { return Utilities.formatDate(new Date(), TZ, 'dd/MM/yyyy HH:mm:ss'); }
+function hash_(salt, pw) { return Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + '|' + pw, Utilities.Charset.UTF_8)); }
+function rawak_(n) { var a = '23456789ABCDEFGHJKMNPQRSTUVWXYZ', s = ''; for (var i = 0; i < n; i++) s += a.charAt(Math.floor(Math.random() * a.length)); return s; }
+function audit_(u, t, id, b) { sh_('AUDIT').appendRow([kini_(), u, t, id || '', b || '']); }
+
+/* ---------- Pesakit KKM (202 lajur + MIMO_ID) ---------- */
+function kkmSemua_() {
+  var d = semua_('PESAKIT_KKM');
+  return d.rows.map(function (r, i) { var o = rowToKkm(r); o.MIMO_ID = r[KKM_N]; o._baris = i + 2; return o; }).filter(function (o) { return o.MIMO_ID; });
+}
+function simpanKkm_(o, baris) {
+  var row = kkmToRow(o).concat([o.MIMO_ID]), s = sh_('PESAKIT_KKM');
+  if (baris) s.getRange(baris, 1, 1, KKM_N + 1).setValues([row]);
+  else s.getRange(s.getLastRow() + 1, 1, 1, KKM_N + 1).setNumberFormat('@').setValues([row]);
+}
+function bolehAkses_(u, o) { return u.f === 'SEMUA' || String(o.FASILITI).toUpperCase() === String(u.f).toUpperCase(); }
+function idBaru_() { return 'MK' + Utilities.formatDate(new Date(), TZ, 'yyMM') + '-' + rawak_(4); }
+function pastikanApp_(id) {
+  var f = cariBaris_('APP_PESAKIT', 'MIMO_ID', id);
+  if (f) { var o = {}; f.head.forEach(function (h, i) { o[h] = f.data[i]; }); return o; }
+  var a = { MIMO_ID: id, TOKEN: rawak_(8), NAMA_PANGGILAN: '', SASARAN_BERAT: '', TEMUJANJI_JSON: '{}', AKTIF: 'YA', CIPTA: kini_() };
+  upsert_('APP_PESAKIT', TAB_APP, a, 'MIMO_ID'); return a;
+}
+
+/* ---------- Penghala API ---------- */
+function doGet() { return json_({ ok: true, app: 'MIMO Kedah API', masa: kini_() }); }
+function doPost(e) {
+  var req; try { req = JSON.parse(e.postData.contents); } catch (x) { return json_({ ok: false, ralat: 'Permintaan tidak sah' }); }
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(20000);
+    var a = req.action, h;
+    if (a === 'login') h = login_(req);
+    else if (a === 'p_get') h = pGet_(req);
+    else if (a === 'p_save') h = pSave_(req);
+    else {
+      var u = sesi_(req.session); if (!u) return json_({ ok: false, ralat: 'SESI_TAMAT' });
+      var F = { list: list_, get: get_, saveKkm: saveKkm_, saveLawatan: saveLawatan_, delLawatan: delLawatan_, saveKec: saveKec_, saveApp: saveApp_, resetToken: resetToken_, importKkm: importKkm_, exportKkm: exportKkm_, tukarPassword: tukarPw_, tambahPetugas: tambahPetugasApi_, logout: logout_ }[a];
+      if (!F) return json_({ ok: false, ralat: 'Tindakan tidak dikenali' });
+      h = F(req, u);
+    }
+    return json_(h);
+  } catch (err) {
+    return json_({ ok: false, ralat: String(err && err.message || err) });
+  } finally { try { lock.releaseLock(); } catch (x) { } }
+}
+function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+/* ---------- Pengesahan petugas ---------- */
+function login_(q) {
+  var f = cariBaris_('PETUGAS', 'USERNAME', String(q.user || '').toLowerCase().trim());
+  if (!f) return { ok: false, ralat: 'Nama pengguna atau kata laluan salah' };
+  var p = {}; f.head.forEach(function (h, i) { p[h] = f.data[i]; });
+  if (p.AKTIF !== 'YA' || hash_(p.SALT, q.pass || '') !== p.HASH) return { ok: false, ralat: 'Nama pengguna atau kata laluan salah' };
+  var tok = Utilities.getUuid();
+  CacheService.getScriptCache().put('s_' + tok, JSON.stringify({ u: p.USERNAME, n: p.NAMA, f: p.FASILITI, r: p.PERANAN }), SESI_SAAT);
+  audit_(p.USERNAME, 'LOGIN');
+  return { ok: true, session: tok, nama: p.NAMA, fasiliti: p.FASILITI, peranan: p.PERANAN };
+}
+function sesi_(t) { if (!t) return null; var c = CacheService.getScriptCache(), v = c.get('s_' + t); if (!v) return null; c.put('s_' + t, v, SESI_SAAT); return JSON.parse(v); }
+function logout_(q) { CacheService.getScriptCache().remove('s_' + q.session); return { ok: true }; }
+function tukarPw_(q, u) {
+  var f = cariBaris_('PETUGAS', 'USERNAME', u.u), p = {}; f.head.forEach(function (h, i) { p[h] = f.data[i]; });
+  if (hash_(p.SALT, q.lama || '') !== p.HASH) return { ok: false, ralat: 'Kata laluan lama salah' };
+  if (String(q.baru || '').length < 8) return { ok: false, ralat: 'Kata laluan baru mesti sekurang-kurangnya 8 aksara' };
+  tambahPetugas(u.u, p.NAMA, p.FASILITI, q.baru, p.PERANAN); audit_(u.u, 'TUKAR_PASSWORD'); return { ok: true };
+}
+function tambahPetugasApi_(q, u) {
+  if (u.r !== 'ADMIN') return { ok: false, ralat: 'Hanya ADMIN' };
+  if (!q.username || String(q.password || '').length < 8) return { ok: false, ralat: 'Nama pengguna & kata laluan (≥8 aksara) diperlukan' };
+  tambahPetugas(q.username, q.nama || q.username, q.fasiliti || 'SEMUA', q.password, q.peranan || 'PETUGAS');
+  audit_(u.u, 'TAMBAH_PETUGAS', '', q.username); return { ok: true };
+}
+
+/* ---------- API petugas ---------- */
+function list_(q, u) {
+  var lw = objs_('LAWATAN'), lg = objs_('LOG_PESAKIT'), ap = objs_('APP_PESAKIT');
+  var akhirLw = {}, akhirLg = {}, apMap = {};
+  lw.forEach(function (r) { var k = r.MIMO_ID; if (!akhirLw[k] || tk_(r.TARIKH) >= tk_(akhirLw[k].TARIKH)) akhirLw[k] = r; });
+  lg.forEach(function (r) { var k = r.MIMO_ID; if (/^\d{4}-\d{2}-\d{2}$/.test(r.KUNCI) && (!akhirLg[k] || r.KUNCI > akhirLg[k])) akhirLg[k] = r.KUNCI; }); // tarikh log harian terkini (ISO)
+  ap.forEach(function (r) { apMap[r.MIMO_ID] = r; });
+  var out = kkmSemua_().filter(function (o) { return bolehAkses_(u, o); }).map(function (o) {
+    var l = akhirLw[o.MIMO_ID] || {};
+    return { id: o.MIMO_ID, nama: o.NAMA, nokp: o.NOKP, umur: o.UMUR, jantina: o.JANTINA, daerah: o.DAERAH, fasiliti: o.FASILITI, status: o.STATUS,
+      b_berat: o.B_BERAT, b_bmi: o.B_BMI, kat: o.B_KATBMI, tinggi: o.B_TINGGI, daftar: o.TARIKH_DAFTAR,
+      f6: o.F6_BERAT, f12: o.F12_BERAT,
+      l_berat: l.BERAT || '', l_tarikh: l.TARIKH || '', log_akhir: akhirLg[o.MIMO_ID] || '', app: !!apMap[o.MIMO_ID] };
+  });
+  return { ok: true, pesakit: out };
+}
+function tk_(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?: (\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)).getTime() : 0; }
+function kkmById_(id) { var a = kkmSemua_(); for (var i = 0; i < a.length; i++) if (a[i].MIMO_ID === id) return a[i]; return null; }
+function semakAkses_(u, id) { var o = kkmById_(id); if (!o) throw new Error('Pesakit tidak dijumpai'); if (!bolehAkses_(u, o)) throw new Error('Tiada akses kepada pesakit ini'); return o; }
+function get_(q, u) {
+  var o = semakAkses_(u, q.id); delete o._baris;
+  audit_(u.u, 'LIHAT', q.id);
+  return { ok: true, kkm: o, app: pastikanApp_(q.id),
+    lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === q.id; }),
+    kecergasan: objs_('KECERGASAN').filter(function (r) { return r.MIMO_ID === q.id; }),
+    logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === q.id; }) };
+}
+function saveKkm_(q, u) {
+  var o = q.kkm || {}, lama = o.MIMO_ID ? kkmById_(o.MIMO_ID) : null;
+  if (u.f !== 'SEMUA') o.FASILITI = u.f;
+  if (lama && !bolehAkses_(u, lama)) throw new Error('Tiada akses');
+  if (!lama) {
+    if (o.NOKP && kkmSemua_().some(function (x) { return x.NOKP === String(o.NOKP); })) return { ok: false, ralat: 'No. KP ini sudah didaftarkan' };
+    o.MIMO_ID = idBaru_(); o.TARIKH_DAFTAR = kini_(); if (!o.STATUS) o.STATUS = 'AKTIF';
+  }
+  o.TARIKH_KEMASKINI = kini_();
+  simpanKkm_(o, lama && lama._baris);
+  pastikanApp_(o.MIMO_ID);
+  audit_(u.u, lama ? 'KEMASKINI_KKM' : 'DAFTAR', o.MIMO_ID);
+  return { ok: true, id: o.MIMO_ID };
+}
+function saveLawatan_(q, u) {
+  var r = q.rec; semakAkses_(u, r.MIMO_ID);
+  if (!r.LAWATAN_ID) r.LAWATAN_ID = 'LW-' + rawak_(8);
+  r.OLEH = u.u; r.KEMASKINI = kini_();
+  upsert_('LAWATAN', TAB_LAWATAN, r, 'LAWATAN_ID'); audit_(u.u, 'LAWATAN', r.MIMO_ID, r.MINGGU);
+  return { ok: true, id: r.LAWATAN_ID };
+}
+function delLawatan_(q, u) {
+  var f = cariBaris_('LAWATAN', 'LAWATAN_ID', q.lid); if (!f) return { ok: true };
+  semakAkses_(u, f.data[1]); padam_('LAWATAN', 'LAWATAN_ID', q.lid); audit_(u.u, 'PADAM_LAWATAN', f.data[1]); return { ok: true };
+}
+function saveKec_(q, u) {
+  var r = q.rec; semakAkses_(u, r.MIMO_ID);
+  r.KEC_ID = r.MIMO_ID + '-' + r.FASA; r.OLEH = u.u; r.KEMASKINI = kini_();
+  upsert_('KECERGASAN', TAB_KEC, r, 'KEC_ID'); audit_(u.u, 'KECERGASAN', r.MIMO_ID, r.FASA); return { ok: true };
+}
+function saveApp_(q, u) {
+  var a = q.app; semakAkses_(u, a.MIMO_ID); pastikanApp_(a.MIMO_ID);
+  upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: a.MIMO_ID, NAMA_PANGGILAN: a.NAMA_PANGGILAN, SASARAN_BERAT: a.SASARAN_BERAT, TEMUJANJI_JSON: a.TEMUJANJI_JSON, AKTIF: a.AKTIF || 'YA' }, 'MIMO_ID');
+  audit_(u.u, 'APP', a.MIMO_ID); return { ok: true };
+}
+function resetToken_(q, u) {
+  semakAkses_(u, q.id); pastikanApp_(q.id); var t = rawak_(8);
+  upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: q.id, TOKEN: t }, 'MIMO_ID'); audit_(u.u, 'TOKEN_BARU', q.id); return { ok: true, token: t };
+}
+/* rows: tatasusunan baris 202 lajur (disalin dari sheet KKM). Padanan ikut No. KP. */
+function importKkm_(q, u) {
+  var ada = {}, baru = 0, kemas = 0, langkau = 0;
+  kkmSemua_().forEach(function (o) { ada[o.NOKP] = o; });
+  var tambah = [];
+  (q.rows || []).forEach(function (r) {
+    var o = rowToKkm(r); if (!o.NOKP || !o.NAMA) { langkau++; return; }
+    if (!bolehAkses_(u, o)) { langkau++; return; }
+    var l = ada[o.NOKP];
+    if (l) { o.MIMO_ID = l.MIMO_ID; simpanKkm_(o, l._baris); kemas++; }
+    else { o.MIMO_ID = idBaru_(); tambah.push(kkmToRow(o).concat([o.MIMO_ID])); ada[o.NOKP] = o; baru++; }
+  });
+  if (tambah.length) { var s = sh_('PESAKIT_KKM'); s.getRange(s.getLastRow() + 1, 1, tambah.length, KKM_N + 1).setNumberFormat('@').setValues(tambah); tambah.forEach(function (r) { pastikanApp_(r[KKM_N]); }); }
+  audit_(u.u, 'IMPORT_KKM', '', 'baru ' + baru + ', kemaskini ' + kemas);
+  return { ok: true, baru: baru, kemaskini: kemas, langkau: langkau };
+}
+function exportKkm_(q, u) {
+  var ids = q.ids && q.ids.length ? q.ids : null;
+  var rows = kkmSemua_().filter(function (o) { return bolehAkses_(u, o) && (!ids || ids.indexOf(o.MIMO_ID) >= 0); }).map(function (o) { return kkmToRow(o); });
+  audit_(u.u, 'EKSPORT_KKM', '', rows.length + ' baris');
+  return { ok: true, rows: rows };
+}
+
+/* ---------- API pesakit (kod akses) ---------- */
+function appDariToken_(t) {
+  t = String(t || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
+  if (t.length < 8) return null;
+  var f = cariBaris_('APP_PESAKIT', 'TOKEN', t); if (!f) return null;
+  var a = {}; f.head.forEach(function (h, i) { a[h] = f.data[i]; });
+  return a.AKTIF === 'TIDAK' ? null : a;
+}
+function pGet_(q) {
+  var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
+  var o = kkmById_(a.MIMO_ID) || {};
+  return { ok: true, profil: profilPesakit_(o, a),
+    lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { delete r.OLEH; delete r.MIMO_ID; return r; }),
+    logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { return { jenis: r.JENIS, kunci: r.KUNCI, data: r.DATA_JSON, kemaskini: r.KEMASKINI }; }) };
+}
+/* Hanya maklumat minimum dihantar ke telefon pesakit — tiada No. KP, telefon, sejarah perubatan atau makmal */
+function profilPesakit_(o, a) {
+  return { nama: a.NAMA_PANGGILAN || String(o.NAMA || '').split(' ')[0], fasiliti: o.FASILITI || '', tinggi: o.B_TINGGI || '',
+    b_berat: o.B_BERAT || '', b_wc: o.B_WC || '', b_bmi: o.B_BMI || '', daftar: o.TARIKH_DAFTAR || '', sasaran: a.SASARAN_BERAT || '',
+    temujanji: a.TEMUJANJI_JSON || '{}' };
+}
+var JENIS_LOG = ['MAKAN', 'REFLEKSI', 'STRATEGI', 'SENAMAN', 'BERAT'];
+function pSave_(q) {
+  var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
+  var n = 0;
+  (q.logs || []).slice(0, 60).forEach(function (l) {
+    if (JENIS_LOG.indexOf(l.jenis) < 0) return;
+    var data = typeof l.data === 'string' ? l.data : JSON.stringify(l.data);
+    if (data.length > 8000) return;
+    var kunci = String(l.kunci || '').slice(0, 20);
+    upsert_('LOG_PESAKIT', TAB_LOG, { LOG_ID: a.MIMO_ID + '|' + l.jenis + '|' + kunci, MIMO_ID: a.MIMO_ID, JENIS: l.jenis, KUNCI: kunci, DATA_JSON: data, KEMASKINI: kini_() }, 'LOG_ID');
+    n++;
+  });
+  return { ok: true, disimpan: n };
+}
+
+/* ===== Data contoh PALSU untuk mod demo ===== */
+function seedDemo() {
+  if (GAS_EMU.hasData()) return;
+  ADMIN_PASSWORD_AWAL = 'demo1234';
+  setup();
+  tambahPetugas('kkbas', 'Petugas KK Bandar Alor Setar', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'demo1234', 'PETUGAS');
+  var U = { u: 'admin', f: 'SEMUA', r: 'ADMIN' };
+  var NAMA = ['NURUL AINA BINTI AHMAD', 'SITI KHADIJAH BINTI OMAR', 'MOHD HAFIZ BIN ISMAIL', 'TAN MEI LING', 'FARAH NADIA BINTI YUSOF', 'AHMAD ZAKI BIN HASSAN',
+    'RAJESWARI A/P MUTHU', 'NOR AZIZAH BINTI MAT', 'KHAIRUL ANUAR BIN SALLEH', 'LIM WEI JIE', 'ROSMAWATI BINTI DAUD', 'SYAFIQ BIN ROSLI'];
+  var FAS = ['KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR',
+    'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN SUNGAI PETANI', 'KLINIK KESIHATAN SUNGAI PETANI', 'KLINIK KESIHATAN SUNGAI PETANI',
+    'KLINIK KESIHATAN KULIM', 'KLINIK KESIHATAN KULIM', 'KLINIK KESIHATAN KULIM'];
+  var DAE = { 'KLINIK KESIHATAN BANDAR ALOR SETAR': 'KOTA SETAR', 'KLINIK KESIHATAN SUNGAI PETANI': 'KUALA MUDA', 'KLINIK KESIHATAN KULIM': 'KULIM' };
+  var seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+  var hari = 864e5, kini = new Date(); kini.setHours(0, 0, 0, 0);
+  var bulanLalu = [11, 9, 7.5, 6.5, 5, 4, 3, 2, 1.5, 1, 0.6, 0.3];
+  var trend = [-0.35, -0.25, -0.3, -0.15, 0.05, -0.4, -0.2, -0.3, 0.1, -0.25, -0.2, 0];
+  NAMA.forEach(function (nama, i) {
+    var pr = !/ BIN |^TAN|^LIM|^MOHD|^AHMAD|^KHAIRUL|^SYAFIQ/.test(nama), lahir = new Date(1970 + Math.floor(rnd() * 33), Math.floor(rnd() * 12), 1 + Math.floor(rnd() * 27));
+    var tinggi = pr ? 150 + Math.round(rnd() * 15) : 162 + Math.round(rnd() * 15), bmi0 = 28 + rnd() * 16, berat0 = Math.round(bmi0 * Math.pow(tinggi / 100, 2) * 10) / 10;
+    var daftar = new Date(kini.getTime() - bulanLalu[i] * 30.44 * hari);
+    var o = { NEGERI: 'KEDAH', DAERAH: DAE[FAS[i]], FASILITI: FAS[i], SUMBER_RUJUKAN: 'KLINIK KESIHATAN', STATUS_RUJUKAN: 'SETUJU SERTAI MIMO', NAMA: nama,
+      NOKP: String(lahir.getFullYear()).slice(2) + ('0' + (lahir.getMonth() + 1)).slice(-2) + ('0' + lahir.getDate()).slice(-2) + '02' + ('000' + (i * 7 + 1)).slice(-4),
+      TARIKH_LAHIR: dateToDmy(lahir), BANGSA: /A\/P/.test(nama) ? 'INDIA' : /^TAN|^LIM/.test(nama) ? 'CINA' : 'MELAYU', JANTINA: pr ? 'PEREMPUAN' : 'LELAKI', TELEFON: '01' + (2000000 + i * 1111),
+      SP_DM: rnd() < .35 ? 'YA' : 'TIDAK', SP_HPT: rnd() < .4 ? 'YA' : 'TIDAK', SP_DLP: rnd() < .5 ? 'YA' : 'TIDAK', SP_CVD: 'TIDAK',
+      B_TINGGI: String(tinggi), B_BERAT: String(berat0), B_WC: String(Math.round(85 + bmi0 * 0.6 + rnd() * 6)), B_SIS: String(115 + Math.round(rnd() * 30)), B_DIA: String(70 + Math.round(rnd() * 15)),
+      B_BCA_PLEMAK: String(Math.round((pr ? 40 : 30) + rnd() * 12)), B_BCA_VISC: String(10 + Math.round(rnd() * 14)), B_BCA_JLEMAK: String(Math.round(berat0 * 0.42)), B_BCA_SMM: String(Math.round((pr ? 21 : 30) + rnd() * 5)),
+      B_FBS_ST: 'SELESAI', B_FBS: String(Math.round((4.8 + rnd() * 3) * 10) / 10), B_2HPP_ST: 'TIDAK DILAKUKAN', B_HBA1C: String(Math.round((5.4 + rnd() * 2.5) * 10) / 10),
+      B_TC_ST: 'SELESAI', B_TC: String(Math.round((4.5 + rnd() * 2) * 10) / 10), B_TG_ST: 'SELESAI', B_TG: String(Math.round((1 + rnd() * 1.5) * 10) / 10),
+      B_LDL_ST: 'SELESAI', B_LDL: String(Math.round((2.8 + rnd() * 1.5) * 10) / 10), B_HDL_ST: 'SELESAI', B_HDL: String(Math.round((1 + rnd() * 0.5) * 10) / 10),
+      B_RP: 'SELESAI', B_LFT: 'SELESAI', B_AST: String(18 + Math.round(rnd() * 25)), B_ALT: String(15 + Math.round(rnd() * 30)), B_FBC: 'SELESAI', B_HB: String(Math.round((11.5 + rnd() * 3) * 10) / 10), B_PLT: String(230 + Math.round(rnd() * 150)),
+      B_MENTAL_ST: 'SELESAI', B_MENTAL_KEP: rnd() < .15 ? 'PERLU DIRUJUK' : 'TIDAK PERLU DIRUJUK', R0_MNT_ST: 'YA', R0_MNT_TRK: dateToDmy(daftar), R0_SEN_ST: 'YA', R0_SEN_TRK: dateToDmy(daftar),
+      ID: 'kk_demo@moh.gov.my', STATUS: 'AKTIF' };
+    kiraKkm(o);
+    var r = saveKkm_({ kkm: o }, U); o.MIMO_ID = r.id; o.TARIKH_DAFTAR = dateToDmy(daftar) + ' 09:' + (10 + i) + ':00';
+    var minggu = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24], lw = [], minggu2 = Math.floor((kini - daftar) / (7 * hari));
+    var mingguTambah = [26, 30, 34, 39, 44, 48, 52];
+    minggu.concat(mingguTambah).forEach(function (m) {
+      if (m > minggu2 + 1 || m > minggu2 && i % 2) return;
+      var d = new Date(daftar.getTime() + (m - 1) * 7 * hari), b = Math.round((berat0 + trend[i] * (m - 1) + (rnd() - .5) * 0.8) * 10) / 10;
+      var rec = { MIMO_ID: o.MIMO_ID, TARIKH: dateToDmy(d), MINGGU: m <= 24 ? 'M' + m : 'M' + m, SIS: String(+o.B_SIS - Math.round(m / 6) + Math.round(rnd() * 6)), DIA: String(+o.B_DIA - Math.round(m / 10)), NADI: String(70 + Math.round(rnd() * 20)),
+        BERAT: String(b), BMI: String(bmiOf(b, tinggi)), WC: String(Math.round((+o.B_WC + trend[i] * (m - 1) * 0.6) * 10) / 10) };
+      if (m % 4 === 0 || m === 1) { rec.BCA_PLEMAK = String(Math.round((+o.B_BCA_PLEMAK + trend[i] * m * 0.15) * 10) / 10); rec.BCA_VISC = String(Math.max(5, +o.B_BCA_VISC + Math.round(trend[i] * m / 4))); rec.BCA_JLEMAK = String(Math.round(b * (+rec.BCA_PLEMAK) / 10) / 10); rec.BCA_SMM = o.B_BCA_SMM; }
+      saveLawatan_({ rec: rec }, U); lw.push(rec);
+    });
+    if (bulanLalu[i] >= 6) { isiSusulan(o, lw, 6); o.R6_MNT_ST = 'YA'; o.R6_SEN_ST = 'YA'; o.F6_FBS_ST = 'SELESAI'; o.F6_FBS = String(Math.round((+o.B_FBS - 0.3) * 10) / 10); o.F6_HBA1C = String(Math.round((+o.B_HBA1C - 0.2) * 10) / 10); }
+    if (bulanLalu[i] >= 11) isiSusulan(o, lw, 12);
+    kiraKkm(o); saveKkm_({ kkm: o }, U);
+    if (minggu2 >= 1) saveKec_({ rec: { MIMO_ID: o.MIMO_ID, FASA: 'PRE', TARIKH: dateToDmy(daftar), BERAT: o.B_BERAT, OTOT: o.B_BCA_SMM, LEMAK_PCT: o.B_BCA_PLEMAK, GRIP_R: String(18 + Math.round(rnd() * 12)), GRIP_L: String(16 + Math.round(rnd() * 12)), STEP_PRE: '82', STEP_PEAK: '138', STEP_1: '118', STEP_2: '104', STEP_3: '96', PUSHUP: String(3 + Math.round(rnd() * 8)), SITUP_REPS: String(5 + Math.round(rnd() * 10)), PLANK: String(15 + Math.round(rnd() * 30)), SITREACH: String(10 + Math.round(rnd() * 15)) } }, U);
+    var tj = {}; DISIPLIN.forEach(function (ds, k) { tj[ds] = []; for (var s = 0; s < 6; s++) { var d = new Date(daftar.getTime() + (s * 28 + k * 2) * hari); tj[ds].push(k < 3 || s < 3 ? dmyToIso(dateToDmy(d)) : ''); } });
+    var ap = pastikanApp_(o.MIMO_ID);
+    saveApp_({ app: { MIMO_ID: o.MIMO_ID, NAMA_PANGGILAN: nama.split(' ')[pr && /^NUR|^SITI|^NOR|^FARAH/.test(nama) ? 1 : 0].replace(/^(.)(.*)$/, function (a, b, c) { return b + c.toLowerCase(); }), SASARAN_BERAT: String(Math.round(berat0 * 0.93)), TEMUJANJI_JSON: JSON.stringify(tj) } }, U);
+    if (i === 0) upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: o.MIMO_ID, TOKEN: 'KEDAH234' }, 'MIMO_ID');
+    // log pesakit
+    var aktifHari = [14, 10, 20, 3, 0, 12, 6, 9, 2, 8, 5, 4][i], senyap = [0, 1, 0, 9, 30, 0, 2, 0, 12, 0, 1, 0][i];
+    if (!aktifHari) return;
+    var tok = ap.TOKEN; if (i === 0) tok = 'KEDAH234';
+    var MENU = { sarapan: ['Roti canai 1 keping + teh tarik kurang manis', 'Oat + pisang', 'Nasi lemak (separuh pinggan)', 'Roti wholemeal 2 keping + telur rebus', 'Bihun goreng (suku pinggan) + kopi O'],
+      snek_pagi: ['Epal 1 biji', 'Kacang badam segenggam', '', 'Kuih karipap 2 biji', ''], tengahari: ['Nasi putih ½ pinggan + ikan bakar + sayur campur', 'Nasi campur: ayam masak merah + kangkung', 'Mee sup', 'Nasi ¼ + sayur ½ + ayam ¼ (Pinggan Sihat)'],
+      petang: ['Teh O kosong', 'Pisang goreng 3 keping', '', 'Jambu batu potong', ''], malam: ['Sup sayur + ikan kukus', 'Nasi goreng kampung', 'Roti john (separuh)', 'Ayam panggang + salad', 'Tidak makan malam'] };
+    var MOOD = ['😊 Gembira', '😐 Biasa', '😟 Risau', '😩 Penat', '😤 Stres', '😔 Sedih', '😌 Tenang'];
+    for (var h = senyap; h < senyap + aktifHari; h++) {
+      var d = new Date(kini.getTime() - h * hari), iso = dmyToIso(dateToDmy(d)), hid = {};
+      Object.keys(MENU).forEach(function (k) { var m = pick(MENU[k]); if (m) hid[k] = { menu: m, lapar: String(3 + Math.floor(rnd() * 7)), mood: pick(MOOD) }; });
+      var logs = [{ jenis: 'MAKAN', kunci: iso, data: { hidangan: hid, air: String(4 + Math.floor(rnd() * 5)) } }];
+      if (rnd() < .6) logs.push({ jenis: 'SENAMAN', kunci: iso, data: { aktiviti: [{ jenis: pick(['Jalan pantas', 'Kayuh basikal', 'Senaman di rumah (video)', 'Zumba', 'Naik tangga']), minit: String(15 + Math.floor(rnd() * 30)), rpe: pick(['Ringan', 'Sederhana', 'Berat']) }], langkah: String(3000 + Math.floor(rnd() * 6000)) } });
+      if (h % 3 === 0) logs.push({ jenis: 'BERAT', kunci: iso, data: { berat: String(Math.round((berat0 + trend[i] * (bulanLalu[i] * 4.3) + (rnd() - .5)) * 10) / 10) } });
+      pSave_({ token: tok, logs: logs });
+    }
+    pSave_({ token: tok, logs: [{ jenis: 'REFLEKSI', kunci: mingguIso(new Date(kini.getTime() - senyap * hari)), data: { q1: 'Waktu malam selepas balik kerja', q2: 'Stres dan penat', q3: 'Jalan kaki 10 minit atau minum air dulu' } },
+      { jenis: 'STRATEGI', kunci: 'FIFOT', data: { rows: { diet: { halangan: 'Selalu craving manis petang', punca: 'Skip makan tengah hari', strategi: 'Bawa bekal + buah potong' }, gaya: { halangan: 'Tiada masa masak', punca: 'Kerja syif', strategi: 'Meal prep hujung minggu' }, sosial: { halangan: 'Makan ramai-ramai', punca: 'Kenduri / kawan ajak', strategi: 'Ambil pinggan kecil, sayur dulu' }, emosi: { halangan: 'Makan bila stres', punca: 'Tekanan kerja', strategi: 'Tarik nafas, telefon kawan, jalan kaki' } } } }] });
+  });
+  GAS_EMU.save();
+}
+function demoCall(payload) { seedDemo(); var r = doPost({ postData: { contents: JSON.stringify(payload) } }); GAS_EMU.save(); return JSON.parse(r.s); }
+</script>
+<script>
+var DEMO = !API_URL, KEY = 'mimo_app_v1';
+var ST = load(), V = 'utama', HARI = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'], BLN = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];
+var WAKTU = [['sarapan', 'Sarapan', '🌅'], ['snek_pagi', 'Snek pagi', '🍎'], ['tengahari', 'Tengah hari', '🍛'], ['petang', 'Minum petang', '☕'], ['malam', 'Makan malam', '🌙']];
+var MOOD = ['😊 Gembira', '😌 Tenang', '😐 Biasa', '😩 Penat', '😟 Risau', '😤 Stres', '😔 Sedih', '😠 Marah', '🥱 Bosan'];
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch (e) { } }
+var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function toast(m) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2200); }
+function iso(d) { return dmyToIso(dateToDmy(d)); }
+function hariIni() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+function tarikhPanjang(s) { var d = new Date(s + 'T00:00'); return HARI[d.getDay()] + ', ' + d.getDate() + ' ' + BLN[d.getMonth()] + ' ' + d.getFullYear(); }
+
+/* ---------- Data & penyegerakan ---------- */
+function api(p) {
+  if (DEMO) return new Promise(function (ok) { setTimeout(function () { ok(demoCall(p)); }, 80); });
+  return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(p) }).then(function (r) { return r.json(); });
+}
+function getLog(j, k) { return (ST.logs || {})[j + '|' + k]; }
+function setLog(j, k, data) { ST.logs = ST.logs || {}; ST.logs[j + '|' + k] = { data: data, dirty: 1, t: Date.now() }; save(); jadualSync(); }
+function dirtyN() { return Object.keys(ST.logs || {}).filter(function (k) { return ST.logs[k].dirty; }).length; }
+var syncT = null, syncing = false;
+function jadualSync() { clearTimeout(syncT); syncT = setTimeout(sync, 1500); paparSync(); }
+function sync() {
+  if (syncing || !ST.token) return Promise.resolve();
+  syncing = true; paparSync();
+  var kot = Object.keys(ST.logs || {}).filter(function (k) { return ST.logs[k].dirty; }).slice(0, 60);
+  var hantar = kot.map(function (k) { var p = k.split('|'); return { jenis: p[0], kunci: p[1], data: ST.logs[k].data, _t: ST.logs[k].t }; });
+  var p = hantar.length ? api({ action: 'p_save', token: ST.token, logs: hantar }) : Promise.resolve({ ok: true });
+  return p.then(function (r) {
+    if (!r.ok) throw new Error(r.ralat);
+    hantar.forEach(function (h) { var x = ST.logs[h.jenis + '|' + h.kunci]; if (x && x.t === h._t) x.dirty = 0; });
+    return api({ action: 'p_get', token: ST.token });
+  }).then(function (r) {
+    if (!r.ok) { if (r.ralat === 'Kod tidak sah') { keluar(true); toast('Kod akses tidak lagi sah. Hubungi petugas MIMO.'); } throw new Error(r.ralat); }
+    ST.profil = r.profil; ST.lawatan = r.lawatan;
+    r.logs.forEach(function (l) { var k = l.jenis + '|' + l.kunci, x = ST.logs[k]; if (!x || !x.dirty) { var d; try { d = JSON.parse(l.data); } catch (e) { d = {}; } ST.logs[k] = { data: d, dirty: 0, t: 0 }; } });
+    ST.lastSync = Date.now(); save();
+  }).catch(function () { }).then(function () { syncing = false; if (dirtyN()) { clearTimeout(syncT); syncT = setTimeout(sync, 30000); } paparSync(); });
+}
+function paparSync() {
+  var b = $('#syncB'); if (!b) return; var n = dirtyN();
+  b.className = 'sync' + (n && !navigator.onLine ? ' off' : '');
+  b.innerHTML = '<i></i>' + (syncing ? 'Menghantar' : n ? (navigator.onLine ? n + ' belum dihantar' : 'Luar talian, ' + n + ' menunggu') : 'Tersimpan');
+}
+window.addEventListener('online', sync); window.addEventListener('offline', paparSync);
+
+
+var GOALS = [['makan', 'Makan', '#ffb627'], ['air', 'Air', '#3fa7f5'], ['gerak', 'Gerak', '#22b07d'], ['timbang', 'Timbang', '#8e7dff']];
+var EMO = function (m) { return (m || '').split(' ')[0]; }, LBL = function (m) { return (m || '').split(' ').slice(1).join(' '); };
+
+/* ---------- Log masuk ---------- */
+function viewLogin(kod) {
+  $('#nav').hidden = true;
+  $('#app').innerHTML = '<div class="login">' + platSvg(64) + '<h1>Pinggan saya,<br>langkah saya.</h1><p>Buku catatan digital program MIMO, Jabatan Kesihatan Negeri Kedah.</p>' +
+    '<div class="box"><label class="lbl" style="margin-top:0" for="kod">Kod akses daripada petugas MIMO</label><input id="kod" class="code" maxlength="9" autocomplete="off" placeholder="XXXX-XXXX" value="' + esc(kod || '') + '">' +
+    '<div style="height:14px"></div><button class="btn pri full" id="go">Masuk</button>' +
+    (DEMO ? '<p class="small soft" style="margin-bottom:0;text-align:center">Mod demo: guna kod <b>KEDA-H234</b></p>' : '') +
+    '<p class="small soft" style="margin-bottom:0">Catatan anda disimpan dalam telefon ini dan dihantar kepada pasukan MIMO fasiliti anda sahaja. No. KP anda tidak disimpan dalam app.</p></div></div>';
+  function go() {
+    var k = $('#kod').value.toUpperCase().replace(/[^0-9A-Z]/g, ''); if (k.length !== 8) return toast('Kod mesti 8 aksara');
+    $('#go').disabled = true; $('#go').textContent = 'Menyemak kod…';
+    api({ action: 'p_get', token: k }).then(function (r) {
+      if (!r.ok) throw new Error(r.ralat || 'Kod tidak sah');
+      ST = { token: k, logs: {} }; save(); return sync().then(function () { history.replaceState(null, '', location.pathname); mula(); });
+    }).catch(function () { $('#go').disabled = false; $('#go').textContent = 'Masuk'; toast(navigator.onLine ? 'Kod tidak sah. Semak semula atau tanya petugas.' : 'Tiada internet. Cuba lagi.'); });
+  }
+  $('#go').onclick = go; $('#kod').onkeydown = function (e) { if (e.key === 'Enter') go(); };
+  if (kod) go();
+}
+function keluar(paksa) {
+  if (!paksa && !window._sah) { window._sah = 1; setTimeout(function () { window._sah = 0; }, 4000); return toast((dirtyN() ? dirtyN() + ' catatan belum dihantar. ' : '') + 'Tekan sekali lagi untuk log keluar'); }
+  window._sah = 0; ST = {}; save(); viewLogin();
+}
+function platSvg(n) { return '<svg width="' + n + '" height="' + n + '" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fff" opacity=".12"/><circle cx="32" cy="32" r="24" fill="#fff"/><path d="M32 8a24 24 0 0 1 0 48z" fill="#22b07d"/><path d="M32 32V8A24 24 0 0 0 8 32z" fill="#ffb627"/><path d="M32 32H8a24 24 0 0 0 24 24z" fill="#ff5a5f"/><circle cx="32" cy="32" r="9" fill="#fff"/></svg>'; }
+
+/* ---------- Rangka ---------- */
+function topBar(t, p) { setTimeout(paparSync, 0); return '<div class="top"><div class="bar"><div><h1>' + t + '</h1>' + (p ? '<p>' + p + '</p>' : '') + '</div><button class="sync" id="syncB" onclick="sync()"></button></div></div>'; }
+function go(v) { V = v; $$('nav [data-v]').forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); }); window.scrollTo(0, 0); ({ utama: vUtama, makan: vMakan, senaman: vSenaman, refleksi: vRefleksi, lagi: vLagi })[v](); paparSync(); }
+$$('nav [data-v]').forEach(function (b) { b.onclick = function () { go(b.dataset.v); }; });
+$('#plus').onclick = function () { sheet(); };
+function mula() { $('#nav').hidden = false; go('utama'); }
+
+/* ---------- Kiraan ---------- */
+function beratSiri() {
+  var P = ST.profil || {}, pts = [];
+  var d0 = dmyToDate(P.daftar); if (d0 && num(P.b_berat)) pts.push({ t: d0.getTime(), v: num(P.b_berat), k: 1 });
+  (ST.lawatan || []).forEach(function (l) { var d = dmyToDate(l.TARIKH); if (d && num(l.BERAT) != null) pts.push({ t: d.getTime(), v: num(l.BERAT), k: 1 }); });
+  Object.keys(ST.logs || {}).forEach(function (k) { if (k.indexOf('BERAT|') === 0) { var v = num(ST.logs[k].data.berat); if (v) pts.push({ t: new Date(k.slice(6) + 'T00:00').getTime(), v: v, k: 0 }); } });
+  return pts.sort(function (a, b) { return a.t - b.t; });
+}
+function streak() { var n = 0, d = hariIni(); if (!getLog('MAKAN', iso(d))) d = new Date(d - 864e5); while (getLog('MAKAN', iso(d))) { n++; d = new Date(d - 864e5); } return n; }
+function temujanji() {
+  var tj = {}; try { tj = JSON.parse((ST.profil || {}).temujanji || '{}'); } catch (e) { }
+  var out = []; Object.keys(tj).forEach(function (ds) { (tj[ds] || []).forEach(function (t, i) { if (t) out.push({ t: t, ds: ds, s: i + 1 }); }); });
+  return out.sort(function (a, b) { return a.t < b.t ? -1 : 1; });
+}
+function mingguIni() { var d = hariIni(), day = (d.getDay() + 6) % 7, out = []; for (var i = 0; i < 7; i++) out.push(iso(new Date(d.getTime() - (day - i) * 864e5))); return out; }
+function minitHari(k) { var l = getLog('SENAMAN', k); return l ? (l.data.aktiviti || []).reduce(function (a, y) { return a + (num(y.minit) || 0); }, 0) : 0; }
+function minitMinggu() { return mingguIni().reduce(function (a, k) { return a + minitHari(k); }, 0); }
+function makanHari(k) { var m = getLog('MAKAN', k); return m ? Object.keys(m.data.hidangan || {}).filter(function (w) { return (m.data.hidangan[w].menu || '').trim(); }).length : 0; }
+function airHari(k) { var m = getLog('MAKAN', k); return m ? num(m.data.air) || 0 : 0; }
+function timbangMinggu() { return mingguIni().some(function (k) { var b = getLog('BERAT', k); return b && num(b.data.berat); }); }
+function sasaranHari() {
+  var td = iso(hariIni());
+  return { makan: Math.min(1, makanHari(td) / 3), air: Math.min(1, airHari(td) / 8), gerak: Math.min(1, minitHari(td) / 30), timbang: timbangMinggu() ? 1 : 0,
+    txt: { makan: makanHari(td) + ' waktu dicatat', air: airHari(td) + '/8 gelas', gerak: minitHari(td) + '/30 min', timbang: timbangMinggu() ? 'Selesai minggu ini' : 'Sekali seminggu' } };
+}
+
+/* ---------- Utama ---------- */
+function dial(s) {
+  var R = 78, C = 100, g = '', ctr = 0;
+  GOALS.forEach(function (gl, i) {
+    var a0 = -90 + i * 90 + 6, a1 = a0 + 78, len = 2 * Math.PI * R * 78 / 360;
+    function P(a) { var r = a * Math.PI / 180; return (C + R * Math.cos(r)).toFixed(2) + ' ' + (C + R * Math.sin(r)).toFixed(2); }
+    var d = 'M' + P(a0) + ' A' + R + ' ' + R + ' 0 0 1 ' + P(a1);
+    g += '<path d="' + d + '" stroke="rgba(255,255,255,.1)" stroke-width="22" fill="none" stroke-linecap="round"/>';
+    g += '<path class="arc" d="' + d + '" stroke="' + gl[2] + '" stroke-width="22" fill="none" stroke-linecap="round" stroke-dasharray="' + len + '" stroke-dashoffset="' + len + '" data-to="' + (len * (1 - s[gl[0]])) + '"/>';
+    if (s[gl[0]] >= 1) ctr++;
+  });
+  return '<div class="dial"><svg viewBox="0 0 200 200" role="img" aria-label="' + ctr + ' daripada 4 sasaran hari ini dicapai"><circle cx="100" cy="100" r="56" fill="rgba(255,255,255,.06)"/>' + g + '</svg><div class="ctr"><b>' + ctr + '/4</b><span>sasaran hari ini</span></div></div>';
+}
+function cartaBerat(pts, sas) {
+  if (pts.length < 2) return '<p class="small soft">Graf akan muncul selepas timbangan kedua.</p>';
+  var W = 340, H = 130, px = 4, vs = pts.map(function (x) { return x.v; }); if (sas) vs.push(sas);
+  var t0 = pts[0].t, t1 = Math.max(pts[pts.length - 1].t, t0 + 1), v0 = Math.min.apply(null, vs) - 1.5, v1 = Math.max.apply(null, vs) + 1.5;
+  function X(t) { return px + (t - t0) / (t1 - t0) * (W - 2 * px); } function Y(v) { return 8 + (1 - (v - v0) / (v1 - v0)) * (H - 22); }
+  var k = pts.filter(function (x) { return x.k; }), line = k.map(function (x, i) { return (i ? 'L' : 'M') + X(x.t).toFixed(1) + ' ' + Y(x.v).toFixed(1); }).join(' ');
+  var area = line + ' L' + X(k[k.length - 1].t).toFixed(1) + ' ' + H + ' L' + X(k[0].t).toFixed(1) + ' ' + H + 'Z', s = '';
+  s += '<defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8e7dff" stop-opacity=".35"/><stop offset="1" stop-color="#8e7dff" stop-opacity="0"/></linearGradient></defs>';
+  if (sas) s += '<line x1="0" x2="' + W + '" y1="' + Y(sas) + '" y2="' + Y(sas) + '" stroke="#22b07d" stroke-width="1.5" stroke-dasharray="5 5"/><text x="' + W + '" y="' + (Y(sas) - 6) + '" font-size="11" font-weight="700" text-anchor="end" fill="#13805a">Sasaran ' + sas + ' kg</text>';
+  s += '<path d="' + area + '" fill="url(#ga)"/><path d="' + line + '" fill="none" stroke="#5a46d6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.filter(function (x) { return !x.k; }).forEach(function (x) { s += '<circle cx="' + X(x.t) + '" cy="' + Y(x.v) + '" r="3.5" fill="#fff" stroke="#ffb627" stroke-width="2"/>'; });
+  var L = k[k.length - 1]; s += '<circle cx="' + X(L.t) + '" cy="' + Y(L.v) + '" r="6" fill="#5a46d6" stroke="#fff" stroke-width="3"/>';
+  return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '">' + s + '</svg><div class="small soft" style="display:flex;gap:14px;margin-top:4px"><span><b style="color:#5a46d6">━</b> Timbangan klinik</span><span><b style="color:#ffb627">○</b> Timbang sendiri</span></div>';
+}
+function lencana() {
+  var P = ST.profil || {}, pts = beratSiri(), b0 = num(P.b_berat), L = pts.length ? pts[pts.length - 1].v : null, pct = b0 && L ? (b0 - L) / b0 * 100 : 0, st = streak();
+  var anyRef = Object.keys(ST.logs || {}).some(function (k) { return k.indexOf('REFLEKSI|') === 0; }), anyLog = Object.keys(ST.logs || {}).length > 0;
+  var air8 = Object.keys(ST.logs || {}).some(function (k) { return k.indexOf('MAKAN|') === 0 && num(ST.logs[k].data.air) >= 8; });
+  return [['🌱', 'Langkah pertama', anyLog], ['🔥', '7 hari berturut', st >= 7], ['💧', '8 gelas sehari', air8], ['🏃', '150 minit seminggu', minitMinggu() >= 150],
+    ['✍️', 'Refleksi pertama', anyRef], ['⭐', 'Turun 5%', pct >= 5], ['🏆', 'Turun 10%', pct >= 10], ['💎', '30 hari berturut', st >= 30]];
+}
+function vUtama() {
+  var P = ST.profil || {}, pts = beratSiri(), b0 = num(P.b_berat), akhir = pts.length ? pts[pts.length - 1] : null, sas = num(P.sasaran) || (b0 ? r1(b0 * 0.95) : null);
+  var turun = b0 && akhir ? r1(b0 - akhir.v) : null, pct = turun != null ? turun / b0 * 100 : null, kmj = b0 && sas && akhir ? Math.max(0, Math.min(1, (b0 - akhir.v) / (b0 - sas))) : 0;
+  var s = sasaranHari(), j = new Date().getHours(), td = iso(hariIni()), st = streak();
+  var tjs = temujanji().filter(function (x) { return x.t >= td; }).slice(0, 2), lc = lencana();
+  setTimeout(paparSync, 0);
+  $('#app').innerHTML = '<div class="hero"><div class="bar"><div><h1>' + (j < 12 ? 'Selamat pagi' : j < 19 ? 'Selamat petang' : 'Selamat malam') + ', ' + esc(P.nama || '') + '</h1><div class="date">' + tarikhPanjang(td) + (st ? ', 🔥 ' + st + ' hari berturut-turut' : '') + '</div></div><button class="sync" id="syncB" onclick="sync()"></button></div>' +
+    '<div class="plate">' + dial(s) + '<div class="legend">' + GOALS.map(function (g) { return '<button data-g="' + g[0] + '"><span class="sw" style="background:' + g[2] + '"></span><span class="t">' + g[1] + '<br><span style="color:#cfc7f3;font-size:12px">' + s.txt[g[0]] + '</span></span>' + (s[g[0]] >= 1 ? '<span class="v">✓</span>' : '') + '</button>'; }).join('') + '</div></div></div>' +
+    '<main><section>' +
+    '<div class="scroll"><button class="qa" data-q="makan"><span style="background:#fff4dc">🍛</span>Catat makan</button><button class="qa" data-q="air"><span style="background:#e4f3fe">💧</span>+1 gelas air</button><button class="qa" data-q="gerak"><span style="background:#e3f7ef">🏃</span>Catat gerak</button><button class="qa" data-q="timbang"><span style="background:#efeaff">⚖️</span>Timbang</button></div>' +
+    '<div class="card"><div class="head"><h2>Perjalanan berat saya</h2>' + (turun != null ? '<span class="delta ' + (turun >= 0 ? 'dn' : 'up') + '">' + (turun >= 0 ? '↓ ' : '↑ ') + Math.abs(turun).toFixed(1) + ' kg</span>' : '') + '</div>' +
+    '<div class="wj"><div class="now">' + (akhir ? akhir.v.toFixed(1) : '–') + '<small>kg</small></div><div class="small soft" style="text-align:right">' + (pct != null ? '<b style="color:var(--ink);font-size:18px">' + Math.abs(pct).toFixed(1) + '%</b><br>' + (pct >= 0 ? 'turun' : 'naik') + ' sejak mula' : '') + '</div></div>' +
+    '<div class="track"><i style="width:' + (kmj * 100).toFixed(0) + '%"></i><em style="left:' + (kmj * 100).toFixed(0) + '%"></em></div><div class="ends"><span>Mula ' + (b0 || '–') + ' kg</span><span>' + Math.round(kmj * 100) + '% ke sasaran</span><span>' + (sas || '–') + ' kg</span></div>' +
+    cartaBerat(pts, sas) + '</div>' +
+    '<div class="card"><div class="head"><h2>Lencana</h2><span class="small soft">' + lc.filter(function (x) { return x[2]; }).length + ' daripada ' + lc.length + '</span></div><div class="badges">' + lc.map(function (b) { return '<div class="bdg' + (b[2] ? ' on' : '') + '"><div class="m">' + b[0] + '</div>' + b[1] + '</div>'; }).join('') + '</div></div>' +
+    '<div class="card"><div class="head"><h2>Temujanji seterusnya</h2><button class="link" onclick="go(\'lagi\')">Semua</button></div>' + (tjs.length ? tjs.map(tiket).join('') : '<p class="small soft" style="margin:0">Tiada temujanji direkodkan. Petugas MIMO akan menetapkannya.</p>') + '</div>' +
+    '</section></main>';
+  requestAnimationFrame(function () { setTimeout(function () { $$('.arc').forEach(function (a) { a.style.strokeDashoffset = a.dataset.to; }); }, 60); });
+  $$('.legend [data-g], .qa').forEach(function (b) { b.onclick = function () { tindakan(b.dataset.g || b.dataset.q); }; });
+}
+function tiket(x) { var d = new Date(x.t + 'T00:00'), lalu = x.t < iso(hariIni()); return '<div class="ticket' + (lalu ? ' past' : '') + '"><div class="d"><b>' + d.getDate() + '</b><span>' + BLN[d.getMonth()] + '</span></div><div class="i"><b>' + esc(x.ds) + '</b><span>Sesi ' + x.s + ', ' + HARI[d.getDay()] + '</span></div></div>'; }
+function tindakan(g) {
+  var td = iso(hariIni());
+  if (g === 'makan') { hariPilih = td; go('makan'); }
+  else if (g === 'gerak') { hariPilih = td; go('senaman'); }
+  else if (g === 'air') { var l = getLog('MAKAN', td), d = l ? JSON.parse(JSON.stringify(l.data)) : { hidangan: {} }; d.air = String((num(d.air) || 0) + 1); setLog('MAKAN', td, d); toast('💧 ' + d.air + ' gelas hari ini'); if (V === 'utama') vUtama(); }
+  else if (g === 'timbang') timbangSheet();
+}
+function bukaSheet(html) { var bg = document.createElement('div'); bg.className = 'sheetbg'; bg.innerHTML = '<div class="sheet" role="dialog"><div class="grab"></div>' + html + '</div>'; bg.onclick = function (e) { if (e.target === bg) bg.remove(); }; document.body.appendChild(bg); return bg; }
+function sheet() {
+  var bg = bukaSheet('<h2 style="font-size:20px">Apa yang anda mahu catat?</h2><div class="grid">' +
+    [['makan', '🍛', 'Makanan & emosi', '#fff4dc'], ['air', '💧', '+1 gelas air', '#e4f3fe'], ['gerak', '🏃', 'Aktiviti fizikal', '#e3f7ef'], ['timbang', '⚖️', 'Berat badan', '#efeaff'], ['refleksi', '✍️', 'Refleksi mingguan', '#ffe9ea'], ['strategi', '🧭', 'Strategi diet', '#f1f0f6']]
+      .map(function (x) { return '<button data-x="' + x[0] + '" style="background:' + x[3] + '"><span>' + x[1] + '</span>' + x[2] + '</button>'; }).join('') + '</div>');
+  $$('[data-x]', bg).forEach(function (b) { b.onclick = function () { bg.remove(); var x = b.dataset.x; if (x === 'refleksi') go('refleksi'); else if (x === 'strategi') { go('lagi'); var d = $('#fifot'); if (d) { d.open = true; d.scrollIntoView({ behavior: 'smooth' }); } } else tindakan(x); }; });
+}
+function timbangSheet() {
+  var td = iso(hariIni()), b = getLog('BERAT', td);
+  var bg = bukaSheet('<h2 style="font-size:20px">Berat hari ini</h2><p class="small soft" style="margin:4px 0 12px">Timbang pada waktu pagi, sebelum makan, untuk bacaan yang konsisten.</p><input id="brI" type="number" step="0.1" inputmode="decimal" placeholder="cth: 72.4" style="font-size:28px;font-weight:800;text-align:center" value="' + esc(b ? b.data.berat : '') + '"><div style="height:12px"></div><button class="btn pri full" id="brS">Simpan berat</button>');
+  setTimeout(function () { $('#brI', bg).focus(); }, 250);
+  $('#brS', bg).onclick = function () { var v = num($('#brI', bg).value); if (!v || v < 30 || v > 300) return toast('Masukkan berat antara 30 hingga 300 kg'); setLog('BERAT', td, { berat: String(v) }); bg.remove(); toast('⚖️ Berat disimpan'); if (V === 'utama') vUtama(); };
+}
+
+/* ---------- Jalur tarikh ---------- */
+var hariPilih = null;
+function jalurHari(jenis) {
+  var td = hariIni(); hariPilih = hariPilih || iso(td); var h = '';
+  for (var i = 13; i >= 0; i--) { var d = new Date(td.getTime() - i * 864e5), k = iso(d); h += '<button class="day' + (k === hariPilih ? ' on' : '') + (getLog(jenis, k) ? ' has' : '') + '" data-d="' + k + '"><small>' + (i === 0 ? 'Hari ini' : HARI[d.getDay()].slice(0, 3)) + '</small><b>' + d.getDate() + '</b><i></i></button>'; }
+  return '<div class="days" id="days">' + h + '</div>';
+}
+function ikatHari(cb) { $$('#days .day').forEach(function (b) { b.onclick = function () { hariPilih = b.dataset.d; cb(); }; }); var d = $('#days'); d.scrollLeft = d.scrollWidth; }
+
+/* ---------- Makan & emosi ---------- */
+var mealPilih = null;
+function mukaLapar(v) { v = +v; return v <= 2 ? '😫' : v <= 4 ? '😕' : v <= 6 ? '🙂' : v <= 8 ? '😌' : '😵'; }
+function katalapar(v) { v = +v; return v <= 2 ? 'Sangat lapar' : v <= 4 ? 'Lapar' : v <= 6 ? 'Sederhana' : v <= 8 ? 'Kenyang' : 'Terlalu kenyang'; }
+function vMakan() {
+  hariPilih = hariPilih || iso(hariIni());
+  var k = hariPilih, l = getLog('MAKAN', k), d = l ? JSON.parse(JSON.stringify(l.data)) : { hidangan: {} }; d.hidangan = d.hidangan || {};
+  if (!mealPilih) { var j = new Date().getHours(); mealPilih = j < 10 ? 'sarapan' : j < 12 ? 'snek_pagi' : j < 15 ? 'tengahari' : j < 18 ? 'petang' : 'malam'; }
+  var w = WAKTU.filter(function (x) { return x[0] === mealPilih; })[0], h = d.hidangan[mealPilih] || {}, air = num(d.air) || 0;
+  $('#app').innerHTML = topBar('Makan & emosi', 'Apa yang dimakan, tahap lapar dan perasaan anda') + '<main><section>' + jalurHari('MAKAN') +
+    '<div class="mtabs">' + WAKTU.map(function (x) { var hh = d.hidangan[x[0]]; return '<button class="mtab' + (x[0] === mealPilih ? ' on' : '') + (hh && (hh.menu || '').trim() ? ' ok' : '') + '" data-m="' + x[0] + '"><span class="e">' + x[2] + '</span>' + x[1] + '</button>'; }).join('') + '</div>' +
+    '<div class="card"><h2>' + w[1] + '</h2><label class="lbl" for="menu">Menu dan saiz hidangan</label><textarea id="menu" rows="3" placeholder="cth: nasi ½ pinggan, ikan bakar 1 ekor, sayur campur">' + esc(h.menu) + '</textarea>' +
+    '<label class="lbl" for="lap">Tahap lapar sebelum makan: <span id="lapT">' + (h.lapar ? h.lapar + ', ' + katalapar(h.lapar) : 'belum dipilih') + '</span></label><div class="hunger"><div class="face" id="lapF">' + mukaLapar(h.lapar || 5) + '</div><input id="lap" type="range" min="1" max="10" value="' + esc(h.lapar || 5) + '" aria-label="Tahap lapar 1 hingga 10"></div><div class="scale"><span>1 sangat lapar</span><span>10 sangat kenyang</span></div>' +
+    '<label class="lbl">Perasaan saya ketika itu</label><div class="moods">' + MOOD.map(function (m) { return '<button data-mo="' + esc(m) + '" class="' + (h.mood === m ? 'on' : '') + '"><span class="e">' + EMO(m) + '</span>' + LBL(m) + '</button>'; }).join('') + '</div></div>' +
+    '<div class="card"><div class="head"><h2>Air kosong</h2><span class="small soft"><b style="color:var(--ink)">' + air + '</b> / 8 gelas</span></div><div class="glasses">' +
+    [1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { var on = n <= air; return '<button class="glass" data-a="' + n + '" aria-label="' + n + ' gelas"><svg viewBox="0 0 34 44"><path d="M4 4h26l-3 36H7z" fill="' + (on ? '#e4f3fe' : '#f3f1fa') + '" stroke="' + (on ? '#3fa7f5' : '#d8d3ea') + '" stroke-width="2" stroke-linejoin="round"/>' + (on ? '<path d="M6.2 16h21.6l-2 22H8.2z" fill="#3fa7f5"/>' : '') + '</svg></button>'; }).join('') + '</div></div>' +
+    '<div class="tip">' + platSvg(38).replace('fill="#fff" opacity=".12"', 'fill="#22b07d" opacity=".15"') + '<div><b>Pinggan Sihat Malaysia</b><br>Separuh pinggan sayur dan buah, suku nasi atau karbohidrat, suku protein.</div></div>' +
+    '</section></main>';
+  ikatHari(vMakan);
+  function H() { return d.hidangan[mealPilih] = d.hidangan[mealPilih] || {}; }
+  function simpan() { setLog('MAKAN', k, d); $$('.mtab').forEach(function (b) { var hh = d.hidangan[b.dataset.m]; b.classList.toggle('ok', !!(hh && (hh.menu || '').trim())); }); }
+  var tm; $('#menu').oninput = function () { H().menu = this.value; clearTimeout(tm); tm = setTimeout(simpan, 500); };
+  $('#lap').oninput = function () { H().lapar = this.value; $('#lapF').textContent = mukaLapar(this.value); $('#lapT').textContent = this.value + ', ' + katalapar(this.value); };
+  $('#lap').onchange = simpan;
+  $$('[data-mo]').forEach(function (b) { b.onclick = function () { var on = H().mood !== b.dataset.mo; H().mood = on ? b.dataset.mo : ''; $$('[data-mo]').forEach(function (x) { x.classList.toggle('on', on && x === b); }); simpan(); }; });
+  $$('.mtab').forEach(function (b) { b.onclick = function () { clearTimeout(tm); if (H().menu !== undefined) simpan(); mealPilih = b.dataset.m; vMakan(); }; });
+  $$('[data-a]').forEach(function (b) { b.onclick = function () { var n = +b.dataset.a; d.air = String(n === air ? n - 1 : n); simpan(); vMakan(); }; });
+}
+
+/* ---------- Gerak ---------- */
+var JENIS_S = [['Jalan pantas', '🚶'], ['Jogging', '🏃'], ['Kayuh basikal', '🚴'], ['Berenang', '🏊'], ['Senaman di rumah (video)', '📱'], ['Zumba / aerobik', '💃'], ['Naik tangga', '🪜'], ['Latihan bebanan', '🏋️'], ['Badminton / sukan', '🏸']];
+var gPilih = { jenis: 'Jalan pantas', minit: 30, rpe: 'Sederhana' };
+function vSenaman() {
+  hariPilih = hariPilih || iso(hariIni());
+  var k = hariPilih, l = getLog('SENAMAN', k), d = l ? JSON.parse(JSON.stringify(l.data)) : { aktiviti: [] }; d.aktiviti = d.aktiviti || [];
+  var mm = minitMinggu(), C = 2 * Math.PI * 38, f = Math.min(1, mm / 150);
+  $('#app').innerHTML = topBar('Gerak', 'Sasaran sekurang-kurangnya 150 minit seminggu') + '<main><section>' +
+    '<div class="card"><div class="ring"><svg viewBox="0 0 92 92"><circle cx="46" cy="46" r="38" stroke="#efedf7" stroke-width="12" fill="none"/><circle cx="46" cy="46" r="38" stroke="#22b07d" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="' + C + '" stroke-dashoffset="' + (C * (1 - f)) + '" transform="rotate(-90 46 46)"/><text x="46" y="52" text-anchor="middle" font-size="17" font-weight="800" fill="#1d1838">' + Math.round(f * 100) + '%</text></svg>' +
+    '<div><div style="font-size:30px;font-weight:800;letter-spacing:-.03em">' + mm + ' <span class="soft" style="font-size:15px;font-weight:600">/ 150 min</span></div><div class="small soft">' + (mm >= 150 ? 'Sasaran minggu ini tercapai. Hebat!' : 'Lagi ' + (150 - mm) + ' minit untuk capai sasaran minggu ini') + '</div></div></div>' +
+    '<div class="week">' + mingguIni().map(function (x) { var m = minitHari(x); return '<div class="' + (m ? 'ok' : '') + '"><i style="height:' + Math.max(6, Math.min(52, m * 0.9)) + 'px"></i>' + HARI[new Date(x + 'T00:00').getDay()].slice(0, 2) + '</div>'; }).join('') + '</div></div>' +
+    jalurHari('SENAMAN') +
+    (d.aktiviti.length ? '<div class="card"><h2>Dicatat</h2><div style="margin-top:6px">' + d.aktiviti.map(function (a, i) { var e = JENIS_S.filter(function (x) { return x[0] === a.jenis; })[0]; return '<div class="done"><div class="e">' + (e ? e[1] : '⭐') + '</div><div style="flex:1"><b>' + esc(a.jenis) + '</b><div class="small soft">' + esc(a.minit) + ' minit, intensiti ' + esc(String(a.rpe).toLowerCase()) + '</div></div><button class="x" data-x="' + i + '" aria-label="Padam">✕</button></div>'; }).join('') + '</div></div>' : '') +
+    '<div class="card"><h2>Tambah aktiviti</h2><div class="acts" style="margin-top:12px">' + JENIS_S.map(function (x) { return '<button data-j="' + esc(x[0]) + '" class="' + (gPilih.jenis === x[0] ? 'on' : '') + '"><span class="e">' + x[1] + '</span>' + x[0].replace(' (video)', '') + '</button>'; }).join('') + '</div>' +
+    '<label class="lbl">Berapa lama?</label><div class="mins">' + [10, 15, 20, 30, 45, 60].map(function (m) { return '<button data-mi="' + m + '" class="' + (gPilih.minit === m ? 'on' : '') + '">' + m + ' min</button>'; }).join('') + '</div>' +
+    '<label class="lbl">Intensiti</label><div class="seg">' + ['Ringan', 'Sederhana', 'Berat'].map(function (r) { return '<button data-r="' + r + '" class="' + (gPilih.rpe === r ? 'on' : '') + '">' + r + '</button>'; }).join('') + '</div>' +
+    '<p class="small soft">Sederhana: masih boleh bercakap tetapi tidak boleh menyanyi.</p><button class="btn pri full" id="sAdd">Tambah ' + gPilih.minit + ' minit ' + gPilih.jenis.toLowerCase().replace(' (video)', '') + '</button>' +
+    '<label class="lbl" for="sL">Langkah hari ini (pilihan)</label><input id="sL" type="number" inputmode="numeric" value="' + esc(d.langkah || '') + '" placeholder="cth: 6000"></div>' +
+    '<div class="tip warn">⚠️<div>Berhenti dan dapatkan bantuan jika sakit dada, sesak nafas teruk, pening atau jantung berdebar.</div></div></section></main>';
+  ikatHari(vSenaman);
+  $$('[data-j]').forEach(function (b) { b.onclick = function () { gPilih.jenis = b.dataset.j; vSenaman(); }; });
+  $$('[data-mi]').forEach(function (b) { b.onclick = function () { gPilih.minit = +b.dataset.mi; vSenaman(); }; });
+  $$('[data-r]').forEach(function (b) { b.onclick = function () { gPilih.rpe = b.dataset.r; vSenaman(); }; });
+  $('#sAdd').onclick = function () { d.aktiviti.push({ jenis: gPilih.jenis, minit: String(gPilih.minit), rpe: gPilih.rpe }); setLog('SENAMAN', k, d); toast('🏃 ' + gPilih.minit + ' minit ditambah'); vSenaman(); };
+  $$('[data-x]').forEach(function (b) { b.onclick = function () { d.aktiviti.splice(+b.dataset.x, 1); setLog('SENAMAN', k, d); vSenaman(); }; });
+  $('#sL').onchange = function () { d.langkah = this.value; setLog('SENAMAN', k, d); toast('Langkah disimpan'); };
+}
+
+/* ---------- Refleksi ---------- */
+function vRefleksi() {
+  var w = mingguIso(hariIni()), l = getLog('REFLEKSI', w), d = l ? l.data : {};
+  var kenyang = {}, emo = {};
+  mingguIni().forEach(function (x) { var m = getLog('MAKAN', x); if (!m) return; Object.keys(m.data.hidangan || {}).forEach(function (k) { var h = m.data.hidangan[k]; if (num(h.lapar) >= 7) kenyang[k] = (kenyang[k] || 0) + 1; if (h.mood) emo[h.mood] = (emo[h.mood] || 0) + 1; }); });
+  var kTop = Object.keys(kenyang).sort(function (a, b) { return kenyang[b] - kenyang[a]; })[0], eTop = Object.keys(emo).sort(function (a, b) { return emo[b] - emo[a]; }).slice(0, 2);
+  var nama = {}; WAKTU.forEach(function (x) { nama[x[0]] = x[1].toLowerCase(); });
+  var lama = Object.keys(ST.logs || {}).filter(function (k) { return k.indexOf('REFLEKSI|') === 0 && k !== 'REFLEKSI|' + w; }).sort().reverse();
+  var Q = [['q1', 'Pada waktu bila saya paling kerap makan walaupun tidak lapar (skala 7 hingga 10)?', kTop ? 'Dari catatan anda, paling kerap semasa ' + nama[kTop] + '.' : ''],
+    ['q2', 'Emosi apa yang paling banyak membuat saya terlebih makan minggu ini?', eTop.length ? 'Paling kerap dicatat: ' + eTop.join(', ') + '.' : ''],
+    ['q3', 'Apa satu tindakan lain yang boleh saya buat minggu depan selain makan, bila emosi itu datang?', '']];
+  $('#app').innerHTML = topBar('Refleksi mingguan', 'Minggu ' + (+w.split('-W')[1]) + ', ' + w.split('-')[0]) + '<main><section>' +
+    Q.map(function (q) { return '<div class="coach"><div class="av">🌿</div><div class="bubble">' + q[1] + (q[2] ? '<div class="small" style="font-weight:500;color:var(--plum2);margin-top:6px">💡 ' + esc(q[2]) + '</div>' : '') + '</div></div><div class="ans"><textarea id="' + q[0] + '" rows="2" placeholder="Tulis jawapan anda…">' + esc(d[q[0]]) + '</textarea></div>'; }).join('') +
+    '<div style="height:14px"></div><button class="btn pri full" id="rS">Simpan refleksi</button>' +
+    (lama.length ? '<div class="card"><h2>Refleksi lepas</h2>' + lama.slice(0, 8).map(function (k) { var x = ST.logs[k].data; return '<details class="g"><summary>Minggu ' + (+k.split('-W')[1]) + ', ' + k.split('|')[1].slice(0, 4) + '</summary><div class="body small soft">' + esc(x.q1) + '<br>' + esc(x.q2) + '<br>' + esc(x.q3) + '</div></details>'; }).join('') + '</div>' : '') +
+    '<div class="tip care">💜<div>Jika anda rasa tertekan, sedih berpanjangan atau sukar mengawal emosi, beritahu petugas MIMO atau hubungi <b>Talian HEAL 15555</b>. Kecemasan: <b>999</b>.</div></div></section></main>';
+  $('#rS').onclick = function () { setLog('REFLEKSI', w, { q1: $('#q1').value.trim(), q2: $('#q2').value.trim(), q3: $('#q3').value.trim() }); toast('✍️ Refleksi disimpan'); };
+}
+
+/* ---------- Saya ---------- */
+var FIFOT = [['diet', 'Diet dan pemakanan', 'cth: craving, porsi besar, skip makan'], ['gaya', 'Gaya hidup dan masa', 'cth: kerja syif, penat, tiada masa masak'], ['sosial', 'Faktor luaran dan sosial', 'cth: makan ramai-ramai, kenduri, kawan ajak'], ['emosi', 'Emosi dan lain-lain', 'cth: stres, bosan, "healing" dengan makanan']];
+function vLagi() {
+  var tj = temujanji(), td = iso(hariIni()), dpn = tj.filter(function (x) { return x.t >= td; }), lps = tj.filter(function (x) { return x.t < td; }).reverse();
+  var s = getLog('STRATEGI', 'FIFOT'), rows = s ? JSON.parse(JSON.stringify(s.data.rows || {})) : {}, P = ST.profil || {};
+  $('#app').innerHTML = topBar(esc(P.nama || 'Saya'), esc(P.fasiliti || '')) + '<main><section>' +
+    '<div class="card"><div class="head"><h2>Temujanji</h2><span class="small soft">' + dpn.length + ' akan datang</span></div>' + (dpn.length ? dpn.map(tiket).join('') : '<p class="small soft" style="margin:0">Tiada temujanji akan datang.</p>') +
+    (lps.length ? '<details class="g" style="margin-top:8px"><summary class="small">Temujanji lepas (' + lps.length + ')</summary><div class="body">' + lps.map(tiket).join('') + '</div></details>' : '') + '</div>' +
+    '<div class="card"><button class="row" style="width:100%;border:0;background:none;padding:0;text-align:left" onclick="go(\'refleksi\')"><span class="ic" style="background:#ffe9ea">✍️</span><span style="flex:1"><b>Refleksi mingguan</b><br><span class="small soft">3 soalan ringkas tentang minggu ini</span></span>' + (getLog('REFLEKSI', mingguIso(hariIni())) ? '<span class="ok-tag">Selesai</span>' : '') + '</button></div>' +
+    '<div class="card"><details class="g" id="fifot"><summary><span class="row" style="padding:0;border:0"><span class="ic" style="background:#f1eeff">🧭</span><span>Strategi perubahan diet<br><span class="small soft" style="font-weight:500">Halangan, punca dan strategi saya</span></span></span></summary><div class="body">' +
+    FIFOT.map(function (f) { var r = rows[f[0]] || {}; return '<div style="margin-top:12px"><b>' + f[1] + '</b> ' + (r.strategi ? '<span class="ok-tag">✓</span>' : '') + '<div class="small soft">' + f[2] + '</div>' +
+      [['halangan', 'Halangan'], ['punca', 'Punca'], ['strategi', 'Strategi saya']].map(function (x) { return '<label class="lbl" style="margin:10px 0 6px;font-size:12px">' + x[1] + '</label><textarea rows="2" data-r="' + f[0] + '" data-c="' + x[0] + '">' + esc(r[x[0]]) + '</textarea>'; }).join('') + '</div>'; }).join('') +
+    '<div class="tip">💡<div><b>Contoh:</b> Halangan kerap makan lewat malam. Puncanya balik kerja penat, skip makan malam dan terus tonton TV. Strategi: sediakan meal prep sedia dipanaskan dan tukar snek kepada buah potong.</div></div><div style="height:12px"></div><button class="btn pri full" id="fS">Simpan strategi</button></div></details>' +
+    '<details class="g"><summary><span class="row" style="padding:0;border:0"><span class="ic" style="background:#e3f7ef">👟</span><span>Sebelum bersenam<br><span class="small soft" style="font-weight:500">Pakaian, kasut, makan dan minum</span></span></span></summary><div class="body small">' +
+    '<p><b>Pakaian.</b> Longgar, selesa dan menyerap peluh supaya badan mudah bergerak dan tidak terlalu panas.</p><p><b>Kasut.</b> Kasut sukan bertapak empuk yang muat, dengan stokin. Elakkan selipar supaya buku lali disokong.</p>' +
+    '<p><b>Makan dan minum.</b> Makan ringan 1 hingga 2 jam sebelum bersenam. Minum air sebelum, semasa dan selepas. Jika anda mengambil insulin atau ubat diabetes, bawa gula-gula sekiranya gula darah turun.</p><p style="margin-bottom:0"><b>Panaskan badan.</b> Mulakan dengan 5 hingga 10 minit regangan atau jalan perlahan, dan akhiri dengan 5 minit menyejukkan badan.</p></div></details></div>' +
+    '<div class="tip care">💜<div>Perlu sokongan emosi? Hubungi petugas MIMO anda atau <b>Talian HEAL 15555</b>. Kecemasan: <b>999</b>.</div></div>' +
+    '<div class="card"><h2>Tetapan</h2><p class="small soft">Kali terakhir disegerak: ' + (ST.lastSync ? new Date(ST.lastSync).toLocaleString('ms-MY') : 'belum') + '<br>Belum dihantar: ' + dirtyN() + ' catatan</p>' +
+    '<button class="btn full" id="sgk">Segerak sekarang</button><div style="height:8px"></div><button class="btn full" style="color:var(--chilli)" onclick="keluar()">Log keluar dan padam data dari telefon ini</button>' +
+    '<p class="small soft" style="margin-bottom:0">Pasang di skrin utama: buka menu pelayar, kemudian pilih "Add to Home Screen" atau "Tambah ke Skrin Utama".</p></div></section></main>';
+  $('#fS').onclick = function () { $$('[data-r]').forEach(function (t) { rows[t.dataset.r] = rows[t.dataset.r] || {}; rows[t.dataset.r][t.dataset.c] = t.value.trim(); }); setLog('STRATEGI', 'FIFOT', { rows: rows }); toast('🧭 Strategi disimpan'); };
+  $('#sgk').onclick = function () { sync().then(function () { toast('Disegerak'); vLagi(); }); };
+}
+
+/* ---------- Mula ---------- */
+(function () {
+  var k = new URLSearchParams(location.search).get('k');
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () { });
+  if (k && (!ST.token || ST.token !== k.toUpperCase())) return viewLogin(k);
+  if (!ST.token) return viewLogin();
+  if (k) history.replaceState(null, '', location.pathname);
+  mula(); sync().then(function () { if (V === 'utama') vUtama(); });
+})();
+</script>
+</body>
+</html>
