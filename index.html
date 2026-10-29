@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIMO Kedah · Kad Rawatan Digital</title>
+<style>
+:root{--ink:#14262b;--muted:#5c7075;--line:#dfe7e8;--bg:#f4f7f7;--card:#fff;--teal:#0f6e74;--teal2:#0f4c5c;--tealbg:#e6f3f3;--amber:#b86e00;--amberbg:#fff3df;--red:#b42318;--redbg:#fdecea;--green:#1d7a46;--greenbg:#e5f5ec;--violet:#5b4bb7;--r:10px}
+*{box-sizing:border-box}html,body{margin:0}body{font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+header.top{background:var(--teal2);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 20px;position:sticky;top:0;z-index:20}
+header.top img{height:36px}header.top .t1{font-weight:700;font-size:16px;letter-spacing:.2px}header.top .t2{font-size:12px;opacity:.8}
+header.top .sp{flex:1}.pill{font-size:11px;padding:2px 8px;border-radius:99px;background:#ffd166;color:#4a3500;font-weight:700}
+header.top button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
+main{max-width:1280px;margin:0 auto;padding:18px 20px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grow{flex:1}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:#b9c9cb}.btn.pri{background:var(--teal);border-color:var(--teal);color:#fff}.btn.pri:hover{background:var(--teal2)}
+.btn.sm{padding:4px 8px;font-size:12px}.btn.dng{color:var(--red)}.btn:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=number],input[type=date],input[type=password],input:not([type]),select,textarea{border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:#fff;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid #9fd1d3;border-color:var(--teal)}
+input[readonly]{background:#f3f6f6;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px}
+.kpi .v{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}.kpi .l{color:var(--muted);font-size:12px}
+table{border-collapse:collapse;width:100%}th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;background:#fafcfc;position:sticky;top:0}
+tbody tr.click{cursor:pointer}tbody tr.click:hover{background:#f6fbfb}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-size:11px;padding:2px 7px;border-radius:99px;margin:1px 2px 1px 0;white-space:nowrap;background:#eef2f2;color:var(--muted)}
+.chip.g{background:var(--greenbg);color:var(--green)}.chip.a{background:var(--amberbg);color:var(--amber)}.chip.r{background:var(--redbg);color:var(--red)}.chip.t{background:var(--tealbg);color:var(--teal)}
+.sub{color:var(--muted);font-size:12px}.up{color:var(--red)}.down{color:var(--green)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:14px 0 16px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:9px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--teal);border-color:var(--teal);font-weight:600}
+.ph{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.ph h2{margin:0;font-size:20px}.meta{color:var(--muted);font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid2>*{min-width:0}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tile{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff}.tile .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}.tile .l{font-size:12px;color:var(--muted)}
+details.sec{border:1px solid var(--line);border-radius:9px;margin-bottom:10px;background:#fff}
+details.sec summary{padding:10px 14px;cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+details.sec summary::after{content:'▾';color:var(--muted)}details.sec[open] summary::after{content:'▴'}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px;padding:4px 14px 14px}
+.fgrid label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.fgrid .calc input{background:var(--tealbg);color:var(--teal);font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(10,30,35,.45);display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow:auto}
+.modal .card{width:min(900px,100%)}.modal h3{margin:0 0 10px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#14262b;color:#fff;padding:9px 16px;border-radius:9px;z-index:99;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.note{background:var(--amberbg);border:1px solid #f3d7a6;color:#6b4300;border-radius:8px;padding:9px 12px;font-size:13px}
+.info{background:var(--tealbg);border:1px solid #bfe0e0;color:#0d4f53;border-radius:8px;padding:9px 12px;font-size:13px}
+.login{max-width:380px;margin:60px auto}
+.daycard{border:1px solid var(--line);border-radius:9px;margin-bottom:10px;overflow:hidden}.daycard .hd{background:#fafcfc;padding:7px 12px;display:flex;justify-content:space-between;font-weight:600}
+.daycard td,.daycard th{padding:6px 12px;font-size:13px}
+.qr svg{width:180px;height:180px;display:block}
+.tbl-wrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:9px}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.chart{width:100%;height:auto;display:block}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.lg i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+#printCard{display:none}
+@media print{body *{visibility:hidden}#printCard,#printCard *{visibility:visible}#printCard{display:block;position:absolute;left:0;top:0;width:90mm;border:1px dashed #999;padding:6mm;font-size:11pt}}
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="logo-jkn.png" alt="" onerror="this.remove()">
+  <div><div class="t1">MIMO Kedah · Kad Rawatan Digital</div><div class="t2">Pengurusan Obesiti Secara Bersepadu · Jabatan Kesihatan Negeri Kedah</div></div>
+  <span id="demoPill" class="pill" hidden>MOD DEMO · DATA PALSU</span>
+  <div class="sp"></div>
+  <span id="who" class="t2"></span>
+  <button id="btnSet" hidden>Tetapan</button>
+  <button id="btnOut" hidden>Log keluar</button>
+</header>
+<main id="app"></main>
+<div id="printCard"></div>
+
+<script>
+/* ======================= KONFIGURASI ======================= */
+var API_URL = 'https://script.google.com/macros/s/AKfycbyMDCXczQL4nju_HyVntkiKs9pxBwd5Y9Nv4a3eKHC8Wx2O2IK_4jFw6CSj5nWV9_e8Nw/exec';   // URL Web App Apps Script (…/exec). Kosong = MOD DEMO (data palsu dalam pelayar)
+var APP_URL = 'https://ncdjknkedah.github.io/mimo/app/';   // URL app pesakit, cth. https://ncdjknkedah.github.io/mimo/app/
+/* =========================================================== */
+</script>
+<script>/* ===== SKEMA LAJUR KKM MIMO (202 lajur, susunan ikut data sebenar sheet KKM) =====
+ * Jika susunan sheet KKM berubah, ubah di sini sahaja.
+ * NOTA: Bagi BASELINE, data sebenar KKM meletakkan Komposisi Tubuh (lajur 26-29) SEBELUM
+ * ujian makmal, walaupun tajuk sheet menunjukkan sebaliknya. Susunan di bawah ikut DATA.
+ * Bagi 6 BULAN / 12 BULAN tiada data untuk disemak — susunan ikut TAJUK sheet.
+ */
+var YT = ['YA', 'TIDAK'];
+var ST = ['SELESAI', 'TIDAK DILAKUKAN'];
+var KKM_SCHEMA = (function () {
+  var c = [];
+  function A(k, l, g, o, t) { c.push({ k: k, l: l, g: g, o: o || null, t: t || 'text' }); }
+  // --- Maklumat fasiliti / rujukan / pesakit (0-17)
+  A('NEGERI', 'Negeri', 'Fasiliti', ['KEDAH']);
+  A('DAERAH', 'Daerah', 'Fasiliti', ['KOTA SETAR', 'KUBANG PASU', 'PADANG TERAP', 'POKOK SENA', 'PENDANG', 'YAN', 'KUALA MUDA', 'SIK', 'BALING', 'KULIM', 'BANDAR BAHARU', 'LANGKAWI']);
+  A('FASILITI', 'Fasiliti', 'Fasiliti');
+  A('SUMBER_RUJUKAN', 'Sumber rujukan', 'Rujukan', ['KLINIK KESIHATAN', 'HOSPITAL', 'KOSPEN', 'SARINGAN KOMUNITI', 'LAIN-LAIN']);
+  A('SUMBER_RUJUKAN_2', 'Sumber rujukan (perincian)', 'Rujukan');
+  A('STATUS_RUJUKAN', 'Status rujukan', 'Rujukan', ['SETUJU SERTAI MIMO', 'TIDAK SETUJU SERTAI MIMO']);
+  A('NAMA', 'Nama', 'Pesakit');
+  A('NOKP', 'No. KP / Polis / Tentera', 'Pesakit');
+  A('TARIKH_LAHIR', 'Tarikh lahir (DD/MM/YYYY)', 'Pesakit', null, 'date');
+  A('UMUR', 'Umur', 'Pesakit', null, 'num');
+  A('BANGSA', 'Bangsa', 'Pesakit', ['MELAYU', 'CINA', 'INDIA', 'BUMIPUTERA SABAH', 'BUMIPUTERA SARAWAK', 'ORANG ASLI', 'LAIN-LAIN']);
+  A('JANTINA', 'Jantina', 'Pesakit', ['LELAKI', 'PEREMPUAN']);
+  A('TELEFON', 'No. telefon', 'Pesakit');
+  A('SP_DM', 'Diabetes', 'Sejarah perubatan', YT);
+  A('SP_HPT', 'Hipertensi', 'Sejarah perubatan', YT);
+  A('SP_DLP', 'Dislipidemia', 'Sejarah perubatan', YT);
+  A('SP_CVD', 'Penyakit kardiovaskular', 'Sejarah perubatan', YT);
+  A('SP_LAIN', 'Lain-lain', 'Sejarah perubatan');
+  // --- Baseline (18-58)
+  var G = 'Baseline';
+  A('B_TINGGI', 'Tinggi (cm)', G, null, 'num');
+  A('B_BERAT', 'Berat (kg)', G, null, 'num');
+  A('B_BMI', 'BMI', G, null, 'calc');
+  A('B_KATBMI', 'Kategori BMI', G, null, 'calc');
+  A('B_WC', 'Lilit pinggang (cm)', G, null, 'num');
+  A('B_SIS', 'BP sistolik', G, null, 'num');
+  A('B_DIA', 'BP diastolik', G, null, 'num');
+  A('B_BCA_PLEMAK', 'Peratus lemak badan (%)', 'Baseline – Komposisi tubuh', null, 'num');
+  A('B_BCA_VISC', 'Lemak viseral (level)', 'Baseline – Komposisi tubuh', null, 'num');
+  A('B_BCA_JLEMAK', 'Jisim lemak badan (kg)', 'Baseline – Komposisi tubuh', null, 'num');
+  A('B_BCA_SMM', 'Jisim otot rangka (kg)', 'Baseline – Komposisi tubuh', null, 'num');
+  G = 'Baseline – Makmal';
+  A('B_FBS_ST', 'FBS (status)', G, ST);
+  A('B_FBS', 'FBS keputusan', G, null, 'num');
+  A('B_2HPP_ST', '2HPP (status)', G, ST);
+  A('B_2HPP', '2HPP keputusan', G, null, 'num');
+  A('B_HBA1C', 'HbA1c (%)', G, null, 'num');
+  A('B_TC_ST', 'Total kolesterol (status)', G, ST);
+  A('B_TC', 'Total kolesterol', G, null, 'num');
+  A('B_TG_ST', 'TG (status)', G, ST);
+  A('B_TG', 'TG', G, null, 'num');
+  A('B_LDL_ST', 'LDL (status)', G, ST);
+  A('B_LDL', 'LDL', G, null, 'num');
+  A('B_HDL_ST', 'HDL (status)', G, ST);
+  A('B_HDL', 'HDL', G, null, 'num');
+  A('B_RP', 'Fungsi ginjal (RP)', G, ST);
+  A('B_LFT', 'Fungsi hati (LFT)', G, ST);
+  A('B_AST', 'AST (U/L)', G, null, 'num');
+  A('B_ALT', 'ALT (U/L)', G, null, 'num');
+  A('B_FBC', 'FBC', G, ST);
+  A('B_HB', 'Hemoglobin (g/dL)', G, null, 'num');
+  A('B_PLT', 'Platelet (x10³/uL)', G, null, 'num');
+  A('B_UPRO', 'Protein urin', G, ST);
+  A('B_TFT', 'Fungsi tiroid (jika perlu)', G, ST);
+  A('B_KORTISOL', 'Kortisol (jika perlu)', G, ST);
+  G = 'Baseline – Penilaian lain';
+  A('B_MENTAL_ST', 'Penilaian kesihatan mental', G, ST);
+  A('B_MENTAL_KEP', 'Keputusan penilaian mental', G, ['PERLU DIRUJUK', 'TIDAK PERLU DIRUJUK']);
+  A('B_FIB4_ST', 'FIB-4 (status)', G, ST);
+  A('B_FIB4', 'FIB-4 keputusan', G, null, 'calc');
+  A('B_STOPBANG', 'STOP-BANG skor', G, null, 'num');
+  A('B_STOPBANG_KAT', 'STOP-BANG kategori', G, ['RISIKO RENDAH', 'RISIKO SEDERHANA', 'RISIKO TINGGI']);
+  A('B_USG', 'Ultrasound (USG)', G, ST);
+  function rawatan(p, gl) {
+    A(p + 'MNT_ST', 'MNT – status', gl, YT); A(p + 'MNT_TRK', 'MNT – tarikh', gl, null, 'date');
+    A(p + 'SEN_ST', 'Senaman fizikal – status', gl, YT); A(p + 'SEN_TRK', 'Senaman – tarikh', gl, null, 'date');
+    A(p + 'TT_ST', 'Terapi tingkah laku – status', gl, YT); A(p + 'TT_TRK', 'Terapi tingkah laku – tarikh', gl, null, 'date');
+    A(p + 'UBAT_JENIS', 'Farmakologi – jenis ubat', gl, ['ORLISTAT', 'LIRAGLUTIDE', 'SEMAGLUTIDE', 'TIRZEPATIDE', 'METFORMIN', 'LAIN-LAIN']);
+    A(p + 'UBAT_TRK', 'Farmakologi – tarikh', gl, null, 'date');
+    A(p + 'UBAT_SUMBER', 'Farmakologi – sumber', gl, ['KKM', 'SENDIRI', 'LAIN-LAIN']);
+    A(p + 'UBAT_FAS', 'Farmakologi – fasiliti', gl);
+    A(p + 'BAR_ST', 'Bariatrik – status', gl, YT); A(p + 'BAR_TRK', 'Bariatrik – tarikh', gl, null, 'date'); A(p + 'BAR_FAS', 'Bariatrik – fasiliti', gl);
+    A(p + 'RUJ', 'Rujukan kepada', gl, ['PAKAR PERUBATAN', 'PAKAR ENDOKRIN', 'PAKAR BEDAH', 'PAKAR PSIKIATRI', 'PEGAWAI DIETETIK', 'FISIOTERAPI', 'TERAPI CARA KERJA', 'KAUNSELOR', 'LAIN-LAIN']);
+    A(p + 'RUJ_TRK', 'Rujukan – tarikh janji temu', gl, null, 'date'); A(p + 'RUJ_FAS', 'Rujukan – fasiliti', gl);
+  }
+  function susulan(p, gl) {
+    A(p + 'BERAT', 'Berat (kg)', gl, null, 'num'); A(p + 'BMI', 'BMI', gl, null, 'calc'); A(p + 'KATBMI', 'Kategori BMI', gl, null, 'calc');
+    A(p + 'WC', 'Lilit pinggang (cm)', gl, null, 'num'); A(p + 'SIS', 'BP sistolik', gl, null, 'num'); A(p + 'DIA', 'BP diastolik', gl, null, 'num');
+    A(p + 'FBS_ST', 'FBS (status)', gl, ST); A(p + 'FBS', 'FBS keputusan', gl, null, 'num'); A(p + 'HBA1C', 'HbA1c (%)', gl, null, 'num');
+    A(p + 'TC_ST', 'Total kolesterol (status)', gl, ST); A(p + 'TC', 'Total kolesterol', gl, null, 'num');
+    A(p + 'TG_ST', 'TG (status)', gl, ST); A(p + 'TG', 'TG', gl, null, 'num');
+    A(p + 'LDL_ST', 'LDL (status)', gl, ST); A(p + 'LDL', 'LDL', gl, null, 'num');
+    A(p + 'HDL_ST', 'HDL (status)', gl, ST); A(p + 'HDL', 'HDL', gl, null, 'num');
+    A(p + 'BCA_PLEMAK', 'Peratus lemak badan (%)', gl, null, 'num'); A(p + 'BCA_VISC', 'Lemak viseral (level)', gl, null, 'num');
+    A(p + 'BCA_JLEMAK', 'Jisim lemak badan (kg)', gl, null, 'num'); A(p + 'BCA_SMM', 'Jisim otot rangka (kg)', gl, null, 'num');
+  }
+  function beza(p, gl) {
+    ['BERAT|Penurunan berat (kg)', 'PBERAT|Penurunan berat (%)', 'WC|Perubahan lilit pinggang', 'FBS|Perubahan FBS', 'SIS|Perubahan sistolik', 'DIA|Perubahan diastolik',
+      'TC|Perubahan TC', 'TG|Perubahan TG', 'LDL|Perubahan LDL', 'HDL|Perubahan HDL', 'PLEMAK|Perubahan % lemak', 'VISC|Perubahan lemak viseral',
+      'JLEMAK|Perubahan jisim lemak', 'SMM|Perubahan jisim otot', 'HBA1C|Perubahan HbA1c (%)', 'HBA1C_ST|Status HbA1c'].forEach(function (s) {
+        var x = s.split('|'); A(p + x[0], x[1], gl, null, 'calc');
+      });
+  }
+  rawatan('R0_', 'Rawatan (baseline)');           // 59-74
+  susulan('F6_', '6 bulan');                       // 75-95
+  rawatan('R6_', 'Rawatan (6 bulan)');             // 96-111
+  susulan('F12_', '12 bulan');                     // 112-132
+  rawatan('R12_', 'Rawatan (12 bulan)');           // 133-148
+  beza('P06_', 'Perbezaan baseline → 6 bulan');    // 149-164
+  beza('P612_', 'Perbezaan 6 → 12 bulan');         // 165-180
+  beza('P012_', 'Perbezaan baseline → 12 bulan');  // 181-196
+  A('TARIKH_DAFTAR', 'Tarikh daftar', 'Rekod', null, 'ro');
+  A('ID', 'ID (emel fasiliti)', 'Rekod');
+  A('STATUS', 'Status', 'Rekod', ['AKTIF', 'TIDAK AKTIF', 'TAMAT PROGRAM', 'KELUAR PROGRAM']);
+  A('TARIKH_KEMASKINI', 'Tarikh kemaskini', 'Rekod', null, 'ro');
+  A('CATATAN', 'Catatan', 'Rekod');
+  return c;
+})();
+var KKM_N = 202;
+var KKM_IDX = {}; KKM_SCHEMA.forEach(function (c, i) { KKM_IDX[c.k] = i; });
+
+/* ===== Logik klinikal dikongsi ===== */
+function num(v) { if (v === '' || v == null) return null; var n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? null : n; }
+function r1(n) { return Math.round(n * 10) / 10; }
+function r2(n) { return Math.round(n * 100) / 100; }
+function bmiOf(berat, tinggi) { var b = num(berat), t = num(tinggi); if (!b || !t) return null; return r1(b / Math.pow(t / 100, 2)); }
+/* Kategori BMI ikut data KKM MIMO (CPG Pengurusan Obesiti 2023) */
+function katBmi(bmi) {
+  if (bmi == null) return '';
+  if (bmi < 18.5) return 'KURANG BERAT BADAN';
+  if (bmi < 23) return 'NORMAL';
+  if (bmi < 27.5) return 'OVERWEIGHT';
+  if (bmi < 32.5) return 'OBES I';
+  if (bmi < 37.5) return 'OBES II';
+  return 'OBES III';
+}
+function fib4(umur, ast, alt, plt) { var a = num(umur), s = num(ast), l = num(alt), p = num(plt); if (!a || !s || !l || !p) return null; return r2(a * s / (p * Math.sqrt(l))); }
+function umurDari(tl) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(tl || ''); if (!m) return null; var d = new Date(+m[3], +m[2] - 1, +m[1]), n = new Date(); var u = n.getFullYear() - d.getFullYear(); if (n.getMonth() < d.getMonth() || (n.getMonth() == d.getMonth() && n.getDate() < d.getDate())) u--; return u; }
+/* Kira semua lajur 'calc' dalam rekod (objek kunci→nilai) */
+function kiraKkm(o) {
+  var t = o.B_TINGGI;
+  [['B_', 'B_BERAT'], ['F6_', 'F6_BERAT'], ['F12_', 'F12_BERAT']].forEach(function (p) {
+    var b = bmiOf(o[p[1]], t); if (b != null) { o[p[0] + 'BMI'] = String(b); o[p[0] + 'KATBMI'] = katBmi(b); }
+  });
+  if (!num(o.UMUR) && o.TARIKH_LAHIR) { var u = umurDari(o.TARIKH_LAHIR); if (u != null) o.UMUR = String(u); }
+  var f = fib4(o.UMUR, o.B_AST, o.B_ALT, o.B_PLT); if (f != null) o.B_FIB4 = String(f);
+  function beza(p, a, b) {
+    var TB = 'TIDAK BERKAITAN';
+    function d(x, y, rev) { var u = num(o[a + x]), v = num(o[b + y]); if (u == null || v == null) return TB; return String(r2(rev ? u - v : v - u)); }
+    var A_ = a == 'B_' ? 'B_BCA_' : a + 'BCA_', B_ = b + 'BCA_';
+    o[p + 'BERAT'] = d('BERAT', 'BERAT', true);
+    var bb = num(o[a + 'BERAT']), ab = num(o[b + 'BERAT']);
+    o[p + 'PBERAT'] = (bb && ab != null) ? String(r2((bb - ab) / bb * 100)) : TB;
+    o[p + 'WC'] = d('WC', 'WC'); o[p + 'FBS'] = d('FBS', 'FBS'); o[p + 'SIS'] = d('SIS', 'SIS'); o[p + 'DIA'] = d('DIA', 'DIA');
+    o[p + 'TC'] = d('TC', 'TC'); o[p + 'TG'] = d('TG', 'TG'); o[p + 'LDL'] = d('LDL', 'LDL'); o[p + 'HDL'] = d('HDL', 'HDL');
+    function dB(x) { var u = num(o[A_ + x]), v = num(o[B_ + x]); return (u == null || v == null) ? TB : String(r2(v - u)); }
+    o[p + 'PLEMAK'] = dB('PLEMAK'); o[p + 'VISC'] = dB('VISC'); o[p + 'JLEMAK'] = dB('JLEMAK'); o[p + 'SMM'] = dB('SMM');
+    var h = d('HBA1C', 'HBA1C'); o[p + 'HBA1C'] = h;
+    o[p + 'HBA1C_ST'] = h == TB ? TB : (num(h) < 0 ? 'MENURUN' : num(h) > 0 ? 'MENINGKAT' : 'TIADA PERUBAHAN');
+  }
+  beza('P06_', 'B_', 'F6_'); beza('P612_', 'F6_', 'F12_'); beza('P012_', 'B_', 'F12_');
+  return o;
+}
+function kkmToRow(o) { return KKM_SCHEMA.map(function (c) { return o[c.k] == null ? '' : String(o[c.k]); }); }
+function rowToKkm(r) { var o = {}; KKM_SCHEMA.forEach(function (c, i) { o[c.k] = r[i] == null ? '' : String(r[i]); }); return o; }
+
+/* ===== Tab tambahan ===== */
+var TAB_LAWATAN = ['LAWATAN_ID', 'MIMO_ID', 'TARIKH', 'MINGGU', 'SIS', 'DIA', 'NADI', 'BERAT', 'BMI', 'WC', 'BCA_PLEMAK', 'BCA_VISC', 'BCA_JLEMAK', 'BCA_SMM', 'CATATAN', 'OLEH', 'KEMASKINI'];
+var TAB_KEC = ['KEC_ID', 'MIMO_ID', 'FASA', 'TARIKH', 'BERAT', 'OTOT', 'LEMAK_PCT', 'GRIP_R', 'GRIP_L', 'STEP_PRE', 'STEP_PEAK', 'STEP_REC1', 'STEP_1', 'STEP_2', 'STEP_3', 'WALK_JARAK', 'WALK_PRE', 'WALK_PEAK', 'PUSHUP', 'SITUP_GRED', 'SITUP_REPS', 'PLANK', 'JUMP', 'STS5', 'SITREACH', 'OLEH', 'KEMASKINI'];
+var TAB_APP = ['MIMO_ID', 'TOKEN', 'NAMA_PANGGILAN', 'SASARAN_BERAT', 'TEMUJANJI_JSON', 'AKTIF', 'CIPTA'];
+var TAB_LOG = ['LOG_ID', 'MIMO_ID', 'JENIS', 'KUNCI', 'DATA_JSON', 'KEMASKINI'];
+var TAB_PETUGAS = ['USERNAME', 'NAMA', 'FASILITI', 'SALT', 'HASH', 'PERANAN', 'AKTIF'];
+var TAB_AUDIT = ['MASA', 'PENGGUNA', 'TINDAKAN', 'MIMO_ID', 'BUTIRAN'];
+var MINGGU_LIST = ['M1', 'M2', 'M4', 'M6', 'M8', 'M10', 'M12', 'M14', 'M16', 'M18', 'M20', 'M22', 'M24'];
+var DISIPLIN = ['Pakar / Pegawai Perubatan', 'Pegawai Dietetik', 'Pegawai Sains Pemakanan', 'Fisioterapi', 'Terapi Cara Kerja', 'Kaunselor', 'Wellness Hub'];
+
+/* ===== Tarikh ===== */
+function dmyToDate(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null; }
+function dateToDmy(d) { function z(n) { return (n < 10 ? '0' : '') + n; } return z(d.getDate()) + '/' + z(d.getMonth() + 1) + '/' + d.getFullYear(); }
+function isoToDmy(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : (s || ''); }
+function dmyToIso(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s || ''); return m ? m[3] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[1]).slice(-2) : ''; }
+
+/* Isi lajur susulan 6/12 bulan daripada lawatan paling hampir (±60 hari) dengan tarikh sasaran */
+function isiSusulan(o, lawatan, bulan) {
+  var rujuk = dmyToDate(o.TARIKH_DAFTAR) || (lawatan.length ? dmyToDate(lawatan.slice().sort(function (a, b) { return dmyToDate(a.TARIKH) - dmyToDate(b.TARIKH); })[0].TARIKH) : null);
+  if (!rujuk) return null;
+  var sasar = new Date(rujuk.getTime() + bulan * 30.44 * 864e5), terbaik = null, beza = 1e15;
+  lawatan.forEach(function (l) { var d = dmyToDate(l.TARIKH); if (!d) return; var x = Math.abs(d - sasar); if (x < beza && num(l.BERAT) != null) { beza = x; terbaik = l; } });
+  if (!terbaik || beza > 60 * 864e5) return null;
+  var p = bulan == 6 ? 'F6_' : 'F12_';
+  o[p + 'BERAT'] = terbaik.BERAT; o[p + 'WC'] = terbaik.WC || o[p + 'WC']; o[p + 'SIS'] = terbaik.SIS || o[p + 'SIS']; o[p + 'DIA'] = terbaik.DIA || o[p + 'DIA'];
+  ['PLEMAK', 'VISC', 'JLEMAK', 'SMM'].forEach(function (k) { if (terbaik['BCA_' + k]) o[p + 'BCA_' + k] = terbaik['BCA_' + k]; });
+  kiraKkm(o);
+  return terbaik;
+}
+
+function mingguIso(d) { var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); var day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); var y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return t.getUTCFullYear() + '-W' + ('0' + Math.ceil(((t - y) / 864e5 + 1) / 7)).slice(-2); }
+</script>
+<script>/* QRCode for JavaScript — Kazuhiko Arase, MIT licence (via qrcode-terminal) */
+var QRLib=(function(){var M={},C={};function R(n){n=n.replace(/^\.\//,"./").replace(/\.js$/,"");if(n=="./index"||n==".")n="./index";if(C[n])return C[n].exports;var m={exports:{}};C[n]=m;M[n](m,m.exports,R);return m.exports;}
+M['./QRErrorCorrectLevel']=function(module,exports,require){module.exports = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+};
+M['./QRPolynomial']=function(module,exports,require){var QRMath = require('./QRMath');
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+module.exports = QRPolynomial;
+
+};
+M['./QRMaskPattern']=function(module,exports,require){module.exports = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+};
+M['./QRMode']=function(module,exports,require){module.exports = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+};
+M['./QRUtil']=function(module,exports,require){var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+module.exports = QRUtil;
+
+};
+M['./QRMath']=function(module,exports,require){var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+module.exports = QRMath;
+
+};
+M['./QR8bitByte']=function(module,exports,require){var QRMode = require('./QRMode');
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+module.exports = QR8bitByte;
+
+};
+M['./index']=function(module,exports,require){//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+module.exports = QRCode;
+
+};
+M['./QRBitBuffer']=function(module,exports,require){function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+module.exports = QRBitBuffer;
+
+};
+M['./QRRSBlock']=function(module,exports,require){var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+module.exports = QRRSBlock;
+
+};
+return {QRCode:R("./index"),ECL:R("./QRErrorCorrectLevel")};})();</script>
+<script>/* Mod demo: emulator + salinan backend + data palsu. Tidak digunakan apabila API_URL ditetapkan. */
+/* ===== Emulator Google Apps Script (MOD DEMO SAHAJA) =====
+ * Membolehkan kod backend sebenar (server.gs) berjalan dalam pelayar
+ * menggunakan localStorage, supaya demo berkelakuan sama seperti sistem sebenar.
+ */
+var GAS_EMU = (function () {
+  var KEY = 'mimo_demo_db_v1', db = null;
+  function load() { if (db) return db; try { db = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { db = null; } if (!db) db = { sheets: {}, order: [] }; return db; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { } }
+  function reset() { db = { sheets: {}, order: [] }; try { localStorage.removeItem(KEY); } catch (e) { } }
+  function Sheet(name) { this.name = name; }
+  Sheet.prototype = {
+    _d: function () { return load().sheets[this.name]; },
+    getLastRow: function () { var d = this._d(); for (var i = d.length - 1; i >= 0; i--) if (d[i].some(function (x) { return x !== ''; })) return i + 1; return 0; },
+    getMaxRows: function () { return Math.max(this._d().length, 1000); },
+    setFrozenRows: function () { return this; },
+    getDataRange: function () {
+      var d = this._d(), n = this.getLastRow(), w = d.reduce(function (m, r) { return Math.max(m, r.length); }, 1);
+      var v = d.slice(0, Math.max(n, 1)).map(function (r) { var x = r.slice(); while (x.length < w) x.push(''); return x; });
+      if (!v.length) v = [['']];
+      return { getDisplayValues: function () { return v; }, getValues: function () { return v; } };
+    },
+    getRange: function (row, col, nr, nc) {
+      var self = this; nr = nr || 1; nc = nc || 1;
+      var R = {
+        setValues: function (vals) {
+          var d = self._d();
+          for (var i = 0; i < nr; i++) { var r = row - 1 + i; while (d.length <= r) d.push([]); for (var j = 0; j < nc; j++) { while (d[r].length < col - 1 + j) d[r].push(''); d[r][col - 1 + j] = vals[i][j] == null ? '' : String(vals[i][j]); } }
+          return R;
+        },
+        setFontWeight: function () { return R; }, setBackground: function () { return R; }, setFontColor: function () { return R; }, setNumberFormat: function () { return R; }
+      };
+      return R;
+    },
+    appendRow: function (vals) { this.getRange(this.getLastRow() + 1, 1, 1, vals.length).setValues([vals]); },
+    deleteRow: function (r) { this._d().splice(r - 1, 1); }
+  };
+  var SS = {
+    getSheetByName: function (n) { return load().sheets[n] ? new Sheet(n) : null; },
+    insertSheet: function (n) { load().sheets[n] = []; db.order.push(n); return new Sheet(n); },
+    getSheets: function () { return load().order.map(function (n) { return new Sheet(n); }); },
+    deleteSheet: function (s) { delete db.sheets[s.name]; db.order = db.order.filter(function (n) { return n !== s.name; }); }
+  };
+  /* SHA-256 segerak (untuk hash kata laluan dalam demo) */
+  function sha256(bytes) {
+    var K = [], H = [], i, j, p = 2, isP;
+    function frac(x) { return (x - Math.floor(x)) * 4294967296 | 0; }
+    for (var c = 0; c < 64; p++) { isP = true; for (j = 2; j * j <= p; j++) if (p % j === 0) { isP = false; break; } if (isP) { if (c < 8) H[c] = frac(Math.pow(p, 1 / 2)); K[c++] = frac(Math.pow(p, 1 / 3)); } }
+    var l = bytes.length, m = bytes.concat([0x80]); while (m.length % 64 !== 56) m.push(0);
+    var bl = l * 8; for (i = 7; i >= 0; i--) m.push(i >= 4 ? 0 : (bl >>> (i * 8)) & 255);
+    function rr(x, n) { return (x >>> n) | (x << (32 - n)); }
+    for (i = 0; i < m.length; i += 64) {
+      var w = [], a = H.slice();
+      for (j = 0; j < 64; j++) {
+        if (j < 16) w[j] = (m[i + 4 * j] << 24) | (m[i + 4 * j + 1] << 16) | (m[i + 4 * j + 2] << 8) | m[i + 4 * j + 3];
+        else { var s0 = rr(w[j - 15], 7) ^ rr(w[j - 15], 18) ^ (w[j - 15] >>> 3), s1 = rr(w[j - 2], 17) ^ rr(w[j - 2], 19) ^ (w[j - 2] >>> 10); w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0; }
+        var S1 = rr(a[4], 6) ^ rr(a[4], 11) ^ rr(a[4], 25), ch = (a[4] & a[5]) ^ (~a[4] & a[6]), t1 = (a[7] + S1 + ch + K[j] + w[j]) | 0;
+        var S0 = rr(a[0], 2) ^ rr(a[0], 13) ^ rr(a[0], 22), mj = (a[0] & a[1]) ^ (a[0] & a[2]) ^ (a[1] & a[2]), t2 = (S0 + mj) | 0;
+        a = [(t1 + t2) | 0, a[0], a[1], a[2], (a[3] + t1) | 0, a[4], a[5], a[6]];
+      }
+      for (j = 0; j < 8; j++) H[j] = (H[j] + a[j]) | 0;
+    }
+    var out = []; H.forEach(function (h) { out.push((h >>> 24) & 255, (h >>> 16) & 255, (h >>> 8) & 255, h & 255); }); return out;
+  }
+  function utf8(s) { return Array.prototype.slice.call(new TextEncoder().encode(s)); }
+  var cache = {};
+  var api = {
+    SpreadsheetApp: { getActiveSpreadsheet: function () { return SS; } },
+    Utilities: {
+      DigestAlgorithm: { SHA_256: 1 }, Charset: { UTF_8: 1 },
+      computeDigest: function (a, s) { return sha256(utf8(s)); },
+      base64Encode: function (b) { return btoa(String.fromCharCode.apply(null, b)); },
+      getUuid: function () { return (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now()); },
+      formatDate: function (d, tz, f) {
+        function z(n) { return (n < 10 ? '0' : '') + n; }
+        return f.replace('yyyy', d.getFullYear()).replace('yy', String(d.getFullYear()).slice(2)).replace('MM', z(d.getMonth() + 1)).replace('dd', z(d.getDate()))
+          .replace('HH', z(d.getHours())).replace('mm', z(d.getMinutes())).replace('ss', z(d.getSeconds()));
+      }
+    },
+    CacheService: { getScriptCache: function () { return { get: function (k) { return cache[k] || null; }, put: function (k, v) { cache[k] = v; }, remove: function (k) { delete cache[k]; } }; } },
+    LockService: { getScriptLock: function () { return { waitLock: function () { }, releaseLock: function () { } }; } },
+    ContentService: { MimeType: { JSON: 1 }, createTextOutput: function (s) { return { s: s, setMimeType: function () { return this; } }; } },
+    Logger: { log: function () { } }
+  };
+  return { api: api, save: save, reset: reset, hasData: function () { return !!load().order.length; } };
+})();
+var SpreadsheetApp = GAS_EMU.api.SpreadsheetApp, Utilities = GAS_EMU.api.Utilities, CacheService = GAS_EMU.api.CacheService,
+  LockService = GAS_EMU.api.LockService, ContentService = GAS_EMU.api.ContentService, Logger = GAS_EMU.api.Logger;
+
+/* =====================================================================
+ * MIMO KEDAH — Backend Google Apps Script
+ * Pangkalan data: Google Sheet ini (tab dicipta oleh setup()).
+ *
+ * LANGKAH PEMASANGAN (ringkas — lihat README):
+ * 1. Ubah ADMIN_PASSWORD_AWAL di bawah.
+ * 2. Jalankan fungsi setup() sekali (Run ▸ setup), benarkan akses.
+ * 3. Deploy ▸ New deployment ▸ Web app
+ *      Execute as: Me   |   Who has access: Anyone
+ * 4. Salin URL web app (…/exec) ke API_URL dalam papan pemuka & app pesakit.
+ * ===================================================================== */
+var ADMIN_PASSWORD_AWAL = 'demo1234';
+var TZ = 'Asia/Kuala_Lumpur';
+var SESI_SAAT = 6 * 3600;
+
+/* ---------- Setup ---------- */
+function setup() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var kkmHead = KKM_SCHEMA.map(function (c, i) { return (i + 1) + '. ' + c.g + ' | ' + c.l; }).concat(['MIMO_ID']);
+  buatTab_(ss, 'PESAKIT_KKM', kkmHead);
+  buatTab_(ss, 'APP_PESAKIT', TAB_APP);
+  buatTab_(ss, 'LAWATAN', TAB_LAWATAN);
+  buatTab_(ss, 'KECERGASAN', TAB_KEC);
+  buatTab_(ss, 'LOG_PESAKIT', TAB_LOG);
+  buatTab_(ss, 'PETUGAS', TAB_PETUGAS);
+  buatTab_(ss, 'AUDIT', TAB_AUDIT);
+  if (!cariBaris_('PETUGAS', 'USERNAME', 'admin')) tambahPetugas('admin', 'Pentadbir Sistem', 'SEMUA', ADMIN_PASSWORD_AWAL, 'ADMIN');
+  var s1 = ss.getSheetByName('Sheet1'); if (s1 && s1.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(s1);
+  Logger.log('Setup selesai. Log masuk: admin / ' + ADMIN_PASSWORD_AWAL + ' (tukar selepas log masuk pertama).');
+}
+function buatTab_(ss, nama, head) {
+  var sh = ss.getSheetByName(nama) || ss.insertSheet(nama);
+  sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight('bold').setBackground('#0f4c5c').setFontColor('#ffffff');
+  sh.setFrozenRows(1);
+  sh.getRange(1, 1, Math.max(sh.getMaxRows(), 1000), head.length).setNumberFormat('@'); // teks: kekal sifar di depan No. KP / telefon
+  return sh;
+}
+/* Tambah / kemas kini petugas. fasiliti = nama fasiliti tepat seperti lajur FASILITI, atau 'SEMUA' */
+function tambahPetugas(username, nama, fasiliti, password, peranan) {
+  var salt = Utilities.getUuid();
+  upsert_('PETUGAS', TAB_PETUGAS, { USERNAME: String(username).toLowerCase(), NAMA: nama, FASILITI: fasiliti, SALT: salt, HASH: hash_(salt, password), PERANAN: peranan || 'PETUGAS', AKTIF: 'YA' }, 'USERNAME');
+}
+
+/* ---------- Helper sheet ---------- */
+function sh_(n) { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(n); }
+function semua_(n) { var v = sh_(n).getDataRange().getDisplayValues(); return { head: v[0], rows: v.slice(1) }; }
+function objs_(n) { var d = semua_(n); return d.rows.filter(function (r) { return r[0] !== ''; }).map(function (r) { var o = {}; d.head.forEach(function (h, i) { o[h] = r[i]; }); return o; }); }
+function cariBaris_(n, kol, nilai) {
+  var d = semua_(n), i = d.head.indexOf(kol);
+  for (var r = 0; r < d.rows.length; r++) if (d.rows[r][i] === String(nilai)) return { baris: r + 2, data: d.rows[r], head: d.head };
+  return null;
+}
+function upsert_(n, head, obj, kunci) {
+  var f = cariBaris_(n, kunci, obj[kunci]), s = sh_(n);
+  var row = head.map(function (h, i) { return obj[h] !== undefined ? String(obj[h]) : (f ? f.data[i] : ''); });
+  if (f) s.getRange(f.baris, 1, 1, head.length).setValues([row]);
+  else s.getRange(s.getLastRow() + 1, 1, 1, head.length).setNumberFormat('@').setValues([row]);
+  return row;
+}
+function padam_(n, kol, nilai) { var f = cariBaris_(n, kol, nilai); if (f) sh_(n).deleteRow(f.baris); return !!f; }
+function kini_() { return Utilities.formatDate(new Date(), TZ, 'dd/MM/yyyy HH:mm:ss'); }
+function hash_(salt, pw) { return Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + '|' + pw, Utilities.Charset.UTF_8)); }
+function rawak_(n) { var a = '23456789ABCDEFGHJKMNPQRSTUVWXYZ', s = ''; for (var i = 0; i < n; i++) s += a.charAt(Math.floor(Math.random() * a.length)); return s; }
+function audit_(u, t, id, b) { sh_('AUDIT').appendRow([kini_(), u, t, id || '', b || '']); }
+
+/* ---------- Pesakit KKM (202 lajur + MIMO_ID) ---------- */
+function kkmSemua_() {
+  var d = semua_('PESAKIT_KKM');
+  return d.rows.map(function (r, i) { var o = rowToKkm(r); o.MIMO_ID = r[KKM_N]; o._baris = i + 2; return o; }).filter(function (o) { return o.MIMO_ID; });
+}
+function simpanKkm_(o, baris) {
+  var row = kkmToRow(o).concat([o.MIMO_ID]), s = sh_('PESAKIT_KKM');
+  if (baris) s.getRange(baris, 1, 1, KKM_N + 1).setValues([row]);
+  else s.getRange(s.getLastRow() + 1, 1, 1, KKM_N + 1).setNumberFormat('@').setValues([row]);
+}
+function bolehAkses_(u, o) { return u.f === 'SEMUA' || String(o.FASILITI).toUpperCase() === String(u.f).toUpperCase(); }
+function idBaru_() { return 'MK' + Utilities.formatDate(new Date(), TZ, 'yyMM') + '-' + rawak_(4); }
+function pastikanApp_(id) {
+  var f = cariBaris_('APP_PESAKIT', 'MIMO_ID', id);
+  if (f) { var o = {}; f.head.forEach(function (h, i) { o[h] = f.data[i]; }); return o; }
+  var a = { MIMO_ID: id, TOKEN: rawak_(8), NAMA_PANGGILAN: '', SASARAN_BERAT: '', TEMUJANJI_JSON: '{}', AKTIF: 'YA', CIPTA: kini_() };
+  upsert_('APP_PESAKIT', TAB_APP, a, 'MIMO_ID'); return a;
+}
+
+/* ---------- Penghala API ---------- */
+function doGet() { return json_({ ok: true, app: 'MIMO Kedah API', masa: kini_() }); }
+function doPost(e) {
+  var req; try { req = JSON.parse(e.postData.contents); } catch (x) { return json_({ ok: false, ralat: 'Permintaan tidak sah' }); }
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(20000);
+    var a = req.action, h;
+    if (a === 'login') h = login_(req);
+    else if (a === 'p_get') h = pGet_(req);
+    else if (a === 'p_save') h = pSave_(req);
+    else {
+      var u = sesi_(req.session); if (!u) return json_({ ok: false, ralat: 'SESI_TAMAT' });
+      var F = { list: list_, get: get_, saveKkm: saveKkm_, saveLawatan: saveLawatan_, delLawatan: delLawatan_, saveKec: saveKec_, saveApp: saveApp_, resetToken: resetToken_, importKkm: importKkm_, exportKkm: exportKkm_, tukarPassword: tukarPw_, tambahPetugas: tambahPetugasApi_, logout: logout_ }[a];
+      if (!F) return json_({ ok: false, ralat: 'Tindakan tidak dikenali' });
+      h = F(req, u);
+    }
+    return json_(h);
+  } catch (err) {
+    return json_({ ok: false, ralat: String(err && err.message || err) });
+  } finally { try { lock.releaseLock(); } catch (x) { } }
+}
+function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+/* ---------- Pengesahan petugas ---------- */
+function login_(q) {
+  var f = cariBaris_('PETUGAS', 'USERNAME', String(q.user || '').toLowerCase().trim());
+  if (!f) return { ok: false, ralat: 'Nama pengguna atau kata laluan salah' };
+  var p = {}; f.head.forEach(function (h, i) { p[h] = f.data[i]; });
+  if (p.AKTIF !== 'YA' || hash_(p.SALT, q.pass || '') !== p.HASH) return { ok: false, ralat: 'Nama pengguna atau kata laluan salah' };
+  var tok = Utilities.getUuid();
+  CacheService.getScriptCache().put('s_' + tok, JSON.stringify({ u: p.USERNAME, n: p.NAMA, f: p.FASILITI, r: p.PERANAN }), SESI_SAAT);
+  audit_(p.USERNAME, 'LOGIN');
+  return { ok: true, session: tok, nama: p.NAMA, fasiliti: p.FASILITI, peranan: p.PERANAN };
+}
+function sesi_(t) { if (!t) return null; var c = CacheService.getScriptCache(), v = c.get('s_' + t); if (!v) return null; c.put('s_' + t, v, SESI_SAAT); return JSON.parse(v); }
+function logout_(q) { CacheService.getScriptCache().remove('s_' + q.session); return { ok: true }; }
+function tukarPw_(q, u) {
+  var f = cariBaris_('PETUGAS', 'USERNAME', u.u), p = {}; f.head.forEach(function (h, i) { p[h] = f.data[i]; });
+  if (hash_(p.SALT, q.lama || '') !== p.HASH) return { ok: false, ralat: 'Kata laluan lama salah' };
+  if (String(q.baru || '').length < 8) return { ok: false, ralat: 'Kata laluan baru mesti sekurang-kurangnya 8 aksara' };
+  tambahPetugas(u.u, p.NAMA, p.FASILITI, q.baru, p.PERANAN); audit_(u.u, 'TUKAR_PASSWORD'); return { ok: true };
+}
+function tambahPetugasApi_(q, u) {
+  if (u.r !== 'ADMIN') return { ok: false, ralat: 'Hanya ADMIN' };
+  if (!q.username || String(q.password || '').length < 8) return { ok: false, ralat: 'Nama pengguna & kata laluan (≥8 aksara) diperlukan' };
+  tambahPetugas(q.username, q.nama || q.username, q.fasiliti || 'SEMUA', q.password, q.peranan || 'PETUGAS');
+  audit_(u.u, 'TAMBAH_PETUGAS', '', q.username); return { ok: true };
+}
+
+/* ---------- API petugas ---------- */
+function list_(q, u) {
+  var lw = objs_('LAWATAN'), lg = objs_('LOG_PESAKIT'), ap = objs_('APP_PESAKIT');
+  var akhirLw = {}, akhirLg = {}, apMap = {};
+  lw.forEach(function (r) { var k = r.MIMO_ID; if (!akhirLw[k] || tk_(r.TARIKH) >= tk_(akhirLw[k].TARIKH)) akhirLw[k] = r; });
+  lg.forEach(function (r) { var k = r.MIMO_ID; if (/^\d{4}-\d{2}-\d{2}$/.test(r.KUNCI) && (!akhirLg[k] || r.KUNCI > akhirLg[k])) akhirLg[k] = r.KUNCI; }); // tarikh log harian terkini (ISO)
+  ap.forEach(function (r) { apMap[r.MIMO_ID] = r; });
+  var out = kkmSemua_().filter(function (o) { return bolehAkses_(u, o); }).map(function (o) {
+    var l = akhirLw[o.MIMO_ID] || {};
+    return { id: o.MIMO_ID, nama: o.NAMA, nokp: o.NOKP, umur: o.UMUR, jantina: o.JANTINA, daerah: o.DAERAH, fasiliti: o.FASILITI, status: o.STATUS,
+      b_berat: o.B_BERAT, b_bmi: o.B_BMI, kat: o.B_KATBMI, tinggi: o.B_TINGGI, daftar: o.TARIKH_DAFTAR,
+      f6: o.F6_BERAT, f12: o.F12_BERAT,
+      l_berat: l.BERAT || '', l_tarikh: l.TARIKH || '', log_akhir: akhirLg[o.MIMO_ID] || '', app: !!apMap[o.MIMO_ID] };
+  });
+  return { ok: true, pesakit: out };
+}
+function tk_(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?: (\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)).getTime() : 0; }
+function kkmById_(id) { var a = kkmSemua_(); for (var i = 0; i < a.length; i++) if (a[i].MIMO_ID === id) return a[i]; return null; }
+function semakAkses_(u, id) { var o = kkmById_(id); if (!o) throw new Error('Pesakit tidak dijumpai'); if (!bolehAkses_(u, o)) throw new Error('Tiada akses kepada pesakit ini'); return o; }
+function get_(q, u) {
+  var o = semakAkses_(u, q.id); delete o._baris;
+  audit_(u.u, 'LIHAT', q.id);
+  return { ok: true, kkm: o, app: pastikanApp_(q.id),
+    lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === q.id; }),
+    kecergasan: objs_('KECERGASAN').filter(function (r) { return r.MIMO_ID === q.id; }),
+    logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === q.id; }) };
+}
+function saveKkm_(q, u) {
+  var o = q.kkm || {}, lama = o.MIMO_ID ? kkmById_(o.MIMO_ID) : null;
+  if (u.f !== 'SEMUA') o.FASILITI = u.f;
+  if (lama && !bolehAkses_(u, lama)) throw new Error('Tiada akses');
+  if (!lama) {
+    if (o.NOKP && kkmSemua_().some(function (x) { return x.NOKP === String(o.NOKP); })) return { ok: false, ralat: 'No. KP ini sudah didaftarkan' };
+    o.MIMO_ID = idBaru_(); o.TARIKH_DAFTAR = kini_(); if (!o.STATUS) o.STATUS = 'AKTIF';
+  }
+  o.TARIKH_KEMASKINI = kini_();
+  simpanKkm_(o, lama && lama._baris);
+  pastikanApp_(o.MIMO_ID);
+  audit_(u.u, lama ? 'KEMASKINI_KKM' : 'DAFTAR', o.MIMO_ID);
+  return { ok: true, id: o.MIMO_ID };
+}
+function saveLawatan_(q, u) {
+  var r = q.rec; semakAkses_(u, r.MIMO_ID);
+  if (!r.LAWATAN_ID) r.LAWATAN_ID = 'LW-' + rawak_(8);
+  r.OLEH = u.u; r.KEMASKINI = kini_();
+  upsert_('LAWATAN', TAB_LAWATAN, r, 'LAWATAN_ID'); audit_(u.u, 'LAWATAN', r.MIMO_ID, r.MINGGU);
+  return { ok: true, id: r.LAWATAN_ID };
+}
+function delLawatan_(q, u) {
+  var f = cariBaris_('LAWATAN', 'LAWATAN_ID', q.lid); if (!f) return { ok: true };
+  semakAkses_(u, f.data[1]); padam_('LAWATAN', 'LAWATAN_ID', q.lid); audit_(u.u, 'PADAM_LAWATAN', f.data[1]); return { ok: true };
+}
+function saveKec_(q, u) {
+  var r = q.rec; semakAkses_(u, r.MIMO_ID);
+  r.KEC_ID = r.MIMO_ID + '-' + r.FASA; r.OLEH = u.u; r.KEMASKINI = kini_();
+  upsert_('KECERGASAN', TAB_KEC, r, 'KEC_ID'); audit_(u.u, 'KECERGASAN', r.MIMO_ID, r.FASA); return { ok: true };
+}
+function saveApp_(q, u) {
+  var a = q.app; semakAkses_(u, a.MIMO_ID); pastikanApp_(a.MIMO_ID);
+  upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: a.MIMO_ID, NAMA_PANGGILAN: a.NAMA_PANGGILAN, SASARAN_BERAT: a.SASARAN_BERAT, TEMUJANJI_JSON: a.TEMUJANJI_JSON, AKTIF: a.AKTIF || 'YA' }, 'MIMO_ID');
+  audit_(u.u, 'APP', a.MIMO_ID); return { ok: true };
+}
+function resetToken_(q, u) {
+  semakAkses_(u, q.id); pastikanApp_(q.id); var t = rawak_(8);
+  upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: q.id, TOKEN: t }, 'MIMO_ID'); audit_(u.u, 'TOKEN_BARU', q.id); return { ok: true, token: t };
+}
+/* rows: tatasusunan baris 202 lajur (disalin dari sheet KKM). Padanan ikut No. KP. */
+function importKkm_(q, u) {
+  var ada = {}, baru = 0, kemas = 0, langkau = 0;
+  kkmSemua_().forEach(function (o) { ada[o.NOKP] = o; });
+  var tambah = [];
+  (q.rows || []).forEach(function (r) {
+    var o = rowToKkm(r); if (!o.NOKP || !o.NAMA) { langkau++; return; }
+    if (!bolehAkses_(u, o)) { langkau++; return; }
+    var l = ada[o.NOKP];
+    if (l) { o.MIMO_ID = l.MIMO_ID; simpanKkm_(o, l._baris); kemas++; }
+    else { o.MIMO_ID = idBaru_(); tambah.push(kkmToRow(o).concat([o.MIMO_ID])); ada[o.NOKP] = o; baru++; }
+  });
+  if (tambah.length) { var s = sh_('PESAKIT_KKM'); s.getRange(s.getLastRow() + 1, 1, tambah.length, KKM_N + 1).setNumberFormat('@').setValues(tambah); tambah.forEach(function (r) { pastikanApp_(r[KKM_N]); }); }
+  audit_(u.u, 'IMPORT_KKM', '', 'baru ' + baru + ', kemaskini ' + kemas);
+  return { ok: true, baru: baru, kemaskini: kemas, langkau: langkau };
+}
+function exportKkm_(q, u) {
+  var ids = q.ids && q.ids.length ? q.ids : null;
+  var rows = kkmSemua_().filter(function (o) { return bolehAkses_(u, o) && (!ids || ids.indexOf(o.MIMO_ID) >= 0); }).map(function (o) { return kkmToRow(o); });
+  audit_(u.u, 'EKSPORT_KKM', '', rows.length + ' baris');
+  return { ok: true, rows: rows };
+}
+
+/* ---------- API pesakit (kod akses) ---------- */
+function appDariToken_(t) {
+  t = String(t || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
+  if (t.length < 8) return null;
+  var f = cariBaris_('APP_PESAKIT', 'TOKEN', t); if (!f) return null;
+  var a = {}; f.head.forEach(function (h, i) { a[h] = f.data[i]; });
+  return a.AKTIF === 'TIDAK' ? null : a;
+}
+function pGet_(q) {
+  var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
+  var o = kkmById_(a.MIMO_ID) || {};
+  return { ok: true, profil: profilPesakit_(o, a),
+    lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { delete r.OLEH; delete r.MIMO_ID; return r; }),
+    logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { return { jenis: r.JENIS, kunci: r.KUNCI, data: r.DATA_JSON, kemaskini: r.KEMASKINI }; }) };
+}
+/* Hanya maklumat minimum dihantar ke telefon pesakit — tiada No. KP, telefon, sejarah perubatan atau makmal */
+function profilPesakit_(o, a) {
+  return { nama: a.NAMA_PANGGILAN || String(o.NAMA || '').split(' ')[0], fasiliti: o.FASILITI || '', tinggi: o.B_TINGGI || '',
+    b_berat: o.B_BERAT || '', b_wc: o.B_WC || '', b_bmi: o.B_BMI || '', daftar: o.TARIKH_DAFTAR || '', sasaran: a.SASARAN_BERAT || '',
+    temujanji: a.TEMUJANJI_JSON || '{}' };
+}
+var JENIS_LOG = ['MAKAN', 'REFLEKSI', 'STRATEGI', 'SENAMAN', 'BERAT'];
+function pSave_(q) {
+  var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
+  var n = 0;
+  (q.logs || []).slice(0, 60).forEach(function (l) {
+    if (JENIS_LOG.indexOf(l.jenis) < 0) return;
+    var data = typeof l.data === 'string' ? l.data : JSON.stringify(l.data);
+    if (data.length > 8000) return;
+    var kunci = String(l.kunci || '').slice(0, 20);
+    upsert_('LOG_PESAKIT', TAB_LOG, { LOG_ID: a.MIMO_ID + '|' + l.jenis + '|' + kunci, MIMO_ID: a.MIMO_ID, JENIS: l.jenis, KUNCI: kunci, DATA_JSON: data, KEMASKINI: kini_() }, 'LOG_ID');
+    n++;
+  });
+  return { ok: true, disimpan: n };
+}
+
+/* ===== Data contoh PALSU untuk mod demo ===== */
+function seedDemo() {
+  if (GAS_EMU.hasData()) return;
+  ADMIN_PASSWORD_AWAL = 'demo1234';
+  setup();
+  tambahPetugas('kkbas', 'Petugas KK Bandar Alor Setar', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'demo1234', 'PETUGAS');
+  var U = { u: 'admin', f: 'SEMUA', r: 'ADMIN' };
+  var NAMA = ['NURUL AINA BINTI AHMAD', 'SITI KHADIJAH BINTI OMAR', 'MOHD HAFIZ BIN ISMAIL', 'TAN MEI LING', 'FARAH NADIA BINTI YUSOF', 'AHMAD ZAKI BIN HASSAN',
+    'RAJESWARI A/P MUTHU', 'NOR AZIZAH BINTI MAT', 'KHAIRUL ANUAR BIN SALLEH', 'LIM WEI JIE', 'ROSMAWATI BINTI DAUD', 'SYAFIQ BIN ROSLI'];
+  var FAS = ['KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR',
+    'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN SUNGAI PETANI', 'KLINIK KESIHATAN SUNGAI PETANI', 'KLINIK KESIHATAN SUNGAI PETANI',
+    'KLINIK KESIHATAN KULIM', 'KLINIK KESIHATAN KULIM', 'KLINIK KESIHATAN KULIM'];
+  var DAE = { 'KLINIK KESIHATAN BANDAR ALOR SETAR': 'KOTA SETAR', 'KLINIK KESIHATAN SUNGAI PETANI': 'KUALA MUDA', 'KLINIK KESIHATAN KULIM': 'KULIM' };
+  var seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+  var hari = 864e5, kini = new Date(); kini.setHours(0, 0, 0, 0);
+  var bulanLalu = [11, 9, 7.5, 6.5, 5, 4, 3, 2, 1.5, 1, 0.6, 0.3];
+  var trend = [-0.35, -0.25, -0.3, -0.15, 0.05, -0.4, -0.2, -0.3, 0.1, -0.25, -0.2, 0];
+  NAMA.forEach(function (nama, i) {
+    var pr = !/ BIN |^TAN|^LIM|^MOHD|^AHMAD|^KHAIRUL|^SYAFIQ/.test(nama), lahir = new Date(1970 + Math.floor(rnd() * 33), Math.floor(rnd() * 12), 1 + Math.floor(rnd() * 27));
+    var tinggi = pr ? 150 + Math.round(rnd() * 15) : 162 + Math.round(rnd() * 15), bmi0 = 28 + rnd() * 16, berat0 = Math.round(bmi0 * Math.pow(tinggi / 100, 2) * 10) / 10;
+    var daftar = new Date(kini.getTime() - bulanLalu[i] * 30.44 * hari);
+    var o = { NEGERI: 'KEDAH', DAERAH: DAE[FAS[i]], FASILITI: FAS[i], SUMBER_RUJUKAN: 'KLINIK KESIHATAN', STATUS_RUJUKAN: 'SETUJU SERTAI MIMO', NAMA: nama,
+      NOKP: String(lahir.getFullYear()).slice(2) + ('0' + (lahir.getMonth() + 1)).slice(-2) + ('0' + lahir.getDate()).slice(-2) + '02' + ('000' + (i * 7 + 1)).slice(-4),
+      TARIKH_LAHIR: dateToDmy(lahir), BANGSA: /A\/P/.test(nama) ? 'INDIA' : /^TAN|^LIM/.test(nama) ? 'CINA' : 'MELAYU', JANTINA: pr ? 'PEREMPUAN' : 'LELAKI', TELEFON: '01' + (2000000 + i * 1111),
+      SP_DM: rnd() < .35 ? 'YA' : 'TIDAK', SP_HPT: rnd() < .4 ? 'YA' : 'TIDAK', SP_DLP: rnd() < .5 ? 'YA' : 'TIDAK', SP_CVD: 'TIDAK',
+      B_TINGGI: String(tinggi), B_BERAT: String(berat0), B_WC: String(Math.round(85 + bmi0 * 0.6 + rnd() * 6)), B_SIS: String(115 + Math.round(rnd() * 30)), B_DIA: String(70 + Math.round(rnd() * 15)),
+      B_BCA_PLEMAK: String(Math.round((pr ? 40 : 30) + rnd() * 12)), B_BCA_VISC: String(10 + Math.round(rnd() * 14)), B_BCA_JLEMAK: String(Math.round(berat0 * 0.42)), B_BCA_SMM: String(Math.round((pr ? 21 : 30) + rnd() * 5)),
+      B_FBS_ST: 'SELESAI', B_FBS: String(Math.round((4.8 + rnd() * 3) * 10) / 10), B_2HPP_ST: 'TIDAK DILAKUKAN', B_HBA1C: String(Math.round((5.4 + rnd() * 2.5) * 10) / 10),
+      B_TC_ST: 'SELESAI', B_TC: String(Math.round((4.5 + rnd() * 2) * 10) / 10), B_TG_ST: 'SELESAI', B_TG: String(Math.round((1 + rnd() * 1.5) * 10) / 10),
+      B_LDL_ST: 'SELESAI', B_LDL: String(Math.round((2.8 + rnd() * 1.5) * 10) / 10), B_HDL_ST: 'SELESAI', B_HDL: String(Math.round((1 + rnd() * 0.5) * 10) / 10),
+      B_RP: 'SELESAI', B_LFT: 'SELESAI', B_AST: String(18 + Math.round(rnd() * 25)), B_ALT: String(15 + Math.round(rnd() * 30)), B_FBC: 'SELESAI', B_HB: String(Math.round((11.5 + rnd() * 3) * 10) / 10), B_PLT: String(230 + Math.round(rnd() * 150)),
+      B_MENTAL_ST: 'SELESAI', B_MENTAL_KEP: rnd() < .15 ? 'PERLU DIRUJUK' : 'TIDAK PERLU DIRUJUK', R0_MNT_ST: 'YA', R0_MNT_TRK: dateToDmy(daftar), R0_SEN_ST: 'YA', R0_SEN_TRK: dateToDmy(daftar),
+      ID: 'kk_demo@moh.gov.my', STATUS: 'AKTIF' };
+    kiraKkm(o);
+    var r = saveKkm_({ kkm: o }, U); o.MIMO_ID = r.id; o.TARIKH_DAFTAR = dateToDmy(daftar) + ' 09:' + (10 + i) + ':00';
+    var minggu = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24], lw = [], minggu2 = Math.floor((kini - daftar) / (7 * hari));
+    var mingguTambah = [26, 30, 34, 39, 44, 48, 52];
+    minggu.concat(mingguTambah).forEach(function (m) {
+      if (m > minggu2 + 1 || m > minggu2 && i % 2) return;
+      var d = new Date(daftar.getTime() + (m - 1) * 7 * hari), b = Math.round((berat0 + trend[i] * (m - 1) + (rnd() - .5) * 0.8) * 10) / 10;
+      var rec = { MIMO_ID: o.MIMO_ID, TARIKH: dateToDmy(d), MINGGU: m <= 24 ? 'M' + m : 'M' + m, SIS: String(+o.B_SIS - Math.round(m / 6) + Math.round(rnd() * 6)), DIA: String(+o.B_DIA - Math.round(m / 10)), NADI: String(70 + Math.round(rnd() * 20)),
+        BERAT: String(b), BMI: String(bmiOf(b, tinggi)), WC: String(Math.round((+o.B_WC + trend[i] * (m - 1) * 0.6) * 10) / 10) };
+      if (m % 4 === 0 || m === 1) { rec.BCA_PLEMAK = String(Math.round((+o.B_BCA_PLEMAK + trend[i] * m * 0.15) * 10) / 10); rec.BCA_VISC = String(Math.max(5, +o.B_BCA_VISC + Math.round(trend[i] * m / 4))); rec.BCA_JLEMAK = String(Math.round(b * (+rec.BCA_PLEMAK) / 10) / 10); rec.BCA_SMM = o.B_BCA_SMM; }
+      saveLawatan_({ rec: rec }, U); lw.push(rec);
+    });
+    if (bulanLalu[i] >= 6) { isiSusulan(o, lw, 6); o.R6_MNT_ST = 'YA'; o.R6_SEN_ST = 'YA'; o.F6_FBS_ST = 'SELESAI'; o.F6_FBS = String(Math.round((+o.B_FBS - 0.3) * 10) / 10); o.F6_HBA1C = String(Math.round((+o.B_HBA1C - 0.2) * 10) / 10); }
+    if (bulanLalu[i] >= 11) isiSusulan(o, lw, 12);
+    kiraKkm(o); saveKkm_({ kkm: o }, U);
+    if (minggu2 >= 1) saveKec_({ rec: { MIMO_ID: o.MIMO_ID, FASA: 'PRE', TARIKH: dateToDmy(daftar), BERAT: o.B_BERAT, OTOT: o.B_BCA_SMM, LEMAK_PCT: o.B_BCA_PLEMAK, GRIP_R: String(18 + Math.round(rnd() * 12)), GRIP_L: String(16 + Math.round(rnd() * 12)), STEP_PRE: '82', STEP_PEAK: '138', STEP_1: '118', STEP_2: '104', STEP_3: '96', PUSHUP: String(3 + Math.round(rnd() * 8)), SITUP_REPS: String(5 + Math.round(rnd() * 10)), PLANK: String(15 + Math.round(rnd() * 30)), SITREACH: String(10 + Math.round(rnd() * 15)) } }, U);
+    var tj = {}; DISIPLIN.forEach(function (ds, k) { tj[ds] = []; for (var s = 0; s < 6; s++) { var d = new Date(daftar.getTime() + (s * 28 + k * 2) * hari); tj[ds].push(k < 3 || s < 3 ? dmyToIso(dateToDmy(d)) : ''); } });
+    var ap = pastikanApp_(o.MIMO_ID);
+    saveApp_({ app: { MIMO_ID: o.MIMO_ID, NAMA_PANGGILAN: nama.split(' ')[pr && /^NUR|^SITI|^NOR|^FARAH/.test(nama) ? 1 : 0].replace(/^(.)(.*)$/, function (a, b, c) { return b + c.toLowerCase(); }), SASARAN_BERAT: String(Math.round(berat0 * 0.93)), TEMUJANJI_JSON: JSON.stringify(tj) } }, U);
+    if (i === 0) upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: o.MIMO_ID, TOKEN: 'KEDAH234' }, 'MIMO_ID');
+    // log pesakit
+    var aktifHari = [14, 10, 20, 3, 0, 12, 6, 9, 2, 8, 5, 4][i], senyap = [0, 1, 0, 9, 30, 0, 2, 0, 12, 0, 1, 0][i];
+    if (!aktifHari) return;
+    var tok = ap.TOKEN; if (i === 0) tok = 'KEDAH234';
+    var MENU = { sarapan: ['Roti canai 1 keping + teh tarik kurang manis', 'Oat + pisang', 'Nasi lemak (separuh pinggan)', 'Roti wholemeal 2 keping + telur rebus', 'Bihun goreng (suku pinggan) + kopi O'],
+      snek_pagi: ['Epal 1 biji', 'Kacang badam segenggam', '', 'Kuih karipap 2 biji', ''], tengahari: ['Nasi putih ½ pinggan + ikan bakar + sayur campur', 'Nasi campur: ayam masak merah + kangkung', 'Mee sup', 'Nasi ¼ + sayur ½ + ayam ¼ (Pinggan Sihat)'],
+      petang: ['Teh O kosong', 'Pisang goreng 3 keping', '', 'Jambu batu potong', ''], malam: ['Sup sayur + ikan kukus', 'Nasi goreng kampung', 'Roti john (separuh)', 'Ayam panggang + salad', 'Tidak makan malam'] };
+    var MOOD = ['😊 Gembira', '😐 Biasa', '😟 Risau', '😩 Penat', '😤 Stres', '😔 Sedih', '😌 Tenang'];
+    for (var h = senyap; h < senyap + aktifHari; h++) {
+      var d = new Date(kini.getTime() - h * hari), iso = dmyToIso(dateToDmy(d)), hid = {};
+      Object.keys(MENU).forEach(function (k) { var m = pick(MENU[k]); if (m) hid[k] = { menu: m, lapar: String(3 + Math.floor(rnd() * 7)), mood: pick(MOOD) }; });
+      var logs = [{ jenis: 'MAKAN', kunci: iso, data: { hidangan: hid, air: String(4 + Math.floor(rnd() * 5)) } }];
+      if (rnd() < .6) logs.push({ jenis: 'SENAMAN', kunci: iso, data: { aktiviti: [{ jenis: pick(['Jalan pantas', 'Kayuh basikal', 'Senaman di rumah (video)', 'Zumba', 'Naik tangga']), minit: String(15 + Math.floor(rnd() * 30)), rpe: pick(['Ringan', 'Sederhana', 'Berat']) }], langkah: String(3000 + Math.floor(rnd() * 6000)) } });
+      if (h % 3 === 0) logs.push({ jenis: 'BERAT', kunci: iso, data: { berat: String(Math.round((berat0 + trend[i] * (bulanLalu[i] * 4.3) + (rnd() - .5)) * 10) / 10) } });
+      pSave_({ token: tok, logs: logs });
+    }
+    pSave_({ token: tok, logs: [{ jenis: 'REFLEKSI', kunci: mingguIso(new Date(kini.getTime() - senyap * hari)), data: { q1: 'Waktu malam selepas balik kerja', q2: 'Stres dan penat', q3: 'Jalan kaki 10 minit atau minum air dulu' } },
+      { jenis: 'STRATEGI', kunci: 'FIFOT', data: { rows: { diet: { halangan: 'Selalu craving manis petang', punca: 'Skip makan tengah hari', strategi: 'Bawa bekal + buah potong' }, gaya: { halangan: 'Tiada masa masak', punca: 'Kerja syif', strategi: 'Meal prep hujung minggu' }, sosial: { halangan: 'Makan ramai-ramai', punca: 'Kenduri / kawan ajak', strategi: 'Ambil pinggan kecil, sayur dulu' }, emosi: { halangan: 'Makan bila stres', punca: 'Tekanan kerja', strategi: 'Tarik nafas, telefon kawan, jalan kaki' } } } }] });
+  });
+  GAS_EMU.save();
+}
+function demoCall(payload) { seedDemo(); var r = doPost({ postData: { contents: JSON.stringify(payload) } }); GAS_EMU.save(); return JSON.parse(r.s); }
+</script>
+<script>
+var DEMO = !API_URL;
+var S = { sess: null, user: null, list: [], cur: null, tab: 'ringkasan', f: { q: '', fas: '', st: 'AKTIF', al: '' } };
+var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function toast(m) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2600); }
+function fmt(n, d) { return n == null || isNaN(n) ? '–' : Number(n).toFixed(d == null ? 1 : d); }
+function hariLalu(d) { return d ? Math.floor((Date.now() - d.getTime()) / 864e5) : null; }
+
+function call(action, p) {
+  p = Object.assign({ action: action, session: S.sess }, p || {});
+  var pr = DEMO ? new Promise(function (ok) { setTimeout(function () { ok(demoCall(p)); }, 60); })
+    : fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(p) }).then(function (r) { return r.json(); });
+  return pr.then(function (r) {
+    if (!r.ok && r.ralat === 'SESI_TAMAT') { logout(true); throw new Error('Sesi tamat. Sila log masuk semula.'); }
+    if (!r.ok) throw new Error(r.ralat || 'Ralat');
+    return r;
+  });
+}
+function gagal(e) { toast('⚠ ' + (e && e.message || e)); }
+
+/* ---------------- Log masuk ---------------- */
+function viewLogin() {
+  $('#app').innerHTML = '<div class="card login"><h3 style="margin-top:0">Log masuk petugas</h3>' +
+    (DEMO ? '<div class="info" style="margin-bottom:12px">Mod demo: guna <b>admin</b> / <b>demo1234</b> (semua fasiliti) atau <b>kkbas</b> / <b>demo1234</b> (KK Bandar Alor Setar sahaja). Semua data adalah palsu.</div>' : '') +
+    '<label class="sub">Nama pengguna</label><input id="lu" autocomplete="username" value="' + (DEMO ? 'admin' : '') + '"><div style="height:8px"></div>' +
+    '<label class="sub">Kata laluan</label><input id="lp" type="password" autocomplete="current-password" value="' + (DEMO ? 'demo1234' : '') + '"><div style="height:14px"></div>' +
+    '<button class="btn pri" id="lb" style="width:100%">Log masuk</button><p class="sub" style="margin-bottom:0">Akses direkod dalam log audit. Data pesakit adalah sulit (Akta Perlindungan Data Peribadi 2010).</p></div>';
+  function go() {
+    $('#lb').disabled = true;
+    call('login', { user: $('#lu').value, pass: $('#lp').value }).then(function (r) {
+      S.sess = r.session; S.user = r; try { sessionStorage.setItem('mimo_s', JSON.stringify({ s: r.session, u: r })); } catch (e) { }
+      chrome(); muatSenarai();
+    }).catch(function (e) { $('#lb').disabled = false; gagal(e); });
+  }
+  $('#lb').onclick = go; $('#lp').onkeydown = function (e) { if (e.key === 'Enter') go(); };
+}
+function chrome() {
+  $('#who').textContent = S.user ? S.user.nama + ' · ' + (S.user.fasiliti === 'SEMUA' ? 'Semua fasiliti' : S.user.fasiliti) : '';
+  $('#btnOut').hidden = $('#btnSet').hidden = !S.user;
+}
+function logout(silent) { if (!silent && S.sess) call('logout').catch(function () { }); S.sess = S.user = null; try { sessionStorage.removeItem('mimo_s'); } catch (e) { } chrome(); viewLogin(); }
+$('#btnOut').onclick = function () { logout(); };
+
+/* ---------------- Senarai pesakit ---------------- */
+function muatSenarai() {
+  $('#app').innerHTML = '<div class="empty">Memuatkan…</div>';
+  return call('list').then(function (r) { S.list = r.pesakit; viewSenarai(); }).catch(gagal);
+}
+function penanda(p) {
+  var c = [], b0 = num(p.b_berat), bl = num(p.l_berat), pct = b0 && bl != null ? (b0 - bl) / b0 * 100 : null;
+  var dfr = dmyToDate(p.daftar), bln = dfr ? (Date.now() - dfr) / (30.44 * 864e5) : 0;
+  if (pct != null && pct >= 10) c.push(['g', '≥10% turun']); else if (pct != null && pct >= 5) c.push(['g', '≥5% turun']);
+  if (pct != null && pct < -1) c.push(['r', 'Berat naik']);
+  var lg = p.log_akhir ? new Date(p.log_akhir) : null, hl = hariLalu(lg);
+  if (p.status === 'AKTIF') {
+    if (!lg) c.push(['a', 'Belum guna app']); else if (hl >= 7) c.push(['a', 'Tiada log ' + hl + ' hari']);
+    var lw = dmyToDate(p.l_tarikh); if (!lw || hariLalu(lw) > 42) c.push(['a', 'Tiada lawatan >6 mgg']);
+    if (bln >= 6.5 && !p.f6) c.push(['r', 'Susulan 6 bln tertunggak']);
+    if (bln >= 12.5 && !p.f12) c.push(['r', 'Susulan 12 bln tertunggak']);
+  }
+  return { c: c, pct: pct };
+}
+function tapis() {
+  var f = S.f, q = f.q.toLowerCase();
+  return S.list.filter(function (p) {
+    if (q && (p.nama + ' ' + p.nokp + ' ' + p.id).toLowerCase().indexOf(q) < 0) return false;
+    if (f.fas && p.fasiliti !== f.fas) return false;
+    if (f.st && p.status !== f.st) return false;
+    if (f.al) { var c = penanda(p).c; if (f.al === 'perhatian' && !c.some(function (x) { return x[0] !== 'g'; })) return false; if (f.al === 'capai' && !c.some(function (x) { return x[0] === 'g'; })) return false; }
+    return true;
+  });
+}
+function viewSenarai() {
+  S.cur = null;
+  var fasL = Array.from(new Set(S.list.map(function (p) { return p.fasiliti; }))).sort();
+  var stL = Array.from(new Set(S.list.map(function (p) { return p.status; }).concat(['AKTIF']))).sort();
+  $('#app').innerHTML =
+    '<div class="kpis" id="kpis"></div>' +
+    '<div class="card"><div class="row" style="margin-bottom:12px">' +
+    '<input id="fq" placeholder="Cari nama, No. KP atau ID…" style="max-width:260px" value="' + esc(S.f.q) + '">' +
+    '<select id="ffas" style="max-width:280px"><option value="">Semua fasiliti</option>' + fasL.map(function (x) { return '<option' + (S.f.fas === x ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('') + '</select>' +
+    '<select id="fst" style="max-width:170px"><option value="">Semua status</option>' + stL.map(function (x) { return '<option' + (S.f.st === x ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('') + '</select>' +
+    '<select id="fal" style="max-width:190px"><option value="">Semua penanda</option><option value="perhatian"' + (S.f.al === 'perhatian' ? ' selected' : '') + '>Perlu perhatian</option><option value="capai"' + (S.f.al === 'capai' ? ' selected' : '') + '>Capai ≥5%</option></select>' +
+    '<div class="grow"></div><button class="btn" id="bImp">⬆ Import dari sheet KKM</button><button class="btn" id="bExp">⬇ Eksport format KKM</button><button class="btn pri" id="bNew">+ Daftar pesakit</button></div>' +
+    '<div class="tbl-wrap"><table><thead><tr><th>Pesakit</th><th>Fasiliti</th><th>BMI asas</th><th class="num">Berat asas → terkini (kg)</th><th class="num">Perubahan</th><th>Lawatan terakhir</th><th>Log app</th><th>Penanda</th></tr></thead><tbody id="tb"></tbody></table></div>' +
+    '<p class="sub" id="cnt"></p></div>';
+  function draw() {
+    var L = tapis(), tb = $('#tb');
+    tb.innerHTML = L.length ? L.map(function (p) {
+      var pn = penanda(p), b0 = num(p.b_berat), bl = num(p.l_berat), lg = p.log_akhir ? new Date(p.log_akhir) : null;
+      return '<tr class="click" data-id="' + esc(p.id) + '"><td><b>' + esc(p.nama) + '</b><div class="sub">' + esc(p.id) + ' · ' + esc(p.umur) + ' th · ' + esc((p.jantina || '').charAt(0)) + '</div></td>' +
+        '<td class="sub">' + esc(p.fasiliti) + '</td><td>' + esc(p.b_bmi) + ' <span class="chip t">' + esc(p.kat) + '</span></td>' +
+        '<td class="num">' + fmt(b0) + ' → ' + (bl != null ? fmt(bl) : '–') + '</td>' +
+        '<td class="num ' + (pn.pct > 0 ? 'down' : pn.pct < 0 ? 'up' : '') + '">' + (pn.pct != null ? (pn.pct > 0 ? '▼ ' : '▲ ') + fmt(Math.abs(pn.pct)) + '%' : '–') + '</td>' +
+        '<td class="sub">' + esc(p.l_tarikh || '–') + '</td><td class="sub">' + (lg ? (hariLalu(lg) === 0 ? 'Hari ini' : hariLalu(lg) + ' hari lalu') : '–') + '</td>' +
+        '<td>' + pn.c.map(function (x) { return '<span class="chip ' + x[0] + '">' + esc(x[1]) + '</span>'; }).join('') + '</td></tr>';
+    }).join('') : '<tr><td colspan="8" class="empty">Tiada pesakit sepadan.</td></tr>';
+    $('#cnt').textContent = L.length + ' daripada ' + S.list.length + ' pesakit';
+    var akt = L.filter(function (p) { return p.status === 'AKTIF'; }), pcts = L.map(function (p) { return penanda(p).pct; }).filter(function (x) { return x != null; });
+    var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : null;
+    var perhatian = L.filter(function (p) { return penanda(p).c.some(function (x) { return x[0] !== 'g'; }); }).length;
+    $('#kpis').innerHTML = [['Pesakit aktif', akt.length], ['Purata penurunan berat', avg == null ? '–' : fmt(avg) + '%'],
+      ['Capai ≥5% penurunan', pcts.filter(function (x) { return x >= 5; }).length + ' / ' + pcts.length], ['Perlu perhatian', perhatian]]
+      .map(function (k) { return '<div class="card kpi"><div class="v">' + k[1] + '</div><div class="l">' + k[0] + '</div></div>'; }).join('');
+    $$('#tb tr.click').forEach(function (tr) { tr.onclick = function () { bukaPesakit(tr.dataset.id); }; });
+  }
+  $('#fq').oninput = function (e) { S.f.q = e.target.value; draw(); };
+  $('#ffas').onchange = function (e) { S.f.fas = e.target.value; draw(); };
+  $('#fst').onchange = function (e) { S.f.st = e.target.value; draw(); };
+  $('#fal').onchange = function (e) { S.f.al = e.target.value; draw(); };
+  $('#bNew').onclick = function () { pesakitBaru(); };
+  $('#bImp').onclick = modalImport;
+  $('#bExp').onclick = function () { modalEksport(tapis().map(function (p) { return p.id; }), 'senarai ditapis (' + tapis().length + ' pesakit)'); };
+  draw();
+}
+
+/* ---------------- Kad pesakit ---------------- */
+function bukaPesakit(id, tab) {
+  $('#app').innerHTML = '<div class="empty">Memuatkan kad rawatan…</div>';
+  return call('get', { id: id }).then(function (r) {
+    r.lawatan.sort(function (a, b) { return dmyToDate(a.TARIKH) - dmyToDate(b.TARIKH); });
+    S.cur = r; S.tab = tab || S.tab || 'ringkasan'; viewKad();
+  }).catch(function (e) { gagal(e); muatSenarai(); });
+}
+function pesakitBaru() {
+  var k = {}; KKM_SCHEMA.forEach(function (c) { k[c.k] = ''; });
+  k.NEGERI = 'KEDAH'; k.STATUS = 'AKTIF'; k.STATUS_RUJUKAN = 'SETUJU SERTAI MIMO';
+  if (S.user.fasiliti !== 'SEMUA') k.FASILITI = S.user.fasiliti;
+  S.cur = { baru: true, kkm: k, app: {}, lawatan: [], kecergasan: [], logs: [] }; S.tab = 'kkm'; viewKad();
+}
+var TABS = [['ringkasan', 'Ringkasan'], ['lawatan', 'Lawatan & BCA'], ['kecergasan', 'Ujian kecergasan'], ['log', 'Log pesakit'], ['kkm', 'Data KKM'], ['app', 'App & temujanji']];
+function viewKad() {
+  var c = S.cur, k = c.kkm;
+  $('#app').innerHTML = '<div class="row" style="margin-bottom:10px"><button class="btn" id="bBack">← Senarai</button></div>' +
+    '<div class="card"><div class="ph"><div class="grow"><h2>' + (c.baru ? 'Daftar pesakit baru' : esc(k.NAMA)) + '</h2>' +
+    (c.baru ? '<div class="meta">Isi bahagian Data KKM, kemudian simpan. Kod app pesakit dijana automatik.</div>' :
+      '<div class="meta">' + esc(k.MIMO_ID) + ' · No. KP ' + esc(k.NOKP) + ' · ' + esc(k.UMUR) + ' tahun · ' + esc(k.JANTINA) + ' · ' + esc(k.BANGSA) + '</div>' +
+      '<div class="meta">' + esc(k.FASILITI) + ' · Daftar ' + esc((k.TARIKH_DAFTAR || '').slice(0, 10)) + ' · Tel ' + esc(k.TELEFON) + '</div>') + '</div>' +
+    (c.baru ? '' : '<div><span class="chip t">' + esc(k.STATUS) + '</span> ' + ['SP_DM:DM', 'SP_HPT:HPT', 'SP_DLP:DLP', 'SP_CVD:CVD'].filter(function (x) { return k[x.split(':')[0]] === 'YA'; }).map(function (x) { return '<span class="chip">' + x.split(':')[1] + '</span>'; }).join('') +
+      (k.B_MENTAL_KEP === 'PERLU DIRUJUK' ? '<span class="chip a">Rujukan kesihatan mental</span>' : '') + '</div>') + '</div>' +
+    '<div class="tabs">' + TABS.filter(function (t) { return !c.baru || t[0] === 'kkm'; }).map(function (t) { return '<button data-t="' + t[0] + '" class="' + (S.tab === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join('') + '</div><div id="tabc"></div></div>';
+  $('#bBack').onclick = function () { muatSenarai(); };
+  $$('.tabs button').forEach(function (b) { b.onclick = function () { S.tab = b.dataset.t; viewKad(); }; });
+  ({ ringkasan: tabRingkasan, lawatan: tabLawatan, kecergasan: tabKec, log: tabLog, kkm: tabKkm, app: tabApp })[S.tab]();
+}
+function logsJenis(j) { return S.cur.logs.filter(function (l) { return l.JENIS === j; }).map(function (l) { var d = {}; try { d = JSON.parse(l.DATA_JSON); } catch (e) { } return { kunci: l.KUNCI, data: d, masa: l.KEMASKINI }; }).sort(function (a, b) { return a.kunci < b.kunci ? 1 : -1; }); }
+
+/* ---- Carta garis SVG ---- */
+function carta(series, o) {
+  o = o || {}; var W = 760, H = o.h || 260, pl = 44, pr = 16, pt = 14, pb = 30, all = [];
+  series.forEach(function (s) { s.pts.forEach(function (p) { all.push(p); }); });
+  (o.hl || []).forEach(function (h) { all.push([null, h.v]); });
+  var ts = all.filter(function (p) { return p[0] != null; }).map(function (p) { return p[0]; });
+  if (!ts.length) return '<div class="empty">Belum ada data untuk carta.</div>';
+  var t0 = Math.min.apply(null, ts), t1 = Math.max.apply(null, ts); if (t1 - t0 < 864e5 * 14) { t0 -= 864e5 * 7; t1 += 864e5 * 7; }
+  var vs = all.map(function (p) { return p[1]; }), v0 = Math.min.apply(null, vs), v1 = Math.max.apply(null, vs), pad = Math.max((v1 - v0) * 0.12, 1); v0 -= pad; v1 += pad;
+  function X(t) { return pl + (t - t0) / (t1 - t0) * (W - pl - pr); } function Y(v) { return pt + (1 - (v - v0) / (v1 - v0)) * (H - pt - pb); }
+  var g = '', st = (v1 - v0) / 4;
+  for (var i = 0; i <= 4; i++) { var v = v0 + st * i; g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="#e7eeee"/><text x="' + (pl - 6) + '" y="' + (Y(v) + 4) + '" font-size="11" text-anchor="end" fill="#6b7f84">' + v.toFixed(0) + '</text>'; }
+  var bulan = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'], d = new Date(t0); d.setDate(1); d.setMonth(d.getMonth() + 1);
+  var langkah = Math.max(1, Math.ceil((t1 - t0) / (30.44 * 864e5) / 8));
+  for (; d.getTime() <= t1; d.setMonth(d.getMonth() + langkah)) g += '<text x="' + X(d.getTime()) + '" y="' + (H - 10) + '" font-size="11" text-anchor="middle" fill="#6b7f84">' + bulan[d.getMonth()] + ' ' + String(d.getFullYear()).slice(2) + '</text>';
+  (o.hl || []).forEach(function (h) { g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(h.v) + '" y2="' + Y(h.v) + '" stroke="' + h.c + '" stroke-dasharray="5 4"/><text x="' + (W - pr) + '" y="' + (Y(h.v) - 4) + '" font-size="11" text-anchor="end" fill="' + h.c + '">' + esc(h.l) + '</text>'; });
+  series.forEach(function (s) {
+    var p = s.pts.slice().sort(function (a, b) { return a[0] - b[0]; });
+    if (s.line !== false && p.length > 1) g += '<polyline fill="none" stroke="' + s.c + '" stroke-width="2.2" points="' + p.map(function (q) { return X(q[0]) + ',' + Y(q[1]); }).join(' ') + '"/>';
+    p.forEach(function (q) { g += '<circle cx="' + X(q[0]) + '" cy="' + Y(q[1]) + '" r="' + (s.r || 3.5) + '" fill="' + (s.hollow ? '#fff' : s.c) + '" stroke="' + s.c + '" stroke-width="1.6"><title>' + dateToDmy(new Date(q[0])) + ': ' + q[1] + '</title></circle>'; });
+  });
+  return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img">' + g + '</svg>';
+}
+
+/* ---- Tab: Ringkasan ---- */
+function tabRingkasan() {
+  var c = S.cur, k = c.kkm, lw = c.lawatan, b0 = num(k.B_BERAT), akhir = lw.length ? lw[lw.length - 1] : null, bl = akhir ? num(akhir.BERAT) : null;
+  var wc0 = num(k.B_WC), wcl = null; for (var i = lw.length - 1; i >= 0; i--) if (num(lw[i].WC) != null) { wcl = num(lw[i].WC); break; }
+  var pct = b0 && bl != null ? (b0 - bl) / b0 * 100 : null, bmiL = bl != null ? bmiOf(bl, k.B_TINGGI) : null, sas = num(c.app.SASARAN_BERAT);
+  var rumah = logsJenis('BERAT').map(function (l) { return [new Date(l.kunci).getTime(), num(l.data.berat)]; }).filter(function (p) { return p[1] != null; });
+  var klinik = lw.filter(function (l) { return num(l.BERAT) != null; }).map(function (l) { return [dmyToDate(l.TARIKH).getTime(), num(l.BERAT)]; });
+  var d0 = dmyToDate(k.TARIKH_DAFTAR); if (b0 && d0 && !lw.some(function (l) { return l.TARIKH === dateToDmy(d0); })) klinik.unshift([d0.getTime(), b0]);
+  var hl = []; if (b0) hl.push({ v: r1(b0 * 0.95), l: 'Sasaran 5%', c: '#1d7a46' }); if (sas) hl.push({ v: sas, l: 'Sasaran individu ' + sas + ' kg', c: '#5b4bb7' });
+  var mk = logsJenis('MAKAN'), h7 = mk.filter(function (l) { return hariLalu(new Date(l.kunci)) < 7; }).length, h30 = mk.filter(function (l) { return hariLalu(new Date(l.kunci)) < 30; }).length;
+  var moods = {}; mk.slice(0, 14).forEach(function (l) { Object.keys(l.data.hidangan || {}).forEach(function (w) { var m = l.data.hidangan[w].mood; if (m) moods[m] = (moods[m] || 0) + 1; }); });
+  var moodTop = Object.keys(moods).sort(function (a, b) { return moods[b] - moods[a]; }).slice(0, 3);
+  var sen = logsJenis('SENAMAN').filter(function (l) { return hariLalu(new Date(l.kunci)) < 7; }), minit = sen.reduce(function (a, l) { return a + (l.data.aktiviti || []).reduce(function (x, y) { return x + (num(y.minit) || 0); }, 0); }, 0);
+  var ref = logsJenis('REFLEKSI')[0];
+  $('#tabc').innerHTML =
+    '<div class="tiles">' + [
+      ['Berat asas', fmt(b0) + ' kg'], ['Berat terkini', bl != null ? fmt(bl) + ' kg' : '–', akhir ? akhir.TARIKH : ''],
+      ['Perubahan berat', pct != null ? '<span class="' + (pct > 0 ? 'down' : 'up') + '">' + (pct > 0 ? '▼ ' : '▲ ') + fmt(Math.abs(b0 - bl)) + ' kg (' + fmt(Math.abs(pct)) + '%)</span>' : '–'],
+      ['BMI terkini', bmiL != null ? fmt(bmiL) + ' <span class="chip t">' + katBmi(bmiL) + '</span>' : (k.B_BMI || '–')],
+      ['Lilit pinggang', wcl != null ? fmt(wcl) + ' cm <span class="sub">(' + (wcl - wc0 > 0 ? '+' : '') + fmt(wcl - wc0) + ')</span>' : (wc0 ? fmt(wc0) + ' cm' : '–')],
+      ['Senaman 7 hari', minit + ' minit', '<span class="sub">sasaran ≥150 minit</span>']
+    ].map(function (t) { return '<div class="tile"><div class="l">' + t[0] + '</div><div class="v">' + t[1] + '</div>' + (t[2] ? '<div class="sub">' + t[2] + '</div>' : '') + '</div>'; }).join('') + '</div>' +
+    '<div class="grid2" style="margin-top:14px;grid-template-columns:2fr 1fr"><div class="card"><b>Trend berat badan</b><div class="lg" style="margin:6px 0"><span><i style="background:#0f6e74"></i>Timbangan klinik</span><span><i style="background:#e08a00"></i>Timbang sendiri (app)</span></div>' +
+    carta([{ pts: klinik, c: '#0f6e74' }, { pts: rumah, c: '#e08a00', line: false, hollow: true, r: 3 }], { hl: hl }) + '</div>' +
+    '<div class="card"><b>Penglibatan app</b><p>Log makanan: <b>' + h7 + '/7</b> hari minggu ini · <b>' + h30 + '/30</b> hari sebulan</p>' +
+    '<p>Emosi kerap (14 hari): ' + (moodTop.length ? moodTop.map(function (m) { return '<span class="chip">' + esc(m) + ' ×' + moods[m] + '</span>'; }).join('') : '–') + '</p>' +
+    (ref ? '<p class="sub" style="margin-bottom:4px">Refleksi terkini (' + esc(ref.kunci) + ')</p><div style="font-size:13px"><b>Bila makan walaupun tak lapar:</b> ' + esc(ref.data.q1) + '<br><b>Emosi pencetus:</b> ' + esc(ref.data.q2) + '<br><b>Tindakan alternatif:</b> ' + esc(ref.data.q3) + '</div>' : '<p class="sub">Tiada refleksi.</p>') +
+    '<div class="info" style="margin-top:10px">Log emosi bukan saringan klinikal. Saringan Whooley/GAD-2/PHQ-9 kekal dalam rekod klinik.</div></div></div>';
+}
+
+/* ---- Tab: Lawatan ---- */
+var LW_F = [['TARIKH', 'Tarikh', 'date'], ['MINGGU', 'Minggu', 'minggu'], ['SIS', 'BP sistolik', 'num'], ['DIA', 'BP diastolik', 'num'], ['NADI', 'Nadi (HR)', 'num'], ['BERAT', 'Berat (kg)', 'num'], ['BMI', 'BMI', 'calc'], ['WC', 'Lilit pinggang (cm)', 'num'],
+  ['BCA_PLEMAK', 'BIA: % lemak badan', 'num'], ['BCA_VISC', 'BIA: lemak viseral', 'num'], ['BCA_JLEMAK', 'BIA: jisim lemak (kg)', 'num'], ['BCA_SMM', 'BIA: jisim otot rangka (kg)', 'num'], ['CATATAN', 'Catatan', 'text']];
+function tabLawatan() {
+  var lw = S.cur.lawatan;
+  $('#tabc').innerHTML = '<div class="row" style="margin-bottom:10px"><b class="grow">Rekod timbangan & komposisi badan (M1–M24 dan seterusnya)</b><button class="btn pri" id="bAddLw">+ Tambah lawatan</button></div>' +
+    '<div id="lwForm"></div><div class="tbl-wrap"><table><thead><tr><th>Minggu</th><th>Tarikh</th><th class="num">BP</th><th class="num">Nadi</th><th class="num">Berat</th><th class="num">BMI</th><th class="num">WC</th><th class="num">% lemak</th><th class="num">Viseral</th><th class="num">Jisim lemak</th><th class="num">Otot rangka</th><th>Catatan</th><th></th></tr></thead><tbody>' +
+    (lw.length ? lw.map(function (l, i) {
+      var pv = i ? num(lw[i - 1].BERAT) : num(S.cur.kkm.B_BERAT), b = num(l.BERAT), d = pv != null && b != null ? b - pv : null;
+      return '<tr><td><b>' + esc(l.MINGGU) + '</b></td><td>' + esc(l.TARIKH) + '</td><td class="num">' + esc(l.SIS && l.DIA ? l.SIS + '/' + l.DIA : '') + '</td><td class="num">' + esc(l.NADI) + '</td>' +
+        '<td class="num"><b>' + esc(l.BERAT) + '</b>' + (d != null ? ' <span class="sub ' + (d > 0 ? 'up' : 'down') + '">' + (d > 0 ? '+' : '') + d.toFixed(1) + '</span>' : '') + '</td>' +
+        '<td class="num">' + esc(l.BMI) + '</td><td class="num">' + esc(l.WC) + '</td><td class="num">' + esc(l.BCA_PLEMAK) + '</td><td class="num">' + esc(l.BCA_VISC) + '</td><td class="num">' + esc(l.BCA_JLEMAK) + '</td><td class="num">' + esc(l.BCA_SMM) + '</td>' +
+        '<td class="sub">' + esc(l.CATATAN) + '</td><td style="white-space:nowrap"><button class="btn sm" data-e="' + i + '">Ubah</button> <button class="btn sm dng" data-d="' + i + '">✕</button></td></tr>';
+    }).join('') : '<tr><td colspan="13" class="empty">Belum ada lawatan direkod.</td></tr>') + '</tbody></table></div>' +
+    '<p class="sub">Berat asas (baseline) diambil dari Data KKM: ' + esc(S.cur.kkm.B_BERAT || '–') + ' kg. Lajur 6/12 bulan KKM boleh diisi automatik dari jadual ini (tab Data KKM).</p>';
+  $('#bAddLw').onclick = function () { borangLawatan({}); };
+  $$('[data-e]').forEach(function (b) { b.onclick = function () { borangLawatan(Object.assign({}, lw[+b.dataset.e])); }; });
+  $$('[data-d]').forEach(function (b) { b.onclick = function () { var l = lw[+b.dataset.d]; ask('Padam lawatan ' + l.MINGGU + ' (' + l.TARIKH + ')?', function () { call('delLawatan', { lid: l.LAWATAN_ID }).then(function () { toast('Lawatan dipadam'); bukaPesakit(S.cur.kkm.MIMO_ID, 'lawatan'); }).catch(gagal); }); }; });
+}
+function cadangMinggu() {
+  var d0 = dmyToDate(S.cur.kkm.TARIKH_DAFTAR); if (!d0) return 'M1';
+  var w = Math.floor((Date.now() - d0) / (7 * 864e5)) + 1, best = 'M1';
+  MINGGU_LIST.forEach(function (m) { if (+m.slice(1) <= w) best = m; }); return w > 25 ? 'M' + w : best;
+}
+function borangLawatan(l) {
+  if (!l.LAWATAN_ID) { l.TARIKH = dateToDmy(new Date()); l.MINGGU = cadangMinggu(); }
+  $('#lwForm').innerHTML = '<div class="card" style="margin-bottom:12px;background:#fbfdfd"><b>' + (l.LAWATAN_ID ? 'Ubah lawatan' : 'Lawatan baru') + '</b><div class="fgrid" style="padding:10px 0 4px">' +
+    LW_F.map(function (f) {
+      var v = l[f[0]] || '', inp;
+      if (f[2] === 'date') inp = '<input type="date" data-f="' + f[0] + '" value="' + dmyToIso(v) + '">';
+      else if (f[2] === 'minggu') inp = '<input data-f="MINGGU" list="dlMg" value="' + esc(v) + '"><datalist id="dlMg">' + MINGGU_LIST.map(function (m) { return '<option>' + m + '</option>'; }).join('') + '</datalist>';
+      else if (f[2] === 'num') inp = '<input type="number" step="any" data-f="' + f[0] + '" value="' + esc(v) + '">';
+      else if (f[2] === 'calc') inp = '<input readonly data-f="' + f[0] + '" value="' + esc(v) + '">';
+      else inp = '<input data-f="' + f[0] + '" value="' + esc(v) + '">';
+      return '<div class="' + (f[2] === 'calc' ? 'calc' : '') + '"><label>' + f[1] + '</label>' + inp + '</div>';
+    }).join('') + '</div><div class="row"><button class="btn pri" id="lwSave">Simpan lawatan</button><button class="btn" id="lwCancel">Batal</button><span class="sub">Tinggi asas: ' + esc(S.cur.kkm.B_TINGGI || '–') + ' cm (untuk kiraan BMI)</span></div></div>';
+  var bInp = $('[data-f=BERAT]', $('#lwForm'));
+  bInp.oninput = function () { var b = bmiOf(bInp.value, S.cur.kkm.B_TINGGI); $('[data-f=BMI]', $('#lwForm')).value = b == null ? '' : b; };
+  $('#lwCancel').onclick = function () { $('#lwForm').innerHTML = ''; };
+  $('#lwSave').onclick = function () {
+    var r = Object.assign({}, l, { MIMO_ID: S.cur.kkm.MIMO_ID });
+    $$('[data-f]', $('#lwForm')).forEach(function (i) { r[i.dataset.f] = i.type === 'date' ? isoToDmy(i.value) : i.value.trim(); });
+    if (!r.TARIKH) return toast('Tarikh diperlukan');
+    $('#lwSave').disabled = true;
+    call('saveLawatan', { rec: r }).then(function () { toast('Lawatan disimpan'); bukaPesakit(S.cur.kkm.MIMO_ID, 'lawatan'); }).catch(function (e) { $('#lwSave').disabled = false; gagal(e); });
+  };
+  bInp.focus();
+}
+
+/* ---- Tab: Kecergasan ---- */
+var KEC_F = [['TARIKH', 'Tarikh', 'date'], ['BERAT', 'Berat (kg)'], ['OTOT', 'Muscle mass (kg)'], ['LEMAK_PCT', 'Body fat (%)'], ['GRIP_R', 'Hand grip kanan (kg)'], ['GRIP_L', 'Hand grip kiri (kg)'],
+  ['STEP_PRE', '3-min step: HR pre'], ['STEP_PEAK', '3-min step: HR peak'], ['STEP_REC1', '3-min step: recovery 1'], ['STEP_1', '3-min step: HR 1 min'], ['STEP_2', '3-min step: HR 2 min'], ['STEP_3', '3-min step: HR 3 min'],
+  ['WALK_JARAK', '6MWT: jarak (m)'], ['WALK_PRE', '6MWT: HR pre'], ['WALK_PEAK', '6MWT: HR peak'], ['PUSHUP', 'Push-up (reps)'], ['SITUP_GRED', 'Sit-up: gred', 'text'], ['SITUP_REPS', 'Sit-up: reps'],
+  ['PLANK', 'Plank (saat)'], ['JUMP', 'Standing jump (cm)'], ['STS5', '5× sit-to-stand (saat)'], ['SITREACH', 'Sit & reach (cm)']];
+function tabKec() {
+  var F = ['PRE', 'MID', 'POST'], by = {}; S.cur.kecergasan.forEach(function (k) { by[k.FASA] = k; });
+  $('#tabc').innerHTML = '<div class="tbl-wrap" style="max-height:none"><table><thead><tr><th>Ujian</th>' + F.map(function (f) { return '<th>' + f + '</th>'; }).join('') + '<th>Perubahan (Pre→Post)</th></tr></thead><tbody>' +
+    KEC_F.map(function (k) {
+      var pre = by.PRE && num(by.PRE[k[0]]), post = by.POST && num(by.POST[k[0]]);
+      return '<tr><td>' + k[1] + '</td>' + F.map(function (f) { var v = by[f] ? by[f][k[0]] || '' : ''; return '<td><input data-fa="' + f + '" data-k="' + k[0] + '" ' + (k[2] === 'date' ? 'type="date" value="' + dmyToIso(v) + '"' : k[2] === 'text' ? 'value="' + esc(v) + '"' : 'type="number" step="any" value="' + esc(v) + '"') + '></td>'; }).join('') +
+        '<td class="num">' + (pre != null && post != null && k[2] !== 'date' ? ((post - pre) > 0 ? '+' : '') + r1(post - pre) : '') + '</td></tr>';
+    }).join('') + '</tbody></table></div><div class="row" style="margin-top:12px"><button class="btn pri" id="kSave">Simpan ujian kecergasan</button><span class="sub">Hanya fasa yang ada data akan disimpan.</span></div>';
+  $('#kSave').onclick = function () {
+    var jobs = F.map(function (f) {
+      var r = { MIMO_ID: S.cur.kkm.MIMO_ID, FASA: f }, ada = false;
+      $$('[data-fa=' + f + ']').forEach(function (i) { var v = i.type === 'date' ? isoToDmy(i.value) : i.value.trim(); r[i.dataset.k] = v; if (v) ada = true; });
+      return ada ? call('saveKec', { rec: r }) : null;
+    }).filter(Boolean);
+    Promise.all(jobs).then(function () { toast('Ujian kecergasan disimpan'); bukaPesakit(S.cur.kkm.MIMO_ID, 'kecergasan'); }).catch(gagal);
+  };
+}
+
+/* ---- Tab: Log pesakit ---- */
+var WAKTU = [['sarapan', 'Sarapan'], ['snek_pagi', 'Snek pagi'], ['tengahari', 'Tengah hari'], ['petang', 'Minum petang'], ['malam', 'Makan malam']];
+function tabLog() {
+  var mk = logsJenis('MAKAN'), sen = {}, br = {}; logsJenis('SENAMAN').forEach(function (l) { sen[l.kunci] = l.data; }); logsJenis('BERAT').forEach(function (l) { br[l.kunci] = l.data.berat; });
+  var hari = Array.from(new Set(mk.map(function (l) { return l.kunci; }).concat(Object.keys(sen), Object.keys(br)))).sort().reverse().slice(0, 30);
+  var mkMap = {}; mk.forEach(function (l) { mkMap[l.kunci] = l.data; });
+  var str = logsJenis('STRATEGI')[0], refs = logsJenis('REFLEKSI');
+  var hariNama = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
+  $('#tabc').innerHTML = '<div class="info" style="margin-bottom:12px">Data di tab ini diisi sendiri oleh pesakit melalui app (paparan sahaja). 30 hari terkini dipaparkan.</div><div class="grid2" style="grid-template-columns:3fr 2fr"><div>' +
+    (hari.length ? hari.map(function (h) {
+      var m = mkMap[h] || {}, hid = m.hidangan || {}, s = sen[h], d = new Date(h);
+      return '<div class="daycard"><div class="hd"><span>' + hariNama[d.getDay()] + ', ' + dateToDmy(d) + '</span><span class="sub">' + (m.air ? '💧 ' + esc(m.air) + ' gelas · ' : '') + (br[h] ? '⚖ ' + esc(br[h]) + ' kg' : '') + '</span></div>' +
+        (Object.keys(hid).length ? '<table><thead><tr><th>Waktu</th><th>Menu & saiz hidangan</th><th class="num" title="1 = sangat lapar, 10 = sangat kenyang">Lapar (1–10)</th><th>Mood</th></tr></thead><tbody>' +
+          WAKTU.filter(function (w) { return hid[w[0]]; }).map(function (w) { var x = hid[w[0]]; return '<tr><td>' + w[1] + '</td><td>' + esc(x.menu) + '</td><td class="num">' + esc(x.lapar) + '</td><td>' + esc(x.mood) + '</td></tr>'; }).join('') + '</tbody></table>' : '') +
+        (s ? '<div style="padding:6px 12px;font-size:13px">🏃 ' + (s.aktiviti || []).map(function (a) { return esc(a.jenis) + ' ' + esc(a.minit) + ' min (' + esc(a.rpe) + ')'; }).join('; ') + (s.langkah ? ' · ' + esc(s.langkah) + ' langkah' : '') + '</div>' : '') + '</div>';
+    }).join('') : '<div class="empty">Pesakit belum menghantar sebarang log.</div>') + '</div><div>' +
+    '<div class="card" style="margin-bottom:12px"><b>Strategi perubahan diet (FIFOT)</b>' + (str ? '<table style="margin-top:6px"><thead><tr><th>Halangan</th><th>Punca</th><th>Strategi</th></tr></thead><tbody>' +
+      ['diet', 'gaya', 'sosial', 'emosi'].map(function (k) { var r = (str.data.rows || {})[k] || {}; return '<tr><td>' + esc(r.halangan) + '</td><td>' + esc(r.punca) + '</td><td>' + esc(r.strategi) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="sub">Belum diisi.</p>') + '</div>' +
+    '<div class="card"><b>Refleksi mingguan</b>' + (refs.length ? refs.map(function (r) { return '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px;font-size:13px"><span class="chip t">' + esc(r.kunci) + '</span><br><b>Bila makan walaupun tak lapar:</b> ' + esc(r.data.q1) + '<br><b>Emosi pencetus:</b> ' + esc(r.data.q2) + '<br><b>Tindakan alternatif:</b> ' + esc(r.data.q3) + '</div>'; }).join('') : '<p class="sub">Belum ada.</p>') + '</div></div></div>';
+}
+
+/* ---- Tab: Data KKM ---- */
+function tabKkm() {
+  var k = S.cur.kkm, groups = [], gi = {};
+  KKM_SCHEMA.forEach(function (c, i) { if (!(c.g in gi)) { gi[c.g] = groups.length; groups.push({ g: c.g, f: [] }); } groups[gi[c.g]].f.push(c); });
+  var buka = { 'Fasiliti': 1, 'Pesakit': 1, 'Baseline': 1 };
+  $('#tabc').innerHTML = '<div class="row" style="margin-bottom:12px"><div class="grow sub">Medan mengikut susunan lajur sheet KKM MIMO. Medan berwarna dikira automatik (BMI, kategori, FIB-4, perbezaan).</div>' +
+    (S.cur.baru ? '' : '<button class="btn" id="f6">Isi 6 bulan dari lawatan</button><button class="btn" id="f12">Isi 12 bulan dari lawatan</button><button class="btn" id="bEx1">⬇ Eksport baris KKM</button>') +
+    '<button class="btn pri" id="kkmSave">' + (S.cur.baru ? 'Daftar pesakit' : 'Simpan') + '</button></div>' +
+    groups.map(function (G) {
+      return '<details class="sec"' + (buka[G.g] || (S.cur.baru && /Sejarah|Rujukan/.test(G.g)) ? ' open' : '') + '><summary>' + esc(G.g) + ' <span class="sub" style="font-weight:400;margin-left:auto;margin-right:8px">' + G.f.filter(function (c) { return k[c.k]; }).length + '/' + G.f.length + '</span></summary><div class="fgrid">' +
+        G.f.map(function (c) {
+          var v = k[c.k] || '', id = 'k_' + c.k, inp;
+          if (c.t === 'calc' || c.t === 'ro') inp = '<input readonly id="' + id + '" data-k="' + c.k + '" value="' + esc(v) + '">';
+          else if (c.t === 'date') inp = '<input type="date" id="' + id + '" data-k="' + c.k + '" data-date="1" value="' + dmyToIso(v) + '">';
+          else if (c.o) inp = '<input id="' + id + '" data-k="' + c.k + '" list="dl_' + c.k + '" value="' + esc(v) + '"><datalist id="dl_' + c.k + '">' + c.o.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('') + '</datalist>';
+          else inp = '<input ' + (c.t === 'num' ? 'type="number" step="any" ' : '') + 'id="' + id + '" data-k="' + c.k + '" value="' + esc(v) + '">';
+          return '<div class="' + (c.t === 'calc' ? 'calc' : '') + '"><label for="' + id + '">' + (KKM_IDX[c.k] + 1) + '. ' + esc(c.l) + '</label>' + inp + '</div>';
+        }).join('') + '</div></details>';
+    }).join('');
+  function baca() { var o = Object.assign({}, k); $$('[data-k]', $('#tabc')).forEach(function (i) { o[i.dataset.k] = i.dataset.date ? isoToDmy(i.value) : i.value.trim(); }); return o; }
+  function tulisCalc(o) { KKM_SCHEMA.forEach(function (c) { if (c.t === 'calc') { var el = $('#k_' + c.k); if (el) el.value = o[c.k] || ''; } }); }
+  $('#tabc').addEventListener('change', function () { var o = kiraKkm(baca()); tulisCalc(o); });
+  if (!S.cur.baru) {
+    $('#f6').onclick = function () { susulan(6); }; $('#f12').onclick = function () { susulan(12); };
+    $('#bEx1').onclick = function () { modalEksport([k.MIMO_ID], k.NAMA); };
+  }
+  function susulan(b) {
+    var o = baca(), t = isiSusulan(o, S.cur.lawatan, b);
+    if (!t) return toast('Tiada lawatan dalam ±60 hari dari tarikh ' + b + ' bulan');
+    KKM_SCHEMA.forEach(function (c) { var el = $('#k_' + c.k); if (el && c.k.indexOf(b == 6 ? 'F6_' : 'F12_') === 0) el.value = el.dataset.date ? dmyToIso(o[c.k]) : (o[c.k] || ''); });
+    tulisCalc(o); $$('details.sec').forEach(function (d) { if (d.textContent.indexOf(b + ' bulan') >= 0) d.open = true; });
+    toast('Diisi dari lawatan ' + t.MINGGU + ' (' + t.TARIKH + '). Semak & lengkapkan keputusan makmal, kemudian Simpan.');
+  }
+  $('#kkmSave').onclick = function () {
+    var o = kiraKkm(baca());
+    if (!o.NAMA || !o.NOKP) return toast('Nama dan No. KP diperlukan');
+    if (!o.FASILITI) return toast('Fasiliti diperlukan');
+    $('#kkmSave').disabled = true;
+    call('saveKkm', { kkm: o }).then(function (r) { toast(S.cur.baru ? 'Pesakit didaftarkan' : 'Data KKM disimpan'); bukaPesakit(r.id, S.cur.baru ? 'app' : 'kkm'); })
+      .catch(function (e) { $('#kkmSave').disabled = false; gagal(e); });
+  };
+}
+
+/* ---- Tab: App & temujanji ---- */
+function pautanApp(t) { return (APP_URL || 'https://<alamat-app-pesakit>/') + '?k=' + t; }
+function svgQR(text) {
+  var q = new QRLib.QRCode(-1, QRLib.ECL.M); q.addData(text); q.make();
+  var n = q.getModuleCount(), m = 2, s = '';
+  for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) s += 'M' + (c + m) + ' ' + (r + m) + 'h1v1h-1z';
+  return '<svg viewBox="0 0 ' + (n + 2 * m) + ' ' + (n + 2 * m) + '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="' + s + '" fill="#000"/></svg>';
+}
+function kodPapar(t) { return String(t || '').replace(/(.{4})(?=.)/, '$1-'); }
+function tabApp() {
+  var a = S.cur.app, k = S.cur.kkm, tj = {}; try { tj = JSON.parse(a.TEMUJANJI_JSON || '{}'); } catch (e) { }
+  var link = pautanApp(a.TOKEN);
+  $('#tabc').innerHTML = '<div class="grid2" style="grid-template-columns:1fr 2fr"><div class="card"><b>Akses app pesakit</b>' +
+    '<div class="row" style="margin:12px 0;align-items:flex-start"><div class="qr">' + svgQR(link) + '</div><div><div class="sub">Kod akses</div><div style="font-size:24px;font-weight:700;letter-spacing:2px;font-family:ui-monospace,monospace">' + esc(kodPapar(a.TOKEN)) + '</div>' +
+    '<div class="sub" style="margin-top:6px;word-break:break-all">' + esc(link) + '</div></div></div>' +
+    (APP_URL ? '' : '<div class="note" style="margin-bottom:10px">APP_URL belum ditetapkan. QR ini contoh sahaja — tetapkan APP_URL selepas app pesakit dihoskan.</div>') +
+    '<div class="row"><button class="btn" id="cpL">Salin pautan</button><button class="btn" id="prC">🖨 Cetak kad akses</button><button class="btn dng" id="rsT">Jana kod baru</button></div>' +
+    '<p class="sub">Pesakit imbas QR atau masukkan kod dalam app. Jana kod baru jika telefon hilang — kod lama terus tidak sah. App tidak memaparkan No. KP, telefon, sejarah perubatan atau keputusan makmal.</p>' +
+    '<div class="fgrid" style="padding:6px 0 0"><div><label>Nama panggilan dalam app</label><input id="aNama" value="' + esc(a.NAMA_PANGGILAN) + '"></div><div><label>Sasaran berat (kg)</label><input id="aSas" type="number" step="any" value="' + esc(a.SASARAN_BERAT) + '"><div class="sub">5% = ' + fmt(num(k.B_BERAT) * 0.95) + ' · 10% = ' + fmt(num(k.B_BERAT) * 0.9) + '</div></div>' +
+    '<div><label>Akses app</label><select id="aAkt"><option' + (a.AKTIF !== 'TIDAK' ? ' selected' : '') + '>YA</option><option' + (a.AKTIF === 'TIDAK' ? ' selected' : '') + '>TIDAK</option></select></div></div></div>' +
+    '<div class="card"><b>Tarikh temujanji (dipaparkan dalam app pesakit)</b><div class="tbl-wrap" style="margin-top:10px;max-height:none"><table><thead><tr><th>Disiplin</th>' + [1, 2, 3, 4, 5, 6].map(function (s) { return '<th>Sesi ' + s + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    DISIPLIN.map(function (d) { return '<tr><td>' + esc(d) + '</td>' + [0, 1, 2, 3, 4, 5].map(function (s) { return '<td><input type="date" data-tj="' + esc(d) + '" data-s="' + s + '" value="' + esc((tj[d] || [])[s] || '') + '" style="min-width:130px"></td>'; }).join('') + '</tr>'; }).join('') +
+    '</tbody></table></div><div class="row" style="margin-top:12px"><button class="btn pri" id="aSave">Simpan tetapan app & temujanji</button></div></div></div>';
+  $('#cpL').onclick = function () { navigator.clipboard.writeText(link).then(function () { toast('Pautan disalin'); }); };
+  $('#rsT').onclick = function () { ask('Jana kod baru? Kod lama tidak akan berfungsi lagi.', function () { call('resetToken', { id: k.MIMO_ID }).then(function () { toast('Kod baru dijana'); bukaPesakit(k.MIMO_ID, 'app'); }).catch(gagal); }); };
+  $('#prC').onclick = function () {
+    $('#printCard').innerHTML = '<div style="font-weight:700;font-size:13pt">MIMO Kedah · App Rekod Saya</div><div style="font-size:9pt;margin-bottom:3mm">Jabatan Kesihatan Negeri Kedah</div><div style="display:flex;gap:4mm;align-items:center"><div style="width:32mm">' + svgQR(link) + '</div><div>Nama: <b>' + esc(a.NAMA_PANGGILAN || k.NAMA.split(' ')[0]) + '</b><br>Kod akses:<br><b style="font-size:16pt;letter-spacing:1px">' + esc(kodPapar(a.TOKEN)) + '</b></div></div>' +
+      '<ol style="font-size:9pt;padding-left:5mm;margin:3mm 0 0"><li>Imbas QR dengan kamera telefon.</li><li>Tekan menu pelayar ▸ "Add to Home Screen" / "Tambah ke Skrin Utama".</li><li>Rahsiakan kod ini.</li></ol>';
+    try { window.print(); } catch (e) { toast('Cetakan tidak disokong di sini'); }
+  };
+  $('#aSave').onclick = function () {
+    var t = {}; DISIPLIN.forEach(function (d) { t[d] = [0, 1, 2, 3, 4, 5].map(function (s) { return $('[data-tj="' + d + '"][data-s="' + s + '"]').value; }); });
+    call('saveApp', { app: { MIMO_ID: k.MIMO_ID, NAMA_PANGGILAN: $('#aNama').value.trim(), SASARAN_BERAT: $('#aSas').value, AKTIF: $('#aAkt').value, TEMUJANJI_JSON: JSON.stringify(t) } })
+      .then(function () { toast('Disimpan'); bukaPesakit(k.MIMO_ID, 'app'); }).catch(gagal);
+  };
+}
+
+/* ---------------- Import / Eksport KKM ---------------- */
+function ask(msg, ok) { var m = modal('<p style="margin-top:0">' + esc(msg) + '</p><div class="row"><button class="btn pri" id="askY">Ya, teruskan</button><button class="btn" id="askN">Batal</button></div>'); m.querySelector('.card').style.maxWidth = '420px'; $('#askN', m).onclick = function () { m.remove(); }; $('#askY', m).onclick = function () { m.remove(); ok(); }; }
+function modal(html) { var m = document.createElement('div'); m.className = 'modal'; m.innerHTML = '<div class="card">' + html + '</div>'; m.onclick = function (e) { if (e.target === m) m.remove(); }; document.body.appendChild(m); return m; }
+function parseTSV(t) {
+  var rows = [], row = [], cell = '', q = false;
+  for (var i = 0; i < t.length; i++) {
+    var ch = t[i];
+    if (q) { if (ch === '"') { if (t[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"' && cell === '') q = true;
+    else if (ch === '\t') { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(function (r) { return r.some(function (x) { return x.trim(); }); });
+}
+function modalImport() {
+  var m = modal('<h3>Import dari sheet KKM MIMO</h3><ol class="sub" style="margin-top:0"><li>Buka sheet KKM, pilih baris pesakit (dari lajur A hingga lajur terakhir, <b>tanpa baris tajuk</b>) dan salin (Ctrl+C).</li><li>Tampal di bawah (Ctrl+V). Padanan dibuat ikut No. KP: pesakit sedia ada dikemas kini, yang baru didaftarkan.</li></ol>' +
+    '<textarea id="imT" rows="9" placeholder="Tampal baris dari sheet KKM di sini…" style="font-family:ui-monospace,monospace;font-size:12px"></textarea><div id="imP" class="sub" style="margin:8px 0"></div>' +
+    '<div class="row"><button class="btn pri" id="imGo" disabled>Import</button><button class="btn" id="imX">Tutup</button></div>');
+  var rows = [];
+  $('#imT', m).oninput = function () {
+    rows = parseTSV(this.value).filter(function (r) { return !/^NEGERI$/i.test((r[0] || '').trim()); }).map(function (r) { r = r.slice(0, KKM_N); while (r.length < KKM_N) r.push(''); return r; });
+    var sah = rows.filter(function (r) { return r[KKM_IDX.NOKP] && r[KKM_IDX.NAMA]; });
+    var ada = {}; S.list.forEach(function (p) { ada[p.nokp] = 1; });
+    $('#imP', m).innerHTML = rows.length ? '<b>' + rows.length + '</b> baris dikesan · ' + sah.length + ' sah (ada nama & No. KP) · ' + sah.filter(function (r) { return ada[r[KKM_IDX.NOKP]]; }).length + ' sudah wujud (akan dikemas kini)<br>Contoh: ' + sah.slice(0, 3).map(function (r) { return esc(r[KKM_IDX.NAMA]) + ' — ' + esc(r[KKM_IDX.FASILITI]); }).join('; ') : '';
+    $('#imGo', m).disabled = !sah.length;
+  };
+  $('#imX', m).onclick = function () { m.remove(); };
+  $('#imGo', m).onclick = function () {
+    this.disabled = true;
+    call('importKkm', { rows: rows }).then(function (r) { m.remove(); toast('Import selesai: ' + r.baru + ' baru, ' + r.kemaskini + ' dikemas kini' + (r.langkau ? ', ' + r.langkau + ' dilangkau' : '')); muatSenarai(); }).catch(gagal);
+  };
+}
+function modalEksport(ids, label) {
+  var m = modal('<h3>Eksport format KKM — ' + esc(label) + '</h3><div class="row" style="margin-bottom:8px"><label class="row" style="gap:6px"><input type="checkbox" id="exP"> Kosongkan lajur PERBEZAAN (jika sheet KKM mengira sendiri)</label><label class="row" style="gap:6px"><input type="checkbox" id="exH"> Sertakan baris tajuk</label></div>' +
+    '<textarea id="exT" rows="9" readonly style="font-family:ui-monospace,monospace;font-size:12px">Memuatkan…</textarea>' +
+    '<p class="sub">Tampal di lajur A pada baris kosong pertama sheet KKM. Susunan 202 lajur sama seperti sheet KKM.</p><div class="row"><button class="btn pri" id="exC">Salin ke papan klip</button><button class="btn" id="exD">Muat turun CSV</button><button class="btn" id="exX">Tutup</button></div>');
+  var rows = [];
+  function bina() {
+    var out = rows.map(function (r) { r = r.slice(); if ($('#exP', m).checked) for (var i = KKM_IDX.P06_BERAT; i <= KKM_IDX.P012_HBA1C_ST; i++) r[i] = ''; return r; });
+    if ($('#exH', m).checked) out.unshift(KKM_SCHEMA.map(function (c) { return c.g + ' | ' + c.l; }));
+    return out;
+  }
+  function tsv() { return bina().map(function (r) { return r.map(function (c) { c = String(c); return /[\t\n"]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join('\t'); }).join('\n'); }
+  function upd() { $('#exT', m).value = tsv(); }
+  call('exportKkm', { ids: ids }).then(function (r) { rows = r.rows; upd(); }).catch(gagal);
+  $('#exP', m).onchange = upd; $('#exH', m).onchange = upd;
+  $('#exC', m).onclick = function () { navigator.clipboard.writeText(tsv()).then(function () { toast(rows.length + ' baris disalin'); }); };
+  $('#exD', m).onclick = function () {
+    var csv = '﻿' + bina().map(function (r) { return r.map(function (c) { c = String(c); return /[",\n]/.test(c) || /^0\d/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(','); }).join('\n');
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'MIMO_KKM_eksport_' + dmyToIso(dateToDmy(new Date())) + '.csv'; a.click();
+  };
+  $('#exX', m).onclick = function () { m.remove(); };
+}
+
+/* ---------------- Tetapan ---------------- */
+$('#btnSet').onclick = function () {
+  var adm = S.user && S.user.peranan === 'ADMIN';
+  var m = modal('<h3>Tetapan</h3><div class="grid2"><div><b>Tukar kata laluan</b><div class="fgrid" style="padding:8px 0"><div><label>Kata laluan lama</label><input type="password" id="pw0"></div><div><label>Kata laluan baru (≥8 aksara)</label><input type="password" id="pw1"></div></div><button class="btn pri" id="pwGo">Tukar</button></div>' +
+    (adm ? '<div><b>Tambah / set semula petugas</b><div class="fgrid" style="padding:8px 0"><div><label>Nama pengguna</label><input id="nu"></div><div><label>Nama penuh</label><input id="nn"></div><div><label>Fasiliti (atau SEMUA)</label><input id="nf" list="dlF"><datalist id="dlF"><option>SEMUA</option>' + Array.from(new Set(S.list.map(function (p) { return p.fasiliti; }))).map(function (f) { return '<option>' + esc(f) + '</option>'; }).join('') + '</datalist></div><div><label>Kata laluan sementara</label><input id="np"></div><div><label>Peranan</label><select id="nr"><option>PETUGAS</option><option>ADMIN</option></select></div></div><button class="btn pri" id="nuGo">Simpan petugas</button></div>' : '') +
+    '</div><div class="row" style="margin-top:14px"><button class="btn" id="stX">Tutup</button>' + (DEMO ? '<button class="btn dng" id="dmR">Set semula data demo</button>' : '') + '</div>');
+  $('#stX', m).onclick = function () { m.remove(); };
+  $('#pwGo', m).onclick = function () { call('tukarPassword', { lama: $('#pw0', m).value, baru: $('#pw1', m).value }).then(function () { toast('Kata laluan ditukar'); m.remove(); }).catch(gagal); };
+  if (adm) $('#nuGo', m).onclick = function () { call('tambahPetugas', { username: $('#nu', m).value.trim(), nama: $('#nn', m).value.trim(), fasiliti: $('#nf', m).value.trim().toUpperCase(), password: $('#np', m).value, peranan: $('#nr', m).value }).then(function () { toast('Petugas disimpan'); m.remove(); }).catch(gagal); };
+  if (DEMO) $('#dmR', m).onclick = function () { GAS_EMU.reset(); m.remove(); logout(true); toast('Data demo dijana semula'); };
+};
+
+/* ---------------- Mula ---------------- */
+(function () {
+  $('#demoPill').hidden = !DEMO;
+  try { var s = JSON.parse(sessionStorage.getItem('mimo_s') || 'null'); if (s) { S.sess = s.s; S.user = s.u; } } catch (e) { }
+  chrome();
+  if (S.sess) muatSenarai(); else viewLogin();
+})();
+</script>
+</body>
+</html>
