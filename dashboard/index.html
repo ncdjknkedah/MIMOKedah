@@ -103,6 +103,10 @@ span.c{display:inline-grid;width:24px;height:24px;border-radius:7px;place-items:
 .login .r{display:flex;align-items:center;justify-content:center;padding:40px}
 .login .box{width:100%;max-width:380px}.login .box h2{margin:0 0 4px;font-size:24px;font-weight:800}
 @media(max-width:860px){.login{grid-template-columns:1fr}.login .l{padding:36px 24px}.login .l img{width:150px}}
+.pw{position:relative}.pw input{padding-right:42px}
+.pw .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;width:32px;height:32px;border-radius:8px;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.pw .eye:hover{background:#eef2f8;color:var(--navy)}.pw .eye svg{width:19px;height:19px}
+.lupa{border:0;background:none;color:var(--blue);font-weight:700;padding:0;cursor:pointer;font-size:12.5px}
 #printCard{display:none}
 @media print{body *{visibility:hidden}#printCard,#printCard *{visibility:visible}#printCard{display:block;position:absolute;left:0;top:0;width:90mm;border:1px dashed #999;padding:6mm;font-size:11pt}}
 </style>
@@ -2186,6 +2190,17 @@ function call(action, p) {
     return r;
   });
 }
+/* Butang mata untuk tunjuk / sembunyi kata laluan */
+var IKON_MATA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>', IKON_MATA_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.4 10.4 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.1-5.9M9.9 5.2A9.6 9.6 0 0 1 12 5c6.5 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2M2 2l20 20"/></svg>';
+function mata(root) {
+  $$('input[type=password]', root || document).forEach(function (i) {
+    if (i.dataset.mata) return; i.dataset.mata = 1;
+    var w = document.createElement('div'); w.className = 'pw'; i.parentNode.insertBefore(w, i); w.appendChild(i);
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'eye'; b.innerHTML = IKON_MATA; b.setAttribute('aria-label', 'Tunjuk kata laluan'); b.title = 'Tunjuk kata laluan';
+    b.onclick = function () { var t = i.type === 'password'; i.type = t ? 'text' : 'password'; b.innerHTML = t ? IKON_MATA_X : IKON_MATA; b.setAttribute('aria-label', t ? 'Sembunyi kata laluan' : 'Tunjuk kata laluan'); b.title = b.getAttribute('aria-label'); i.focus(); };
+    w.appendChild(b);
+  });
+}
 function gagal(e) { toast('⚠ ' + (e && e.message || e)); }
 
 /* ---------------- Log masuk ---------------- */
@@ -2196,7 +2211,7 @@ function viewLogin() {
     (DEMO ? '<div class="info" style="margin-bottom:14px">Mod demo (data palsu), kata laluan <b>demo1234</b>: <b>admin</b> (negeri), <b>pkdkm</b> (daerah Kuala Muda), <b>kkbas</b> (KK Bandar Alor Setar).</div>' : '') +
     '<label class="sub" for="lu" style="font-weight:600">Nama pengguna</label><input id="lu" autocomplete="username" value="' + (DEMO ? 'admin' : '') + '"><div style="height:12px"></div>' +
     '<label class="sub" for="lp" style="font-weight:600">Kata laluan</label><input id="lp" type="password" autocomplete="current-password" value="' + (DEMO ? 'demo1234' : '') + '"><div style="height:18px"></div>' +
-    '<button class="btn pri" id="lb" style="width:100%;padding:12px">Log masuk</button><p class="sub" style="margin-top:16px">Setiap akses direkod dalam log audit. Data pesakit adalah sulit di bawah Akta Perlindungan Data Peribadi 2010.</p></div></div></div>';
+    '<button class="btn pri" id="lb" style="width:100%;padding:12px">Log masuk</button><div style="text-align:right;margin-top:10px"><button class="lupa" id="lupa">Lupa kata laluan?</button></div><p class="sub" style="margin-top:12px">Setiap akses direkod dalam log audit. Data pesakit adalah sulit di bawah Akta Perlindungan Data Peribadi 2010.</p></div></div></div>';
   function go() {
     $('#lb').disabled = true;
     call('login', { user: $('#lu').value, pass: $('#lp').value }).then(function (r) {
@@ -2205,6 +2220,11 @@ function viewLogin() {
     }).catch(function (e) { $('#lb').disabled = false; gagal(e); });
   }
   $('#lb').onclick = go; $('#lp').onkeydown = function (e) { if (e.key === 'Enter') go(); };
+  mata($('#app'));
+  $('#lupa').onclick = function () {
+    var m = modal('<h3>Lupa kata laluan</h3><p style="margin-top:0">Atas sebab keselamatan data pesakit, kata laluan hanya boleh diset semula oleh <b>pentadbir sistem MIMO</b>.</p><ol class="sub" style="line-height:1.8"><li>Hubungi pentadbir sistem (Unit NCD, JKN Kedah) dan nyatakan nama pengguna anda.</li><li>Pentadbir akan memberi kata laluan sementara.</li><li>Log masuk, kemudian tukar kata laluan anda melalui menu <b>Tetapan</b>.</li></ol><button class="btn pri" id="lpX">Faham</button>');
+    m.querySelector('.card').style.maxWidth = '480px'; $('#lpX', m).onclick = function () { m.remove(); };
+  };
 }
 function chrome() {
   document.body.classList.toggle('nolog', !S.user);
@@ -2615,7 +2635,7 @@ function modal(html) { var m = document.createElement('div'); m.className = 'mod
 $('#btnSet').onclick = function () {
   var m = modal('<h3>Tetapan akaun</h3><div class="fgrid" style="padding:8px 0"><div><label>Kata laluan lama</label><input type="password" id="pw0"></div><div><label>Kata laluan baru (≥8 aksara)</label><input type="password" id="pw1"></div></div>' +
     '<div class="row"><button class="btn pri" id="pwGo">Tukar kata laluan</button><button class="btn" id="stX">Tutup</button>' + (DEMO ? '<button class="btn dng" id="dmR">Set semula data demo</button>' : '') + '</div>');
-  m.querySelector('.card').style.maxWidth = '560px';
+  m.querySelector('.card').style.maxWidth = '560px'; mata(m);
   $('#stX', m).onclick = function () { m.remove(); };
   $('#pwGo', m).onclick = function () { call('tukarPassword', { lama: $('#pw0', m).value, baru: $('#pw1', m).value }).then(function () { toast('Kata laluan ditukar'); m.remove(); }).catch(gagal); };
   if (DEMO) $('#dmR', m).onclick = function () { GAS_EMU.reset(); m.remove(); logout(true); toast('Data demo dijana semula'); };
@@ -2633,8 +2653,8 @@ function viewPengguna() {
       '<div><label>Tahap akses</label><select id="nt"><option value="FASILITI">Fasiliti (klinik)</option><option value="DAERAH">Daerah</option><option value="NEGERI">Negeri</option></select></div>' +
       '<div id="wD"><label>Daerah</label><select id="nd">' + R.daerah.map(function (d) { return '<option>' + esc(d) + '</option>'; }).join('') + '</select></div>' +
       '<div id="wF" style="grid-column:1/-1"><label>Fasiliti</label><select id="nf">' + R.fasiliti.map(function (g) { return '<optgroup label="' + esc(g.daerah) + '">' + g.fasiliti.map(function (f) { return '<option>' + esc(f) + '</option>'; }).join('') + '</optgroup>'; }).join('') + '</select></div>' +
-      '<div><label>Kata laluan sementara</label><input id="np" placeholder="≥8 aksara"></div><div><label>Peranan</label><select id="nr"><option value="PETUGAS">Petugas</option><option value="ADMIN">Admin (urus pengguna)</option></select></div></div>' +
-      '<div style="height:12px"></div><button class="btn pri" id="nuGo">Simpan pengguna</button><p class="sub">Senarai daerah dan fasiliti diambil daripada data KKM.</p></div></div>';
+      '<div><label>Kata laluan sementara</label><input id="np" placeholder="≥8 aksara" autocomplete="off"></div><div><label>Peranan</label><select id="nr"><option value="PETUGAS">Petugas</option><option value="ADMIN">Admin (urus pengguna)</option></select></div></div>' +
+      '<div style="height:12px"></div><button class="btn pri" id="nuGo">Simpan pengguna</button><p class="sub">Senarai daerah dan fasiliti diambil daripada data KKM.<br>Pengguna lupa kata laluan? Simpan semula nama pengguna yang sama dengan kata laluan sementara baharu, kemudian minta mereka menukarnya melalui Tetapan.</p></div></div>';
     function tukar() { var t = $('#nt').value; $('#wD').hidden = t !== 'DAERAH'; $('#wF').hidden = t !== 'FASILITI'; }
     $('#nt').onchange = tukar; tukar();
     $('#nuGo').onclick = function () {
