@@ -4,74 +4,128 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MIMO Kedah · Kad Rawatan Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#14262b;--muted:#5c7075;--line:#dfe7e8;--bg:#f4f7f7;--card:#fff;--teal:#0f6e74;--teal2:#0f4c5c;--tealbg:#e6f3f3;--amber:#b86e00;--amberbg:#fff3df;--red:#b42318;--redbg:#fdecea;--green:#1d7a46;--greenbg:#e5f5ec;--violet:#5b4bb7;--r:10px}
-*{box-sizing:border-box}html,body{margin:0}body{font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+:root{--navy:#1b2a5e;--blue:#2f4a9a;--brand:#3d5aa8;--sky:#8fb0e3;--ice:#eaf0fb;--bg:#f2f5fb;--card:#fff;--line:#e3e9f4;--ink:#16213f;--muted:#5f6d8c;
+  --green:#1a8f62;--greenbg:#e3f6ee;--amber:#b86e00;--amberbg:#fff3df;--red:#c23a3a;--redbg:#fdeaea;--teal:#2f4a9a;--tealbg:#eaf0fb;
+  --r:14px;--sh:0 1px 2px rgba(27,42,94,.05),0 6px 20px -10px rgba(27,42,94,.18);--f:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}html,body{margin:0}body{font:500 14px/1.5 var(--f);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:inherit}
-header.top{background:var(--teal2);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 20px;position:sticky;top:0;z-index:20}
-header.top img{height:36px}header.top .t1{font-weight:700;font-size:16px;letter-spacing:.2px}header.top .t2{font-size:12px;opacity:.8}
-header.top .sp{flex:1}.pill{font-size:11px;padding:2px 8px;border-radius:99px;background:#ffd166;color:#4a3500;font-weight:700}
-header.top button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
-main{max-width:1280px;margin:0 auto;padding:18px 20px 60px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+:focus-visible{outline:3px solid #9db6ee;outline-offset:1px}
+/* shell */
+.side{position:fixed;left:0;top:0;bottom:0;width:248px;background:linear-gradient(180deg,#1b2a5e 0%,#16224d 100%);color:#fff;display:flex;flex-direction:column;padding:18px 14px;z-index:30}
+.side .brand{background:#fff;border-radius:16px;padding:12px 12px 10px;text-align:center;box-shadow:0 10px 24px -12px rgba(0,0,0,.5)}
+.side .brand img{width:132px;height:auto;display:block;margin:0 auto}
+.side .sys{font-size:11.5px;color:#a9b8e2;text-align:center;margin:10px 0 16px;line-height:1.35}
+.side nav{display:flex;flex-direction:column;gap:3px}
+.side nav button{display:flex;align-items:center;gap:11px;border:0;background:none;color:#c8d3f0;padding:10px 12px;border-radius:11px;font-weight:600;text-align:left;cursor:pointer}
+.side nav button svg{width:19px;height:19px;flex:none;opacity:.9}
+.side nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+.side nav button.on{background:#fff;color:var(--navy);box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.side nav .sep{height:1px;background:rgba(255,255,255,.1);margin:10px 4px}
+.side .who{margin-top:auto;background:rgba(255,255,255,.06);border-radius:12px;padding:11px 12px;font-size:12px;color:#c8d3f0}
+.side .who b{display:block;color:#fff;font-size:13px}
+.side .who button{margin-top:9px;width:100%;border:1px solid rgba(255,255,255,.18);background:none;color:#fff;border-radius:9px;padding:7px;cursor:pointer;font-weight:600}
+.mainwrap{margin-left:248px;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(242,245,251,.88);backdrop-filter:blur(10px);display:flex;align-items:center;gap:12px;padding:16px 28px;border-bottom:1px solid var(--line)}
+.topbar h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.02em}.topbar .crumb{color:var(--muted);font-size:13px}
+.pill{font-size:11px;padding:3px 10px;border-radius:99px;background:#ffd166;color:#4a3500;font-weight:800}
+main{max-width:1320px;margin:0 auto;padding:22px 28px 60px}
+body.nolog .side,body.nolog .topbar{display:none}body.nolog .mainwrap{margin-left:0}body.nolog main{max-width:none;padding:0}
+@media(max-width:980px){.side{position:static;width:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:10px}.side .brand{padding:6px}.side .brand img{width:64px}.side .sys{display:none}.side nav{flex-direction:row;flex-wrap:wrap}.side nav .sep{display:none}.side .who{margin:0}.mainwrap{margin-left:0}main{padding:16px}}
+/* primitives */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.card h3,.h3{margin:0 0 4px;font-size:15px;font-weight:700}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grow{flex:1}
-.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;white-space:nowrap}
-.btn:hover{border-color:#b9c9cb}.btn.pri{background:var(--teal);border-color:var(--teal);color:#fff}.btn.pri:hover{background:var(--teal2)}
-.btn.sm{padding:4px 8px;font-size:12px}.btn.dng{color:var(--red)}.btn:disabled{opacity:.5;cursor:default}
-input[type=text],input[type=number],input[type=date],input[type=password],input:not([type]),select,textarea{border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:#fff;width:100%}
-input:focus,select:focus,textarea:focus{outline:2px solid #9fd1d3;border-color:var(--teal)}
-input[readonly]{background:#f3f6f6;color:var(--muted)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px}
-.kpi .v{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}.kpi .l{color:var(--muted);font-size:12px}
-table{border-collapse:collapse;width:100%}th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-size:12px;color:var(--muted);font-weight:600;background:#fafcfc;position:sticky;top:0}
-tbody tr.click{cursor:pointer}tbody tr.click:hover{background:#f6fbfb}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;white-space:nowrap;font-weight:600}
+.btn:hover{border-color:#b8c6e4}.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 14px -8px rgba(47,74,154,.8)}.btn.pri:hover{background:var(--navy)}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:8px}.btn.dng{color:var(--red)}.btn:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=number],input[type=date],input[type=password],input:not([type]),select,textarea{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fbfcff;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(61,90,168,.15);background:#fff}
+input[readonly]{background:#f2f5fa;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:16px}
+.kpi{display:flex;gap:14px;align-items:center}.kpi .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:21px;flex:none}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}.kpi .l{color:var(--muted);font-size:12.5px}
+table{border-collapse:collapse;width:100%}th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:11.5px;color:var(--muted);font-weight:700;background:#f7f9fd;position:sticky;top:0;z-index:1}
+tbody tr.click{cursor:pointer}tbody tr.click:hover{background:#f5f8ff}
 .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.chip{display:inline-block;font-size:11px;padding:2px 7px;border-radius:99px;margin:1px 2px 1px 0;white-space:nowrap;background:#eef2f2;color:var(--muted)}
-.chip.g{background:var(--greenbg);color:var(--green)}.chip.a{background:var(--amberbg);color:var(--amber)}.chip.r{background:var(--redbg);color:var(--red)}.chip.t{background:var(--tealbg);color:var(--teal)}
-.sub{color:var(--muted);font-size:12px}.up{color:var(--red)}.down{color:var(--green)}
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:14px 0 16px;overflow-x:auto}
-.tabs button{border:0;background:none;padding:9px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
-.tabs button.on{color:var(--teal);border-color:var(--teal);font-weight:600}
-.ph{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
-.ph h2{margin:0;font-size:20px}.meta{color:var(--muted);font-size:13px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid2>*{min-width:0}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.tile{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff}.tile .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}.tile .l{font-size:12px;color:var(--muted)}
-details.sec{border:1px solid var(--line);border-radius:9px;margin-bottom:10px;background:#fff}
-details.sec summary{padding:10px 14px;cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;margin:1px 3px 1px 0;white-space:nowrap;background:#eef2f8;color:var(--muted)}
+.chip.g{background:var(--greenbg);color:var(--green)}.chip.a{background:var(--amberbg);color:var(--amber)}.chip.r{background:var(--redbg);color:var(--red)}.chip.t{background:var(--ice);color:var(--blue)}
+.sub{color:var(--muted);font-size:12.5px}.up{color:var(--red)}.down{color:var(--green)}
+.av{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;flex:none}
+.pcell{display:flex;gap:10px;align-items:center}
+.mini{height:6px;border-radius:99px;background:#edf1f8;overflow:hidden;width:90px;margin-left:auto}.mini i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#5b7fe0,#1a8f62)}
+.tabs{display:flex;gap:6px;margin:16px 0 18px;overflow-x:auto;background:#f2f5fb;padding:5px;border-radius:12px;border:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:8px 14px;cursor:pointer;color:var(--muted);border-radius:9px;white-space:nowrap;font-weight:700;font-size:13px}
+.tabs button.on{background:#fff;color:var(--navy);box-shadow:var(--sh)}
+.hero{background:linear-gradient(120deg,#1b2a5e,#2f4a9a 60%,#4a6bc4);color:#fff;border-radius:18px;padding:20px 22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero .av{width:58px;height:58px;font-size:20px;border-radius:16px;background:rgba(255,255,255,.16)}
+.hero h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.01em}.hero .meta{color:#c9d6f5;font-size:13px}
+.hero .chip{background:rgba(255,255,255,.14);color:#fff}.hero .chip.a{background:#ffd166;color:#4a3500}.hero .chip.g{background:#9ff0c9;color:#0b4d34}.hero .chip.r{background:#ffb4b4;color:#6b1111}
+.ph{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}.ph h2{margin:0;font-size:20px}.meta{color:var(--muted);font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid2>*{min-width:0}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid3>*{min-width:0}
+@media(max-width:1000px){.grid2,.grid3{grid-template-columns:1fr}}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:#fff;box-shadow:var(--sh)}.tile .v{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.tile .l{font-size:12px;color:var(--muted);font-weight:600}
+details.sec{border:1px solid var(--line);border-radius:13px;margin-bottom:10px;background:#fff}
+details.sec summary{padding:12px 16px;cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between}
 details.sec summary::after{content:'▾';color:var(--muted)}details.sec[open] summary::after{content:'▴'}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px;padding:4px 14px 14px}
-.fgrid label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.fgrid .calc input{background:var(--tealbg);color:var(--teal);font-weight:600}
-.modal{position:fixed;inset:0;background:rgba(10,30,35,.45);display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow:auto}
-.modal .card{width:min(900px,100%)}.modal h3{margin:0 0 10px}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#14262b;color:#fff;padding:9px 16px;border-radius:9px;z-index:99;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
-.note{background:var(--amberbg);border:1px solid #f3d7a6;color:#6b4300;border-radius:8px;padding:9px 12px;font-size:13px}
-.info{background:var(--tealbg);border:1px solid #bfe0e0;color:#0d4f53;border-radius:8px;padding:9px 12px;font-size:13px}
-.login{max-width:380px;margin:60px auto}
-.daycard{border:1px solid var(--line);border-radius:9px;margin-bottom:10px;overflow:hidden}.daycard .hd{background:#fafcfc;padding:7px 12px;display:flex;justify-content:space-between;font-weight:600}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px;padding:4px 16px 16px}
+.fgrid label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}.fgrid .calc input{background:var(--ice);color:var(--blue);font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(15,24,55,.5);display:flex;align-items:flex-start;justify-content:center;padding:50px 16px;z-index:50;overflow:auto;backdrop-filter:blur(2px)}
+.modal .card{width:min(900px,100%)}.modal h3{margin:0 0 10px;font-size:17px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:11px;z-index:99;font-size:13px;font-weight:600;box-shadow:0 10px 24px -8px rgba(0,0,0,.35)}
+.note{background:var(--amberbg);border:1px solid #f3d7a6;color:#6b4300;border-radius:10px;padding:10px 12px;font-size:13px}
+.info{background:var(--ice);border:1px solid #cfdbf5;color:#24387a;border-radius:10px;padding:10px 12px;font-size:13px}
+.alert{background:var(--redbg);border:1px solid #f3c1c1;color:#7a1a1a;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:600}
+.daycard{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff}.daycard .hd{background:#f7f9fd;padding:8px 12px;display:flex;justify-content:space-between;font-weight:700}
 .daycard td,.daycard th{padding:6px 12px;font-size:13px}
 .qr svg{width:180px;height:180px;display:block}
-.tbl-wrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:9px}
-.empty{padding:30px;text-align:center;color:var(--muted)}
+.tbl-wrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:13px;background:#fff}
+.empty{padding:34px;text-align:center;color:var(--muted)}
 .chart{width:100%;height:auto;display:block}
 .lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.lg i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.hbar{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;margin:9px 0;font-size:13px}
+.hbar .tr{height:12px;border-radius:99px;background:#eef2f8;overflow:hidden}.hbar .tr i{display:block;height:100%;border-radius:99px}
+.cols{display:flex;align-items:flex-end;gap:12px;height:170px;padding-top:10px}
+.cols div{flex:1;text-align:center;font-size:12px;color:var(--muted);font-weight:600}.cols i{display:block;border-radius:9px 9px 4px 4px;margin:0 auto 6px;max-width:58px}.cols b{display:block;color:var(--ink);font-size:13px;margin-bottom:4px}
+.donut{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;flex:none}.donut span{width:100px;height:100px;border-radius:50%;background:#fff;display:grid;place-content:center;text-align:center}
+.donut b{font-size:24px;font-weight:800;line-height:1}
+.leg{display:grid;gap:8px;font-size:13px}.leg div{display:flex;align-items:center;gap:8px}.leg i{width:10px;height:10px;border-radius:3px}
+span.c{display:inline-grid;width:24px;height:24px;border-radius:7px;place-items:center;font-size:11px;font-weight:800;vertical-align:middle}
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.login .l{background:radial-gradient(120% 90% at 20% 10%,#3d5aa8 0%,#1b2a5e 55%,#121d45 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:60px}
+.login .l .lg2{background:#fff;border-radius:22px;padding:16px 18px 12px;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)}.login .l img{width:210px;display:block}
+.login .l h1{font-size:34px;line-height:1.1;margin:28px 0 8px;font-weight:800;letter-spacing:-.02em}.login .l p{color:#c9d6f5;max-width:440px;margin:0}
+.login .r{display:flex;align-items:center;justify-content:center;padding:40px}
+.login .box{width:100%;max-width:380px}.login .box h2{margin:0 0 4px;font-size:24px;font-weight:800}
+@media(max-width:860px){.login{grid-template-columns:1fr}.login .l{padding:36px 24px}.login .l img{width:150px}}
 #printCard{display:none}
 @media print{body *{visibility:hidden}#printCard,#printCard *{visibility:visible}#printCard{display:block;position:absolute;left:0;top:0;width:90mm;border:1px dashed #999;padding:6mm;font-size:11pt}}
 </style>
+
 </head>
 <body>
-<header class="top">
-  <img src="logo-jkn.png" alt="" onerror="this.remove()">
-  <div><div class="t1">MIMO Kedah · Kad Rawatan Digital</div><div class="t2">Pengurusan Obesiti Secara Bersepadu · Jabatan Kesihatan Negeri Kedah</div></div>
-  <span id="demoPill" class="pill" hidden>MOD DEMO · DATA PALSU</span>
-  <div class="sp"></div>
-  <span id="who" class="t2"></span>
-  <button id="btnSet" hidden>Tetapan</button>
-  <button id="btnOut" hidden>Log keluar</button>
-</header>
-<main id="app"></main>
+<aside class="side">
+  <div class="brand"><img src="data:image/webp;base64,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" alt="Logo MIMO, Pasukan MIMO JKN Kedah"></div>
+  <div class="sys">Sistem Kad Rawatan Digital<br>Pengurusan Obesiti Secara Bersepadu</div>
+  <nav>
+    <button data-pg="ringkasan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Ringkasan</button>
+    <button data-pg="pesakit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21c1-4 4-6 7-6s6 2 7 6"/><path d="M17 11a3 3 0 1 0 0-6M22 21c-.6-2.6-2-4.3-4-5"/></svg>Senarai pesakit</button>
+    <div class="sep"></div>
+    <button data-pg="muat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg>Muat semula data KKM</button>
+    <button data-pg="pengguna" id="navPengguna"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M19 3l2 2-2 2"/></svg>Pengguna sistem</button>
+    <button id="btnSet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Tetapan</button>
+  </nav>
+  <div class="who"><b id="whoN"></b><span id="who"></span><button id="btnOut">Log keluar</button></div>
+</aside>
+<div class="mainwrap">
+  <div class="topbar"><div class="grow"><h1 id="pgT">Ringkasan</h1><div class="crumb" id="pgS"></div></div><span id="demoPill" class="pill" hidden>MOD DEMO · DATA PALSU</span></div>
+  <main id="app"></main>
+</div>
 <div id="printCard"></div>
 
 <script>
@@ -84,7 +138,7 @@ var APP_URL = 'https://ncdjknkedah.github.io/MIMOKedah/app/';   // URL app pesak
  * Jika susunan sheet KKM berubah, ubah di sini sahaja.
  * NOTA: Bagi BASELINE, data sebenar KKM meletakkan Komposisi Tubuh (lajur 26-29) SEBELUM
  * ujian makmal, walaupun tajuk sheet menunjukkan sebaliknya. Susunan di bawah ikut DATA.
- * Bagi 6 BULAN / 12 BULAN tiada data untuk disemak — susunan ikut TAJUK sheet.
+ * Begitu juga 6 BULAN / 12 BULAN: komposisi tubuh selepas BP, sebelum FBS (disahkan dengan data 30/10/2026).
  */
 var YT = ['YA', 'TIDAK'];
 var ST = ['SELESAI', 'TIDAK DILAKUKAN'];
@@ -95,7 +149,7 @@ var KKM_SCHEMA = (function () {
   A('NEGERI', 'Negeri', 'Fasiliti', ['KEDAH']);
   A('DAERAH', 'Daerah', 'Fasiliti', ['KOTA SETAR', 'KUBANG PASU', 'PADANG TERAP', 'POKOK SENA', 'PENDANG', 'YAN', 'KUALA MUDA', 'SIK', 'BALING', 'KULIM', 'BANDAR BAHARU', 'LANGKAWI']);
   A('FASILITI', 'Fasiliti', 'Fasiliti');
-  A('SUMBER_RUJUKAN', 'Sumber rujukan', 'Rujukan', ['KLINIK KESIHATAN', 'HOSPITAL', 'KOSPEN', 'SARINGAN KOMUNITI', 'LAIN-LAIN']);
+  A('SUMBER_RUJUKAN', 'Sumber rujukan', 'Rujukan', ['DALAMAN', 'KLINIK KESIHATAN', 'HOSPITAL', 'KOSPEN', 'SARINGAN KOMUNITI', 'LAIN-LAIN']);
   A('SUMBER_RUJUKAN_2', 'Sumber rujukan (perincian)', 'Rujukan');
   A('STATUS_RUJUKAN', 'Status rujukan', 'Rujukan', ['SETUJU SERTAI MIMO', 'TIDAK SETUJU SERTAI MIMO']);
   A('NAMA', 'Nama', 'Pesakit');
@@ -170,13 +224,13 @@ var KKM_SCHEMA = (function () {
   function susulan(p, gl) {
     A(p + 'BERAT', 'Berat (kg)', gl, null, 'num'); A(p + 'BMI', 'BMI', gl, null, 'calc'); A(p + 'KATBMI', 'Kategori BMI', gl, null, 'calc');
     A(p + 'WC', 'Lilit pinggang (cm)', gl, null, 'num'); A(p + 'SIS', 'BP sistolik', gl, null, 'num'); A(p + 'DIA', 'BP diastolik', gl, null, 'num');
+    A(p + 'BCA_PLEMAK', 'Peratus lemak badan (%)', gl, null, 'num'); A(p + 'BCA_VISC', 'Lemak viseral (level)', gl, null, 'num');
+    A(p + 'BCA_JLEMAK', 'Jisim lemak badan (kg)', gl, null, 'num'); A(p + 'BCA_SMM', 'Jisim otot rangka (kg)', gl, null, 'num');
     A(p + 'FBS_ST', 'FBS (status)', gl, ST); A(p + 'FBS', 'FBS keputusan', gl, null, 'num'); A(p + 'HBA1C', 'HbA1c (%)', gl, null, 'num');
     A(p + 'TC_ST', 'Total kolesterol (status)', gl, ST); A(p + 'TC', 'Total kolesterol', gl, null, 'num');
     A(p + 'TG_ST', 'TG (status)', gl, ST); A(p + 'TG', 'TG', gl, null, 'num');
     A(p + 'LDL_ST', 'LDL (status)', gl, ST); A(p + 'LDL', 'LDL', gl, null, 'num');
     A(p + 'HDL_ST', 'HDL (status)', gl, ST); A(p + 'HDL', 'HDL', gl, null, 'num');
-    A(p + 'BCA_PLEMAK', 'Peratus lemak badan (%)', gl, null, 'num'); A(p + 'BCA_VISC', 'Lemak viseral (level)', gl, null, 'num');
-    A(p + 'BCA_JLEMAK', 'Jisim lemak badan (kg)', gl, null, 'num'); A(p + 'BCA_SMM', 'Jisim otot rangka (kg)', gl, null, 'num');
   }
   function beza(p, gl) {
     ['BERAT|Penurunan berat (kg)', 'PBERAT|Penurunan berat (%)', 'WC|Perubahan lilit pinggang', 'FBS|Perubahan FBS', 'SIS|Perubahan sistolik', 'DIA|Perubahan diastolik',
@@ -211,7 +265,7 @@ function bmiOf(berat, tinggi) { var b = num(berat), t = num(tinggi); if (!b || !
 /* Kategori BMI ikut data KKM MIMO (CPG Pengurusan Obesiti 2023) */
 function katBmi(bmi) {
   if (bmi == null) return '';
-  if (bmi < 18.5) return 'KURANG BERAT BADAN';
+  if (bmi < 18.5) return 'UNDERWEIGHT';
   if (bmi < 23) return 'NORMAL';
   if (bmi < 27.5) return 'OVERWEIGHT';
   if (bmi < 32.5) return 'OBES I';
@@ -251,9 +305,10 @@ function rowToKkm(r) { var o = {}; KKM_SCHEMA.forEach(function (c, i) { o[c.k] =
 /* ===== Tab tambahan ===== */
 var TAB_LAWATAN = ['LAWATAN_ID', 'MIMO_ID', 'TARIKH', 'MINGGU', 'SIS', 'DIA', 'NADI', 'BERAT', 'BMI', 'WC', 'BCA_PLEMAK', 'BCA_VISC', 'BCA_JLEMAK', 'BCA_SMM', 'CATATAN', 'OLEH', 'KEMASKINI'];
 var TAB_KEC = ['KEC_ID', 'MIMO_ID', 'FASA', 'TARIKH', 'BERAT', 'OTOT', 'LEMAK_PCT', 'GRIP_R', 'GRIP_L', 'STEP_PRE', 'STEP_PEAK', 'STEP_REC1', 'STEP_1', 'STEP_2', 'STEP_3', 'WALK_JARAK', 'WALK_PRE', 'WALK_PEAK', 'PUSHUP', 'SITUP_GRED', 'SITUP_REPS', 'PLANK', 'JUMP', 'STS5', 'SITREACH', 'OLEH', 'KEMASKINI'];
-var TAB_APP = ['MIMO_ID', 'TOKEN', 'NAMA_PANGGILAN', 'SASARAN_BERAT', 'TEMUJANJI_JSON', 'AKTIF', 'CIPTA'];
+var TAB_APP = ['MIMO_ID', 'TOKEN', 'NAMA_PANGGILAN', 'SASARAN_BERAT', 'TEMUJANJI_JSON', 'AKTIF', 'CIPTA', 'TARIKH_MULA', 'NOKP'];
+var TAB_PEN = ['MIMO_ID', 'TARIKH', 'TINGGI', 'LILIT_LEHER', 'WHOOLEY_Q1', 'WHOOLEY_Q2', 'GAD2', 'PHQ9', 'PHQ9_ITEM9', 'GAD7', 'AKUJANJI_KERTAS', 'CATATAN', 'OLEH', 'KEMASKINI'];
 var TAB_LOG = ['LOG_ID', 'MIMO_ID', 'JENIS', 'KUNCI', 'DATA_JSON', 'KEMASKINI'];
-var TAB_PETUGAS = ['USERNAME', 'NAMA', 'FASILITI', 'SALT', 'HASH', 'PERANAN', 'AKTIF'];
+var TAB_PETUGAS = ['USERNAME', 'NAMA', 'FASILITI', 'SALT', 'HASH', 'PERANAN', 'AKTIF', 'TAHAP', 'DAERAH'];
 var TAB_AUDIT = ['MASA', 'PENGGUNA', 'TINDAKAN', 'MIMO_ID', 'BUTIRAN'];
 var MINGGU_LIST = ['M1', 'M2', 'M4', 'M6', 'M8', 'M10', 'M12', 'M14', 'M16', 'M18', 'M20', 'M22', 'M24'];
 var DISIPLIN = ['Pakar / Pegawai Perubatan', 'Pegawai Dietetik', 'Pegawai Sains Pemakanan', 'Fisioterapi', 'Terapi Cara Kerja', 'Kaunselor', 'Wellness Hub'];
@@ -279,6 +334,42 @@ function isiSusulan(o, lawatan, bulan) {
 }
 
 function mingguIso(d) { var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); var day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); var y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return t.getUTCFullYear() + '-W' + ('0' + Math.ceil(((t - y) / 864e5 + 1) / 7)).slice(-2); }
+
+/* ===== Kandungan buku MIMO ===== */
+/* Program senaman berfasa (Fisioterapi) — ikut buku catatan MIMO */
+var PROGRAM_SENAMAN = [
+  { m: [1, 2], fasa: 'Fasa Permulaan', kardio: { minit: 30, hari: 5, jenis: 'Brisk walk', hrr: '40–59% HRR' },
+    atas: ['Wall push up', 'Biceps curl', 'Arm raise'], bawah: ['Sit to stand', 'Heel raise', 'Hamstring curl'], core: ['Sit up level 2', 'Seated knee lift', 'Pelvic tilt'] },
+  { m: [3, 4], fasa: 'Fasa Permulaan', kardio: { minit: 35, hari: 5, jenis: 'Brisk walk', hrr: '40–59% HRR' },
+    atas: ['Back & side extension', 'Biceps curl', 'Rowing with resistance'], bawah: ['Bridging', 'Side leg lifts', 'Back kick'], core: ['Sit up level 2', 'Full plank', 'Lateral crunch'] },
+  { m: [5, 6], fasa: 'Fasa Pertengahan', kardio: { minit: 40, hari: 5, jenis: 'Slow jog / bicycle', hrr: '40–59% HRR' },
+    atas: ['Floor push up', 'Lateral raise with resistance', 'Pect deck with resistance'], bawah: ['Single leg bridge', 'Lateral step up', 'Donkey kick'], core: ['Dead bug', 'Bicycle crunch', 'Trunk extension'] },
+  { m: [7, 8], fasa: 'Fasa Pertengahan', kardio: { minit: 45, hari: 5, jenis: 'Slow jog / bicycle', hrr: '40–59% HRR' },
+    atas: ['Arm punch with resistance', 'Front raise with resistance', 'Pull up'], bawah: ['Lunges', 'Sumo squat with heel raise', 'Fire hydrant exercise'], core: ['Standing russian twist with resistance', 'Mountain climbers', 'Lateral crunch with resistance'] },
+  { m: [9, 10], fasa: 'Fasa Lanjutan', kardio: { minit: 50, hari: 5, jenis: 'Jogging / treadmill / cycling', hrr: '40–59% HRR' },
+    atas: ['Back and side extension', 'Biceps curl', 'Rowing with resistance'], bawah: ['Bridging', 'Side leg lifts', 'Back kick'], core: ['Sit up level 2', 'Full plank', 'Lateral crunch'] },
+  { m: [11, 12], fasa: 'Fasa Lanjutan', kardio: { minit: 50, hari: 5, jenis: 'Jogging / treadmill / cycling', hrr: '50–75% HRR' },
+    atas: ['Floor push up', 'Lateral raise with resistance', 'Pect deck with resistance'], bawah: ['Single leg bridge', 'Lateral step up', 'Donkey kick'], core: ['Dead bug', 'Bicycle crunch', 'Trunk extension'] }
+];
+var PRESKRIPSI_KEKUATAN = '3 set, 8–12 ulangan setiap set, rehat 90–120 saat, 3 kali seminggu';
+/* Borang Makan Sihat Weekly Challenge — tabiat diperkenalkan secara berperingkat (minggu program) */
+var TABIAT = [
+  { n: 1, t: 'Hanya minum air kosong sahaja, 6–8 gelas sehari', mula: 1 },
+  { n: 2, t: 'Hadkan makanan manis (1 kali seminggu)', mula: 3 },
+  { n: 3, t: 'Makan 2 sajian buah-buahan setiap hari', mula: 5 },
+  { n: 4, t: 'Makan 3 sajian sayur setiap hari', mula: 5 },
+  { n: 5, t: 'Hadkan makanan bergoreng (2 kali seminggu)', mula: 7 },
+  { n: 6, t: 'Hadkan makanan bersantan (1 kali seminggu)', mula: 7 },
+  { n: 7, t: 'Makan makanan berserat setiap hari', mula: 9 },
+  { n: 8, t: 'Hadkan makanan segera (1 kali sebulan)', mula: 11 },
+  { n: 9, t: 'Hadkan makanan ringan (1 kali seminggu)', mula: 11 }
+];
+/* Saringan kesihatan mental — tafsiran skor */
+function tafsirPHQ9(s) { s = num(s); if (s == null) return ''; return s <= 4 ? 'Minimum' : s <= 9 ? 'Ringan' : s <= 14 ? 'Sederhana' : s <= 19 ? 'Sederhana teruk' : 'Teruk'; }
+function tafsirGAD7(s) { s = num(s); if (s == null) return ''; return s <= 4 ? 'Minimum' : s <= 9 ? 'Ringan' : s <= 14 ? 'Sederhana' : 'Teruk'; }
+function tafsirGAD2(s) { s = num(s); if (s == null) return ''; return s >= 3 ? 'Positif (teruskan GAD-7)' : 'Negatif'; }
+function tafsirWhooley(a, b) { if (!a && !b) return ''; return (a === 'YA' || b === 'YA') ? 'Positif (teruskan PHQ-9)' : 'Negatif'; }
+function mingguProgram(mulaIso, hariIso) { var a = new Date(mulaIso + 'T00:00'), b = new Date(hariIso + 'T00:00'); if (isNaN(a)) return null; return Math.floor((b - a) / (7 * 864e5)) + 1; }
 </script>
 <script>/* QRCode for JavaScript — Kazuhiko Arase, MIT licence (via qrcode-terminal) */
 var QRLib=(function(){var M={},C={};function R(n){n=n.replace(/^\.\//,"./").replace(/\.js$/,"");if(n=="./index"||n==".")n="./index";if(C[n])return C[n].exports;var m={exports:{}};C[n]=m;M[n](m,m.exports,R);return m.exports;}
@@ -1558,6 +1649,8 @@ var GAS_EMU = (function () {
           for (var i = 0; i < nr; i++) { var r = row - 1 + i; while (d.length <= r) d.push([]); for (var j = 0; j < nc; j++) { while (d[r].length < col - 1 + j) d[r].push(''); d[r][col - 1 + j] = vals[i][j] == null ? '' : String(vals[i][j]); } }
           return R;
         },
+        getDisplayValues: function () { var d = self._d(), out = []; for (var i = 0; i < nr; i++) { var rw = []; for (var j = 0; j < nc; j++) { var r = d[row - 1 + i] || []; rw.push(r[col - 1 + j] == null ? '' : r[col - 1 + j]); } out.push(rw); } return out; },
+        setFormula: function (f) { return R.setValues([[f]]); },
         setFontWeight: function () { return R; }, setBackground: function () { return R; }, setFontColor: function () { return R; }, setNumberFormat: function () { return R; }
       };
       return R;
@@ -1627,25 +1720,40 @@ var SpreadsheetApp = GAS_EMU.api.SpreadsheetApp, Utilities = GAS_EMU.api.Utiliti
  * 3. Deploy ▸ New deployment ▸ Web app
  *      Execute as: Me   |   Who has access: Anyone
  * 4. Salin URL web app (…/exec) ke API_URL dalam papan pemuka & app pesakit.
+ * 5. Buka tab KKM dalam Sheet ini dan klik "Allow access" pada sel A1 (sekali sahaja).
+ *
+ * SUMBER DATA: tab KKM = salinan automatik (IMPORTRANGE) sheet KKM MIMO.
+ * Tab itu JANGAN diedit. Data KKM dikemas kini melalui Google Form KKM seperti biasa.
  * ===================================================================== */
 var ADMIN_PASSWORD_AWAL = 'demo1234';
+var KKM_URL = 'https://docs.google.com/spreadsheets/d/1Zn7JHkTrfol2G0Sl4b0oazryk2Syhbp0Xj74HPD1PXU';
+var KKM_TAB_SUMBER = 'KEDAH';      // nama tab dalam sheet KKM
+var KKM_BARIS_DATA = 8;            // baris pertama data pesakit (baris 1-7 tajuk)
+var KKM_CACHE = null;
 var TZ = 'Asia/Kuala_Lumpur';
 var SESI_SAAT = 6 * 3600;
 
 /* ---------- Setup ---------- */
 function setup() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var kkmHead = KKM_SCHEMA.map(function (c, i) { return (i + 1) + '. ' + c.g + ' | ' + c.l; }).concat(['MIMO_ID']);
-  buatTab_(ss, 'PESAKIT_KKM', kkmHead);
+  var k = ss.getSheetByName('KKM');
+  if (!k) { k = ss.insertSheet('KKM', 0); k.getRange(1, 1).setFormula('=IMPORTRANGE("' + KKM_URL + '","' + KKM_TAB_SUMBER + '!A1:GT")'); }
   buatTab_(ss, 'APP_PESAKIT', TAB_APP);
   buatTab_(ss, 'LAWATAN', TAB_LAWATAN);
   buatTab_(ss, 'KECERGASAN', TAB_KEC);
+  buatTab_(ss, 'PENILAIAN', TAB_PEN);
   buatTab_(ss, 'LOG_PESAKIT', TAB_LOG);
   buatTab_(ss, 'PETUGAS', TAB_PETUGAS);
   buatTab_(ss, 'AUDIT', TAB_AUDIT);
-  if (!cariBaris_('PETUGAS', 'USERNAME', 'admin')) tambahPetugas('admin', 'Pentadbir Sistem', 'SEMUA', ADMIN_PASSWORD_AWAL, 'ADMIN');
+  if (!cariBaris_('PETUGAS', 'USERNAME', 'admin')) tambahPetugas('admin', 'Pentadbir Sistem', 'SEMUA', ADMIN_PASSWORD_AWAL, 'ADMIN', 'NEGERI', '');
+  // Migrasi versi lama: isi NOKP dalam APP_PESAKIT daripada tab PESAKIT_KKM (jika ada)
+  var lama = ss.getSheetByName('PESAKIT_KKM');
+  if (lama && lama.getLastRow() > 1) {
+    var map = {}; lama.getDataRange().getDisplayValues().slice(1).forEach(function (r) { if (r[KKM_N]) map[r[KKM_N]] = normKp_(r[KKM_IDX.NOKP]); });
+    objs_('APP_PESAKIT').forEach(function (a) { if (!a.NOKP && map[a.MIMO_ID]) upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: a.MIMO_ID, NOKP: map[a.MIMO_ID] }, 'MIMO_ID'); });
+  }
   var s1 = ss.getSheetByName('Sheet1'); if (s1 && s1.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(s1);
-  Logger.log('Setup selesai. Log masuk: admin / ' + ADMIN_PASSWORD_AWAL + ' (tukar selepas log masuk pertama).');
+  Logger.log('Setup selesai. Buka tab KKM dan klik "Allow access" jika diminta.');
 }
 function buatTab_(ss, nama, head) {
   var sh = ss.getSheetByName(nama) || ss.insertSheet(nama);
@@ -1655,11 +1763,12 @@ function buatTab_(ss, nama, head) {
   return sh;
 }
 /* Tambah / kemas kini petugas. fasiliti = nama fasiliti tepat seperti lajur FASILITI, atau 'SEMUA' */
-function tambahPetugas(username, nama, fasiliti, password, peranan) {
+/* tahap: NEGERI | DAERAH | FASILITI. daerah = nama daerah (tahap DAERAH). fasiliti = nama fasiliti (tahap FASILITI) */
+function tambahPetugas(username, nama, fasiliti, password, peranan, tahap, daerah) {
   var salt = Utilities.getUuid();
-  upsert_('PETUGAS', TAB_PETUGAS, { USERNAME: String(username).toLowerCase(), NAMA: nama, FASILITI: fasiliti, SALT: salt, HASH: hash_(salt, password), PERANAN: peranan || 'PETUGAS', AKTIF: 'YA' }, 'USERNAME');
+  tahap = tahap || (fasiliti === 'SEMUA' ? 'NEGERI' : 'FASILITI');
+  upsert_('PETUGAS', TAB_PETUGAS, { USERNAME: String(username).toLowerCase(), NAMA: nama, FASILITI: tahap === 'FASILITI' ? fasiliti : (tahap === 'NEGERI' ? 'SEMUA' : ''), SALT: salt, HASH: hash_(salt, password), PERANAN: peranan || 'PETUGAS', AKTIF: 'YA', TAHAP: tahap, DAERAH: tahap === 'DAERAH' ? daerah : '' }, 'USERNAME');
 }
-
 /* ---------- Helper sheet ---------- */
 function sh_(n) { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(n); }
 function semua_(n) { var v = sh_(n).getDataRange().getDisplayValues(); return { head: v[0], rows: v.slice(1) }; }
@@ -1683,38 +1792,67 @@ function rawak_(n) { var a = '23456789ABCDEFGHJKMNPQRSTUVWXYZ', s = ''; for (var
 function audit_(u, t, id, b) { sh_('AUDIT').appendRow([kini_(), u, t, id || '', b || '']); }
 
 /* ---------- Pesakit KKM (202 lajur + MIMO_ID) ---------- */
+function normKp_(k) { return String(k || '').replace(/[\s-]/g, '').toUpperCase(); }
+/* Baca tab KKM (salinan sheet KKM) dan padankan dengan APP_PESAKIT melalui No. KP */
 function kkmSemua_() {
-  var d = semua_('PESAKIT_KKM');
-  return d.rows.map(function (r, i) { var o = rowToKkm(r); o.MIMO_ID = r[KKM_N]; o._baris = i + 2; return o; }).filter(function (o) { return o.MIMO_ID; });
+  if (KKM_CACHE) return KKM_CACHE;
+  var s = sh_('KKM'), out = [], ap = {};
+  objs_('APP_PESAKIT').forEach(function (a) { if (a.NOKP) ap[normKp_(a.NOKP)] = a; });
+  if (s) {
+    var v = s.getDataRange().getDisplayValues(), byKp = {};
+    for (var i = KKM_BARIS_DATA - 1; i < v.length; i++) {
+      var r = v[i]; if (!r[KKM_IDX.NOKP] || !r[KKM_IDX.NAMA]) continue;
+      var o = rowToKkm(r); o.NOKP = normKp_(o.NOKP); o._baris = i + 1;
+      var a = ap[o.NOKP]; o.MIMO_ID = a ? a.MIMO_ID : ''; o._app = a || null;
+      if (byKp[o.NOKP] != null) out[byKp[o.NOKP]] = o; else { byKp[o.NOKP] = out.length; out.push(o); }
+    }
+  }
+  KKM_CACHE = out; return out;
 }
-function simpanKkm_(o, baris) {
-  var row = kkmToRow(o).concat([o.MIMO_ID]), s = sh_('PESAKIT_KKM');
-  if (baris) s.getRange(baris, 1, 1, KKM_N + 1).setValues([row]);
-  else s.getRange(s.getLastRow() + 1, 1, 1, KKM_N + 1).setNumberFormat('@').setValues([row]);
+function statusKkm_() {
+  var s = sh_('KKM'); if (!s) return { ok: false, mesej: 'Tab KKM belum dicipta. Jalankan setup().' };
+  var a1 = s.getRange(1, 1, 1, 1).getDisplayValues ? s.getRange(1, 1, 1, 1).getDisplayValues()[0][0] : '';
+  if (/^#/.test(a1)) return { ok: false, mesej: 'Tab KKM belum disambung. Buka tab KKM dan klik "Allow access" pada sel A1.' };
+  return { ok: true, pesakit: kkmSemua_().length };
 }
-function bolehAkses_(u, o) { return u.f === 'SEMUA' || String(o.FASILITI).toUpperCase() === String(u.f).toUpperCase(); }
-function idBaru_() { return 'MK' + Utilities.formatDate(new Date(), TZ, 'yyMM') + '-' + rawak_(4); }
-function pastikanApp_(id) {
-  var f = cariBaris_('APP_PESAKIT', 'MIMO_ID', id);
-  if (f) { var o = {}; f.head.forEach(function (h, i) { o[h] = f.data[i]; }); return o; }
-  var a = { MIMO_ID: id, TOKEN: rawak_(8), NAMA_PANGGILAN: '', SASARAN_BERAT: '', TEMUJANJI_JSON: '{}', AKTIF: 'YA', CIPTA: kini_() };
-  upsert_('APP_PESAKIT', TAB_APP, a, 'MIMO_ID'); return a;
+/* Cipta rekod app (ID MIMO + kod akses) secara automatik untuk pesakit baharu dalam tab KKM */
+function pastikanSemuaApp_() {
+  var baru = kkmSemua_().filter(function (o) { return !o.MIMO_ID; });
+  if (!baru.length) return 0;
+  var s = sh_('APP_PESAKIT'), rows = baru.map(function (o) {
+    var a = { MIMO_ID: idBaru_(), TOKEN: rawak_(8), NAMA_PANGGILAN: '', SASARAN_BERAT: '', TEMUJANJI_JSON: '{}', AKTIF: 'YA', CIPTA: kini_(), TARIKH_MULA: dmyToIso(o.TARIKH_DAFTAR || ''), NOKP: o.NOKP };
+    return TAB_APP.map(function (h) { return a[h]; });
+  });
+  s.getRange(s.getLastRow() + 1, 1, rows.length, TAB_APP.length).setNumberFormat('@').setValues(rows);
+  KKM_CACHE = null; return rows.length;
 }
 
+function tahap_(u) { return u.t || (u.f === 'SEMUA' ? 'NEGERI' : 'FASILITI'); }
+function bolehAkses_(u, o) {
+  var t = tahap_(u), up = function (x) { return String(x || '').toUpperCase().trim(); };
+  if (t === 'NEGERI') return true;
+  if (t === 'DAERAH') return up(o.DAERAH) === up(u.d);
+  return up(o.FASILITI) === up(u.f);
+}
+function idBaru_() { return 'MK' + Utilities.formatDate(new Date(), TZ, 'yyMM') + '-' + rawak_(4); }
+function pastikanApp_(id) {
+  var f = cariBaris_('APP_PESAKIT', 'MIMO_ID', id); if (!f) throw new Error('Rekod app tidak dijumpai');
+  var o = {}; f.head.forEach(function (h, i) { o[h] = f.data[i]; }); return o;
+}
 /* ---------- Penghala API ---------- */
 function doGet() { return json_({ ok: true, app: 'MIMO Kedah API', masa: kini_() }); }
 function doPost(e) {
   var req; try { req = JSON.parse(e.postData.contents); } catch (x) { return json_({ ok: false, ralat: 'Permintaan tidak sah' }); }
   var lock = LockService.getScriptLock();
   try {
-    lock.waitLock(20000);
+    lock.waitLock(20000); KKM_CACHE = null;
     var a = req.action, h;
     if (a === 'login') h = login_(req);
     else if (a === 'p_get') h = pGet_(req);
     else if (a === 'p_save') h = pSave_(req);
     else {
       var u = sesi_(req.session); if (!u) return json_({ ok: false, ralat: 'SESI_TAMAT' });
-      var F = { list: list_, get: get_, saveKkm: saveKkm_, saveLawatan: saveLawatan_, delLawatan: delLawatan_, saveKec: saveKec_, saveApp: saveApp_, resetToken: resetToken_, importKkm: importKkm_, exportKkm: exportKkm_, tukarPassword: tukarPw_, tambahPetugas: tambahPetugasApi_, logout: logout_ }[a];
+      var F = { list: list_, get: get_, saveLawatan: saveLawatan_, delLawatan: delLawatan_, saveKec: saveKec_, saveApp: saveApp_, savePen: savePen_, resetToken: resetToken_, tukarPassword: tukarPw_, tambahPetugas: tambahPetugasApi_, senaraiPetugas: senaraiPetugas_, logout: logout_ }[a];
       if (!F) return json_({ ok: false, ralat: 'Tindakan tidak dikenali' });
       h = F(req, u);
     }
@@ -1732,9 +1870,10 @@ function login_(q) {
   var p = {}; f.head.forEach(function (h, i) { p[h] = f.data[i]; });
   if (p.AKTIF !== 'YA' || hash_(p.SALT, q.pass || '') !== p.HASH) return { ok: false, ralat: 'Nama pengguna atau kata laluan salah' };
   var tok = Utilities.getUuid();
-  CacheService.getScriptCache().put('s_' + tok, JSON.stringify({ u: p.USERNAME, n: p.NAMA, f: p.FASILITI, r: p.PERANAN }), SESI_SAAT);
+  var t = p.TAHAP || (p.FASILITI === 'SEMUA' ? 'NEGERI' : 'FASILITI');
+  CacheService.getScriptCache().put('s_' + tok, JSON.stringify({ u: p.USERNAME, n: p.NAMA, f: p.FASILITI, r: p.PERANAN, t: t, d: p.DAERAH }), SESI_SAAT);
   audit_(p.USERNAME, 'LOGIN');
-  return { ok: true, session: tok, nama: p.NAMA, fasiliti: p.FASILITI, peranan: p.PERANAN };
+  return { ok: true, session: tok, nama: p.NAMA, fasiliti: p.FASILITI, peranan: p.PERANAN, tahap: t, daerah: p.DAERAH, skop: t === 'NEGERI' ? 'Peringkat negeri' : t === 'DAERAH' ? 'Daerah ' + p.DAERAH : p.FASILITI };
 }
 function sesi_(t) { if (!t) return null; var c = CacheService.getScriptCache(), v = c.get('s_' + t); if (!v) return null; c.put('s_' + t, v, SESI_SAAT); return JSON.parse(v); }
 function logout_(q) { CacheService.getScriptCache().remove('s_' + q.session); return { ok: true }; }
@@ -1742,56 +1881,54 @@ function tukarPw_(q, u) {
   var f = cariBaris_('PETUGAS', 'USERNAME', u.u), p = {}; f.head.forEach(function (h, i) { p[h] = f.data[i]; });
   if (hash_(p.SALT, q.lama || '') !== p.HASH) return { ok: false, ralat: 'Kata laluan lama salah' };
   if (String(q.baru || '').length < 8) return { ok: false, ralat: 'Kata laluan baru mesti sekurang-kurangnya 8 aksara' };
-  tambahPetugas(u.u, p.NAMA, p.FASILITI, q.baru, p.PERANAN); audit_(u.u, 'TUKAR_PASSWORD'); return { ok: true };
+  tambahPetugas(u.u, p.NAMA, p.FASILITI, q.baru, p.PERANAN, p.TAHAP || (p.FASILITI === 'SEMUA' ? 'NEGERI' : 'FASILITI'), p.DAERAH); audit_(u.u, 'TUKAR_PASSWORD'); return { ok: true };
 }
 function tambahPetugasApi_(q, u) {
   if (u.r !== 'ADMIN') return { ok: false, ralat: 'Hanya ADMIN' };
   if (!q.username || String(q.password || '').length < 8) return { ok: false, ralat: 'Nama pengguna & kata laluan (≥8 aksara) diperlukan' };
-  tambahPetugas(q.username, q.nama || q.username, q.fasiliti || 'SEMUA', q.password, q.peranan || 'PETUGAS');
-  audit_(u.u, 'TAMBAH_PETUGAS', '', q.username); return { ok: true };
+  var t = q.tahap || 'FASILITI';
+  if (t === 'DAERAH' && !q.daerah) return { ok: false, ralat: 'Pilih daerah' };
+  if (t === 'FASILITI' && !q.fasiliti) return { ok: false, ralat: 'Pilih fasiliti' };
+  tambahPetugas(q.username, q.nama || q.username, q.fasiliti || '', q.password, q.peranan || 'PETUGAS', t, q.daerah || '');
+  audit_(u.u, 'TAMBAH_PETUGAS', '', q.username + ' (' + t + ')'); return { ok: true };
 }
-
+function senaraiPetugas_(q, u) {
+  if (u.r !== 'ADMIN') return { ok: false, ralat: 'Hanya ADMIN' };
+  return { ok: true, petugas: objs_('PETUGAS').map(function (p) { var t = p.TAHAP || (p.FASILITI === 'SEMUA' ? 'NEGERI' : 'FASILITI'); return { username: p.USERNAME, nama: p.NAMA, tahap: t, skop: t === 'NEGERI' ? 'Kedah' : t === 'DAERAH' ? p.DAERAH : p.FASILITI, peranan: p.PERANAN, aktif: p.AKTIF }; }) };
+}
 /* ---------- API petugas ---------- */
 function list_(q, u) {
+  var st = statusKkm_(); if (!st.ok) return { ok: true, pesakit: [], kkm: st, rujukan: { daerah: [], fasiliti: [] } };
+  pastikanSemuaApp_();
   var lw = objs_('LAWATAN'), lg = objs_('LOG_PESAKIT'), ap = objs_('APP_PESAKIT');
   var akhirLw = {}, akhirLg = {}, apMap = {};
   lw.forEach(function (r) { var k = r.MIMO_ID; if (!akhirLw[k] || tk_(r.TARIKH) >= tk_(akhirLw[k].TARIKH)) akhirLw[k] = r; });
+  var akj = {}; lg.forEach(function (r) { if (r.JENIS === 'AKUJANJI') akj[r.MIMO_ID] = 1; });
   lg.forEach(function (r) { var k = r.MIMO_ID; if (/^\d{4}-\d{2}-\d{2}$/.test(r.KUNCI) && (!akhirLg[k] || r.KUNCI > akhirLg[k])) akhirLg[k] = r.KUNCI; }); // tarikh log harian terkini (ISO)
   ap.forEach(function (r) { apMap[r.MIMO_ID] = r; });
-  var out = kkmSemua_().filter(function (o) { return bolehAkses_(u, o); }).map(function (o) {
+  var semua = kkmSemua_(), out = semua.filter(function (o) { return bolehAkses_(u, o); }).map(function (o) {
     var l = akhirLw[o.MIMO_ID] || {};
     return { id: o.MIMO_ID, nama: o.NAMA, nokp: o.NOKP, umur: o.UMUR, jantina: o.JANTINA, daerah: o.DAERAH, fasiliti: o.FASILITI, status: o.STATUS,
       b_berat: o.B_BERAT, b_bmi: o.B_BMI, kat: o.B_KATBMI, tinggi: o.B_TINGGI, daftar: o.TARIKH_DAFTAR,
       f6: o.F6_BERAT, f12: o.F12_BERAT,
-      l_berat: l.BERAT || '', l_tarikh: l.TARIKH || '', log_akhir: akhirLg[o.MIMO_ID] || '', app: !!apMap[o.MIMO_ID] };
+      l_berat: l.BERAT || '', l_tarikh: l.TARIKH || '', log_akhir: akhirLg[o.MIMO_ID] || '', app: !!apMap[o.MIMO_ID], akujanji: !!akj[o.MIMO_ID] };
   });
-  return { ok: true, pesakit: out };
+  var dmap = {}; semua.forEach(function (o) { dmap[o.DAERAH] = dmap[o.DAERAH] || {}; dmap[o.DAERAH][o.FASILITI] = 1; });
+  return { ok: true, pesakit: out, kkm: { ok: true, pesakit: semua.length }, rujukan: { daerah: Object.keys(dmap).sort(), fasiliti: Object.keys(dmap).sort().map(function (d) { return { daerah: d, fasiliti: Object.keys(dmap[d]).sort() }; }) } };
 }
 function tk_(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?: (\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)).getTime() : 0; }
 function kkmById_(id) { var a = kkmSemua_(); for (var i = 0; i < a.length; i++) if (a[i].MIMO_ID === id) return a[i]; return null; }
 function semakAkses_(u, id) { var o = kkmById_(id); if (!o) throw new Error('Pesakit tidak dijumpai'); if (!bolehAkses_(u, o)) throw new Error('Tiada akses kepada pesakit ini'); return o; }
 function get_(q, u) {
-  var o = semakAkses_(u, q.id); delete o._baris;
+  var o = semakAkses_(u, q.id), app = o._app; delete o._baris; delete o._app;
   audit_(u.u, 'LIHAT', q.id);
-  return { ok: true, kkm: o, app: pastikanApp_(q.id),
+  return { ok: true, kkm: o, app: app,
     lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === q.id; }),
     kecergasan: objs_('KECERGASAN').filter(function (r) { return r.MIMO_ID === q.id; }),
+    penilaian: (objs_('PENILAIAN').filter(function (r) { return r.MIMO_ID === q.id; })[0] || {}),
     logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === q.id; }) };
 }
-function saveKkm_(q, u) {
-  var o = q.kkm || {}, lama = o.MIMO_ID ? kkmById_(o.MIMO_ID) : null;
-  if (u.f !== 'SEMUA') o.FASILITI = u.f;
-  if (lama && !bolehAkses_(u, lama)) throw new Error('Tiada akses');
-  if (!lama) {
-    if (o.NOKP && kkmSemua_().some(function (x) { return x.NOKP === String(o.NOKP); })) return { ok: false, ralat: 'No. KP ini sudah didaftarkan' };
-    o.MIMO_ID = idBaru_(); o.TARIKH_DAFTAR = kini_(); if (!o.STATUS) o.STATUS = 'AKTIF';
-  }
-  o.TARIKH_KEMASKINI = kini_();
-  simpanKkm_(o, lama && lama._baris);
-  pastikanApp_(o.MIMO_ID);
-  audit_(u.u, lama ? 'KEMASKINI_KKM' : 'DAFTAR', o.MIMO_ID);
-  return { ok: true, id: o.MIMO_ID };
-}
+
 function saveLawatan_(q, u) {
   var r = q.rec; semakAkses_(u, r.MIMO_ID);
   if (!r.LAWATAN_ID) r.LAWATAN_ID = 'LW-' + rawak_(8);
@@ -1809,36 +1946,20 @@ function saveKec_(q, u) {
   upsert_('KECERGASAN', TAB_KEC, r, 'KEC_ID'); audit_(u.u, 'KECERGASAN', r.MIMO_ID, r.FASA); return { ok: true };
 }
 function saveApp_(q, u) {
-  var a = q.app; semakAkses_(u, a.MIMO_ID); pastikanApp_(a.MIMO_ID);
-  upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: a.MIMO_ID, NAMA_PANGGILAN: a.NAMA_PANGGILAN, SASARAN_BERAT: a.SASARAN_BERAT, TEMUJANJI_JSON: a.TEMUJANJI_JSON, AKTIF: a.AKTIF || 'YA' }, 'MIMO_ID');
+  var a = q.app; semakAkses_(u, a.MIMO_ID);
+  upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: a.MIMO_ID, NAMA_PANGGILAN: a.NAMA_PANGGILAN, SASARAN_BERAT: a.SASARAN_BERAT, TEMUJANJI_JSON: a.TEMUJANJI_JSON, AKTIF: a.AKTIF || 'YA', TARIKH_MULA: a.TARIKH_MULA || '' }, 'MIMO_ID');
   audit_(u.u, 'APP', a.MIMO_ID); return { ok: true };
 }
+function savePen_(q, u) {
+  var r = q.rec; semakAkses_(u, r.MIMO_ID); r.OLEH = u.u; r.KEMASKINI = kini_();
+  upsert_('PENILAIAN', TAB_PEN, r, 'MIMO_ID'); audit_(u.u, 'PENILAIAN', r.MIMO_ID); return { ok: true };
+}
 function resetToken_(q, u) {
-  semakAkses_(u, q.id); pastikanApp_(q.id); var t = rawak_(8);
+  semakAkses_(u, q.id); var t = rawak_(8);
   upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: q.id, TOKEN: t }, 'MIMO_ID'); audit_(u.u, 'TOKEN_BARU', q.id); return { ok: true, token: t };
 }
 /* rows: tatasusunan baris 202 lajur (disalin dari sheet KKM). Padanan ikut No. KP. */
-function importKkm_(q, u) {
-  var ada = {}, baru = 0, kemas = 0, langkau = 0;
-  kkmSemua_().forEach(function (o) { ada[o.NOKP] = o; });
-  var tambah = [];
-  (q.rows || []).forEach(function (r) {
-    var o = rowToKkm(r); if (!o.NOKP || !o.NAMA) { langkau++; return; }
-    if (!bolehAkses_(u, o)) { langkau++; return; }
-    var l = ada[o.NOKP];
-    if (l) { o.MIMO_ID = l.MIMO_ID; simpanKkm_(o, l._baris); kemas++; }
-    else { o.MIMO_ID = idBaru_(); tambah.push(kkmToRow(o).concat([o.MIMO_ID])); ada[o.NOKP] = o; baru++; }
-  });
-  if (tambah.length) { var s = sh_('PESAKIT_KKM'); s.getRange(s.getLastRow() + 1, 1, tambah.length, KKM_N + 1).setNumberFormat('@').setValues(tambah); tambah.forEach(function (r) { pastikanApp_(r[KKM_N]); }); }
-  audit_(u.u, 'IMPORT_KKM', '', 'baru ' + baru + ', kemaskini ' + kemas);
-  return { ok: true, baru: baru, kemaskini: kemas, langkau: langkau };
-}
-function exportKkm_(q, u) {
-  var ids = q.ids && q.ids.length ? q.ids : null;
-  var rows = kkmSemua_().filter(function (o) { return bolehAkses_(u, o) && (!ids || ids.indexOf(o.MIMO_ID) >= 0); }).map(function (o) { return kkmToRow(o); });
-  audit_(u.u, 'EKSPORT_KKM', '', rows.length + ' baris');
-  return { ok: true, rows: rows };
-}
+
 
 /* ---------- API pesakit (kod akses) ---------- */
 function appDariToken_(t) {
@@ -1850,7 +1971,7 @@ function appDariToken_(t) {
 }
 function pGet_(q) {
   var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
-  var o = kkmById_(a.MIMO_ID) || {};
+  var o = kkmById_(a.MIMO_ID) || {}; delete o._app;
   return { ok: true, profil: profilPesakit_(o, a),
     lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { delete r.OLEH; delete r.MIMO_ID; return r; }),
     logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { return { jenis: r.JENIS, kunci: r.KUNCI, data: r.DATA_JSON, kemaskini: r.KEMASKINI }; }) };
@@ -1859,9 +1980,9 @@ function pGet_(q) {
 function profilPesakit_(o, a) {
   return { nama: a.NAMA_PANGGILAN || String(o.NAMA || '').split(' ')[0], fasiliti: o.FASILITI || '', tinggi: o.B_TINGGI || '',
     b_berat: o.B_BERAT || '', b_wc: o.B_WC || '', b_bmi: o.B_BMI || '', daftar: o.TARIKH_DAFTAR || '', sasaran: a.SASARAN_BERAT || '',
-    temujanji: a.TEMUJANJI_JSON || '{}' };
+    temujanji: a.TEMUJANJI_JSON || '{}', mula: a.TARIKH_MULA || dmyToIso(o.TARIKH_DAFTAR || ''), status: o.STATUS || '' };
 }
-var JENIS_LOG = ['MAKAN', 'REFLEKSI', 'STRATEGI', 'SENAMAN', 'BERAT'];
+var JENIS_LOG = ['MAKAN', 'REFLEKSI', 'STRATEGI', 'SENAMAN', 'BERAT', 'AKUJANJI', 'LATIHAN', 'TABIAT', 'HABIT', 'TIDUR', 'TINGKAHLAKU', 'PERSEKITARAN'];
 function pSave_(q) {
   var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
   var n = 0;
@@ -1881,14 +2002,16 @@ function seedDemo() {
   if (GAS_EMU.hasData()) return;
   ADMIN_PASSWORD_AWAL = 'demo1234';
   setup();
-  tambahPetugas('kkbas', 'Petugas KK Bandar Alor Setar', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'demo1234', 'PETUGAS');
-  var U = { u: 'admin', f: 'SEMUA', r: 'ADMIN' };
+  tambahPetugas('kkbas', 'Petugas KK Bandar Alor Setar', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'demo1234', 'PETUGAS', 'FASILITI', '');
+  tambahPetugas('pkdkm', 'Pegawai PKD Kuala Muda', '', 'demo1234', 'PETUGAS', 'DAERAH', 'KUALA MUDA');
+  var ROWS = [], CTX = [], NOKPS = [];
+  var U = { u: 'admin', f: 'SEMUA', r: 'ADMIN', t: 'NEGERI' };
   var NAMA = ['NURUL AINA BINTI AHMAD', 'SITI KHADIJAH BINTI OMAR', 'MOHD HAFIZ BIN ISMAIL', 'TAN MEI LING', 'FARAH NADIA BINTI YUSOF', 'AHMAD ZAKI BIN HASSAN',
     'RAJESWARI A/P MUTHU', 'NOR AZIZAH BINTI MAT', 'KHAIRUL ANUAR BIN SALLEH', 'LIM WEI JIE', 'ROSMAWATI BINTI DAUD', 'SYAFIQ BIN ROSLI'];
   var FAS = ['KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR',
-    'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN SUNGAI PETANI', 'KLINIK KESIHATAN SUNGAI PETANI', 'KLINIK KESIHATAN SUNGAI PETANI',
+    'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR ALOR SETAR', 'KLINIK KESIHATAN BANDAR SUNGAI PETANI', 'KLINIK KESIHATAN BANDAR SUNGAI PETANI', 'KLINIK KESIHATAN BANDAR SUNGAI PETANI',
     'KLINIK KESIHATAN KULIM', 'KLINIK KESIHATAN KULIM', 'KLINIK KESIHATAN KULIM'];
-  var DAE = { 'KLINIK KESIHATAN BANDAR ALOR SETAR': 'KOTA SETAR', 'KLINIK KESIHATAN SUNGAI PETANI': 'KUALA MUDA', 'KLINIK KESIHATAN KULIM': 'KULIM' };
+  var DAE = { 'KLINIK KESIHATAN BANDAR ALOR SETAR': 'KOTA SETAR', 'KLINIK KESIHATAN BANDAR SUNGAI PETANI': 'KUALA MUDA', 'KLINIK KESIHATAN KULIM': 'KULIM' };
   var seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
   function pick(a) { return a[Math.floor(rnd() * a.length)]; }
   var hari = 864e5, kini = new Date(); kini.setHours(0, 0, 0, 0);
@@ -1911,7 +2034,7 @@ function seedDemo() {
       B_MENTAL_ST: 'SELESAI', B_MENTAL_KEP: rnd() < .15 ? 'PERLU DIRUJUK' : 'TIDAK PERLU DIRUJUK', R0_MNT_ST: 'YA', R0_MNT_TRK: dateToDmy(daftar), R0_SEN_ST: 'YA', R0_SEN_TRK: dateToDmy(daftar),
       ID: 'kk_demo@moh.gov.my', STATUS: 'AKTIF' };
     kiraKkm(o);
-    var r = saveKkm_({ kkm: o }, U); o.MIMO_ID = r.id; o.TARIKH_DAFTAR = dateToDmy(daftar) + ' 09:' + (10 + i) + ':00';
+    o.TARIKH_DAFTAR = dateToDmy(daftar) + ' 09:' + (10 + i) + ':00'; o.MIMO_ID = 'TMP';
     var minggu = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24], lw = [], minggu2 = Math.floor((kini - daftar) / (7 * hari));
     var mingguTambah = [26, 30, 34, 39, 44, 48, 52];
     minggu.concat(mingguTambah).forEach(function (m) {
@@ -1920,11 +2043,12 @@ function seedDemo() {
       var rec = { MIMO_ID: o.MIMO_ID, TARIKH: dateToDmy(d), MINGGU: m <= 24 ? 'M' + m : 'M' + m, SIS: String(+o.B_SIS - Math.round(m / 6) + Math.round(rnd() * 6)), DIA: String(+o.B_DIA - Math.round(m / 10)), NADI: String(70 + Math.round(rnd() * 20)),
         BERAT: String(b), BMI: String(bmiOf(b, tinggi)), WC: String(Math.round((+o.B_WC + trend[i] * (m - 1) * 0.6) * 10) / 10) };
       if (m % 4 === 0 || m === 1) { rec.BCA_PLEMAK = String(Math.round((+o.B_BCA_PLEMAK + trend[i] * m * 0.15) * 10) / 10); rec.BCA_VISC = String(Math.max(5, +o.B_BCA_VISC + Math.round(trend[i] * m / 4))); rec.BCA_JLEMAK = String(Math.round(b * (+rec.BCA_PLEMAK) / 10) / 10); rec.BCA_SMM = o.B_BCA_SMM; }
-      saveLawatan_({ rec: rec }, U); lw.push(rec);
+      lw.push(rec);
     });
     if (bulanLalu[i] >= 6) { isiSusulan(o, lw, 6); o.R6_MNT_ST = 'YA'; o.R6_SEN_ST = 'YA'; o.F6_FBS_ST = 'SELESAI'; o.F6_FBS = String(Math.round((+o.B_FBS - 0.3) * 10) / 10); o.F6_HBA1C = String(Math.round((+o.B_HBA1C - 0.2) * 10) / 10); }
     if (bulanLalu[i] >= 11) isiSusulan(o, lw, 12);
-    kiraKkm(o); saveKkm_({ kkm: o }, U);
+    kiraKkm(o); ROWS.push(kkmToRow(o)); NOKPS.push(o.NOKP);
+    CTX.push(function (idSebenar) { o.MIMO_ID = idSebenar; lw.forEach(function (rec) { rec.MIMO_ID = idSebenar; saveLawatan_({ rec: rec }, U); });
     if (minggu2 >= 1) saveKec_({ rec: { MIMO_ID: o.MIMO_ID, FASA: 'PRE', TARIKH: dateToDmy(daftar), BERAT: o.B_BERAT, OTOT: o.B_BCA_SMM, LEMAK_PCT: o.B_BCA_PLEMAK, GRIP_R: String(18 + Math.round(rnd() * 12)), GRIP_L: String(16 + Math.round(rnd() * 12)), STEP_PRE: '82', STEP_PEAK: '138', STEP_1: '118', STEP_2: '104', STEP_3: '96', PUSHUP: String(3 + Math.round(rnd() * 8)), SITUP_REPS: String(5 + Math.round(rnd() * 10)), PLANK: String(15 + Math.round(rnd() * 30)), SITREACH: String(10 + Math.round(rnd() * 15)) } }, U);
     var tj = {}; DISIPLIN.forEach(function (ds, k) { tj[ds] = []; for (var s = 0; s < 6; s++) { var d = new Date(daftar.getTime() + (s * 28 + k * 2) * hari); tj[ds].push(k < 3 || s < 3 ? dmyToIso(dateToDmy(d)) : ''); } });
     var ap = pastikanApp_(o.MIMO_ID);
@@ -1946,16 +2070,34 @@ function seedDemo() {
       if (h % 3 === 0) logs.push({ jenis: 'BERAT', kunci: iso, data: { berat: String(Math.round((berat0 + trend[i] * (bulanLalu[i] * 4.3) + (rnd() - .5)) * 10) / 10) } });
       pSave_({ token: tok, logs: logs });
     }
+    var lg2 = [{ jenis: 'AKUJANJI', kunci: 'AKUJANJI', data: { nama: nama, setuju: true, masa: daftar.toISOString() } }];
+    for (var h2 = senyap; h2 < senyap + Math.min(aktifHari, 10); h2++) {
+      var dd = new Date(kini.getTime() - h2 * hari), k2 = dmyToIso(dateToDmy(dd)), wk = Math.floor((dd - daftar) / (7 * hari)) + 1, blk = PROGRAM_SENAMAN[Math.min(5, Math.floor((Math.min(wk, 12) - 1) / 2))];
+      if (rnd() < .7) lg2.push({ jenis: 'LATIHAN', kunci: k2, data: { kardio: String(blk.kardio.minit), done: rnd() < .5 ? semuaLatihan0(blk).slice(0, 3 + Math.floor(rnd() * 6)) : [] } });
+      lg2.push({ jenis: 'TABIAT', kunci: wk <= 12 ? k2 : mingguIso(dd), data: { ok: TABIAT.filter(function (t) { return t.mula <= wk && rnd() < .7; }).map(function (t) { return t.n; }) } });
+      lg2.push({ jenis: 'TIDUR', kunci: k2, data: { tidur: pick(['22:30', '23:00', '23:30', '00:15']), bangun: pick(['06:00', '06:30', '07:00']), jam: String(6 + Math.round(rnd() * 20) / 10), kualiti: String(2 + Math.floor(rnd() * 4)) } });
+    }
+    pSave_({ token: tok, logs: lg2 });
+    savePen_({ rec: { MIMO_ID: o.MIMO_ID, TARIKH: dateToDmy(daftar), TINGGI: o.B_TINGGI, LILIT_LEHER: String(34 + Math.round(rnd() * 8)), WHOOLEY_Q1: rnd() < .2 ? 'YA' : 'TIDAK', WHOOLEY_Q2: 'TIDAK', GAD2: String(Math.floor(rnd() * 4)), PHQ9: '', GAD7: '', AKUJANJI_KERTAS: dateToDmy(daftar) } }, U);
     pSave_({ token: tok, logs: [{ jenis: 'REFLEKSI', kunci: mingguIso(new Date(kini.getTime() - senyap * hari)), data: { q1: 'Waktu malam selepas balik kerja', q2: 'Stres dan penat', q3: 'Jalan kaki 10 minit atau minum air dulu' } },
       { jenis: 'STRATEGI', kunci: 'FIFOT', data: { rows: { diet: { halangan: 'Selalu craving manis petang', punca: 'Skip makan tengah hari', strategi: 'Bawa bekal + buah potong' }, gaya: { halangan: 'Tiada masa masak', punca: 'Kerja syif', strategi: 'Meal prep hujung minggu' }, sosial: { halangan: 'Makan ramai-ramai', punca: 'Kenduri / kawan ajak', strategi: 'Ambil pinggan kecil, sayur dulu' }, emosi: { halangan: 'Makan bila stres', punca: 'Tekanan kerja', strategi: 'Tarik nafas, telefon kawan, jalan kaki' } } } }] });
+    });
   });
+  var kk = sh_('KKM'), H = [['DATA KK MIMO - KEDAH (DEMO, DATA PALSU)'], [''], [''], KKM_SCHEMA.map(function (c) { return c.g; }), KKM_SCHEMA.map(function (c) { return c.l; }), [''], ['']];
+  H.forEach(function (r, i) { kk.getRange(i + 1, 1, 1, r.length).setValues([r]); });
+  kk.getRange(KKM_BARIS_DATA, 1, ROWS.length, KKM_N).setValues(ROWS);
+  KKM_CACHE = null; pastikanSemuaApp_();
+  var idm = {}; objs_('APP_PESAKIT').forEach(function (a) { idm[a.NOKP] = a.MIMO_ID; });
+  CTX.forEach(function (f, i) { KKM_CACHE = null; f(idm[normKp_(NOKPS[i])]); });
   GAS_EMU.save();
 }
 function demoCall(payload) { seedDemo(); var r = doPost({ postData: { contents: JSON.stringify(payload) } }); GAS_EMU.save(); return JSON.parse(r.s); }
+
+function semuaLatihan0(b) { return b.atas.concat(b.bawah, b.core); }
 </script>
 <script>
 var DEMO = !API_URL;
-var S = { sess: null, user: null, list: [], cur: null, tab: 'ringkasan', f: { q: '', fas: '', st: 'AKTIF', al: '' } };
+var S = { sess: null, user: null, list: [], cur: null, page: 'ringkasan', tab: 'ringkasan', f: { q: '', fas: '', st: 'AKTIF', al: '' } };
 var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function toast(m) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2600); }
@@ -1976,31 +2118,47 @@ function gagal(e) { toast('⚠ ' + (e && e.message || e)); }
 
 /* ---------------- Log masuk ---------------- */
 function viewLogin() {
-  $('#app').innerHTML = '<div class="card login"><h3 style="margin-top:0">Log masuk petugas</h3>' +
-    (DEMO ? '<div class="info" style="margin-bottom:12px">Mod demo: guna <b>admin</b> / <b>demo1234</b> (semua fasiliti) atau <b>kkbas</b> / <b>demo1234</b> (KK Bandar Alor Setar sahaja). Semua data adalah palsu.</div>' : '') +
-    '<label class="sub">Nama pengguna</label><input id="lu" autocomplete="username" value="' + (DEMO ? 'admin' : '') + '"><div style="height:8px"></div>' +
-    '<label class="sub">Kata laluan</label><input id="lp" type="password" autocomplete="current-password" value="' + (DEMO ? 'demo1234' : '') + '"><div style="height:14px"></div>' +
-    '<button class="btn pri" id="lb" style="width:100%">Log masuk</button><p class="sub" style="margin-bottom:0">Akses direkod dalam log audit. Data pesakit adalah sulit (Akta Perlindungan Data Peribadi 2010).</p></div>';
+  document.body.classList.add('nolog');
+  $('#app').innerHTML = '<div class="login"><div class="l"><div class="lg2"><img src="data:image/webp;base64,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" alt="Logo MIMO, Pasukan MIMO JKN Kedah"></div><h1>Kad Rawatan Digital MIMO</h1><p>Pemantauan pesakit program Pengurusan Obesiti Secara Bersepadu di fasiliti kesihatan negeri Kedah.</p></div>' +
+    '<div class="r"><div class="box"><h2>Log masuk petugas</h2><p class="sub" style="margin:0 0 18px">Gunakan akaun yang diberikan oleh pentadbir sistem.</p>' +
+    (DEMO ? '<div class="info" style="margin-bottom:14px">Mod demo (data palsu), kata laluan <b>demo1234</b>: <b>admin</b> (negeri), <b>pkdkm</b> (daerah Kuala Muda), <b>kkbas</b> (KK Bandar Alor Setar).</div>' : '') +
+    '<label class="sub" for="lu" style="font-weight:600">Nama pengguna</label><input id="lu" autocomplete="username" value="' + (DEMO ? 'admin' : '') + '"><div style="height:12px"></div>' +
+    '<label class="sub" for="lp" style="font-weight:600">Kata laluan</label><input id="lp" type="password" autocomplete="current-password" value="' + (DEMO ? 'demo1234' : '') + '"><div style="height:18px"></div>' +
+    '<button class="btn pri" id="lb" style="width:100%;padding:12px">Log masuk</button><p class="sub" style="margin-top:16px">Setiap akses direkod dalam log audit. Data pesakit adalah sulit di bawah Akta Perlindungan Data Peribadi 2010.</p></div></div></div>';
   function go() {
     $('#lb').disabled = true;
     call('login', { user: $('#lu').value, pass: $('#lp').value }).then(function (r) {
       S.sess = r.session; S.user = r; try { sessionStorage.setItem('mimo_s', JSON.stringify({ s: r.session, u: r })); } catch (e) { }
-      chrome(); muatSenarai();
+      chrome(); S.page = 'ringkasan'; muatSenarai();
     }).catch(function (e) { $('#lb').disabled = false; gagal(e); });
   }
   $('#lb').onclick = go; $('#lp').onkeydown = function (e) { if (e.key === 'Enter') go(); };
 }
 function chrome() {
-  $('#who').textContent = S.user ? S.user.nama + ' · ' + (S.user.fasiliti === 'SEMUA' ? 'Semua fasiliti' : S.user.fasiliti) : '';
-  $('#btnOut').hidden = $('#btnSet').hidden = !S.user;
+  document.body.classList.toggle('nolog', !S.user);
+  if (!S.user) return;
+  $('#whoN').textContent = S.user.nama; $('#who').textContent = (S.user.skop || (S.user.fasiliti === 'SEMUA' ? 'Peringkat negeri' : S.user.fasiliti)) + (S.user.peranan === 'ADMIN' ? ' · ADMIN' : '');
+  $('#navPengguna').hidden = S.user.peranan !== 'ADMIN';
 }
+function tajuk(t, sub, pg) { $('#pgT').textContent = t; $('#pgS').textContent = sub || ''; $$('.side [data-pg]').forEach(function (b) { b.classList.toggle('on', b.dataset.pg === pg); }); window.scrollTo(0, 0); }
 function logout(silent) { if (!silent && S.sess) call('logout').catch(function () { }); S.sess = S.user = null; try { sessionStorage.removeItem('mimo_s'); } catch (e) { } chrome(); viewLogin(); }
 $('#btnOut').onclick = function () { logout(); };
+$$('.side [data-pg]').forEach(function (b) { b.onclick = function () {
+  var g = b.dataset.pg;
+  if (g === 'ringkasan' || g === 'pesakit') { S.page = g; if (S.list.length && !S.cur) (g === 'pesakit' ? viewSenarai : viewRingkasan)(); else muatSenarai(); }
+  else if (g === 'muat') { S.cur = null; muatSenarai().then(function () { toast('Data KKM dimuat semula'); }); }
+  else if (g === 'pengguna') viewPengguna();
+}; });
 
 /* ---------------- Senarai pesakit ---------------- */
+function viewKkmRalat(m) {
+  tajuk('Sambungan data KKM', '', 'ringkasan');
+  $('#app').innerHTML = '<div class="card" style="max-width:720px"><h3>Data KKM belum boleh dibaca</h3><div class="alert" style="margin:10px 0">' + esc(m) + '</div>' +
+    '<ol class="sub" style="line-height:1.8"><li>Buka Google Sheet pangkalan data MIMO dan pergi ke tab <b>KKM</b>.</li><li>Klik sel <b>A1</b>. Jika muncul butang <b>Allow access</b>, klik butang itu.</li><li>Tunggu sehingga data KKM dipaparkan, kemudian klik <b>Muat semula data KKM</b> di sebelah kiri.</li></ol></div>';
+}
 function muatSenarai() {
   $('#app').innerHTML = '<div class="empty">Memuatkan…</div>';
-  return call('list').then(function (r) { S.list = r.pesakit; viewSenarai(); }).catch(gagal);
+  return call('list').then(function (r) { S.list = r.pesakit; S.rujukan = r.rujukan; S.kkm = r.kkm; if (r.kkm && !r.kkm.ok) return viewKkmRalat(r.kkm.mesej); (S.page === 'pesakit' ? viewSenarai : viewRingkasan)(); }).catch(gagal);
 }
 function penanda(p) {
   var c = [], b0 = num(p.b_berat), bl = num(p.l_berat), pct = b0 && bl != null ? (b0 - bl) / b0 * 100 : null;
@@ -2026,50 +2184,68 @@ function tapis() {
     return true;
   });
 }
+var WARNA = ['#2f4a9a', '#1a8f62', '#b86e00', '#7a4cc2', '#c23a3a', '#127c9c', '#8a5a2b'];
+function avatar(n) { var p = String(n || '?').replace(/\b(BIN|BINTI|BT|A\/L|A\/P)\b/g, '').trim().split(/\s+/), h = 0, i; for (i = 0; i < (n || '').length; i++) h = (h * 31 + n.charCodeAt(i)) % 997; return '<span class="av" style="background:' + WARNA[h % WARNA.length] + '">' + esc((p[0] || '?').charAt(0) + (p[1] || '').charAt(0)) + '</span>'; }
 function viewSenarai() {
-  S.cur = null;
+  S.cur = null; S.page = 'pesakit'; tajuk('Senarai pesakit', S.list.length + ' pesakit dalam akses anda', 'pesakit');
   var fasL = Array.from(new Set(S.list.map(function (p) { return p.fasiliti; }))).sort();
   var stL = Array.from(new Set(S.list.map(function (p) { return p.status; }).concat(['AKTIF']))).sort();
   $('#app').innerHTML =
-    '<div class="kpis" id="kpis"></div>' +
-    '<div class="card"><div class="row" style="margin-bottom:12px">' +
-    '<input id="fq" placeholder="Cari nama, No. KP atau ID…" style="max-width:260px" value="' + esc(S.f.q) + '">' +
-    '<select id="ffas" style="max-width:280px"><option value="">Semua fasiliti</option>' + fasL.map(function (x) { return '<option' + (S.f.fas === x ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('') + '</select>' +
+    '<div class="card"><div class="row" style="margin-bottom:14px">' +
+    '<input id="fq" placeholder="🔍  Cari nama, No. KP atau ID" style="max-width:280px" value="' + esc(S.f.q) + '">' +
+    '<select id="ffas" style="max-width:290px"><option value="">Semua fasiliti</option>' + fasL.map(function (x) { return '<option' + (S.f.fas === x ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('') + '</select>' +
     '<select id="fst" style="max-width:170px"><option value="">Semua status</option>' + stL.map(function (x) { return '<option' + (S.f.st === x ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('') + '</select>' +
     '<select id="fal" style="max-width:190px"><option value="">Semua penanda</option><option value="perhatian"' + (S.f.al === 'perhatian' ? ' selected' : '') + '>Perlu perhatian</option><option value="capai"' + (S.f.al === 'capai' ? ' selected' : '') + '>Capai ≥5%</option></select>' +
-    '<div class="grow"></div><button class="btn" id="bImp">⬆ Import dari sheet KKM</button><button class="btn" id="bExp">⬇ Eksport format KKM</button><button class="btn pri" id="bNew">+ Daftar pesakit</button></div>' +
-    '<div class="tbl-wrap"><table><thead><tr><th>Pesakit</th><th>Fasiliti</th><th>BMI asas</th><th class="num">Berat asas → terkini (kg)</th><th class="num">Perubahan</th><th>Lawatan terakhir</th><th>Log app</th><th>Penanda</th></tr></thead><tbody id="tb"></tbody></table></div>' +
-    '<p class="sub" id="cnt"></p></div>';
+    '<div class="grow"></div><span class="sub">Pesakit baharu didaftar melalui Google Form KKM dan muncul di sini secara automatik.</span></div>' +
+    '<div class="tbl-wrap"><table><thead><tr><th>Pesakit</th><th>Fasiliti</th><th>BMI asas</th><th class="num">Berat (kg)</th><th>Kemajuan</th><th>Lawatan terakhir</th><th>App</th><th>Penanda</th></tr></thead><tbody id="tb"></tbody></table></div>' +
+    '<p class="sub" id="cnt" style="margin-bottom:0"></p></div>';
   function draw() {
     var L = tapis(), tb = $('#tb');
     tb.innerHTML = L.length ? L.map(function (p) {
-      var pn = penanda(p), b0 = num(p.b_berat), bl = num(p.l_berat), lg = p.log_akhir ? new Date(p.log_akhir) : null;
-      return '<tr class="click" data-id="' + esc(p.id) + '"><td><b>' + esc(p.nama) + '</b><div class="sub">' + esc(p.id) + ' · ' + esc(p.umur) + ' th · ' + esc((p.jantina || '').charAt(0)) + '</div></td>' +
-        '<td class="sub">' + esc(p.fasiliti) + '</td><td>' + esc(p.b_bmi) + ' <span class="chip t">' + esc(p.kat) + '</span></td>' +
-        '<td class="num">' + fmt(b0) + ' → ' + (bl != null ? fmt(bl) : '–') + '</td>' +
-        '<td class="num ' + (pn.pct > 0 ? 'down' : pn.pct < 0 ? 'up' : '') + '">' + (pn.pct != null ? (pn.pct > 0 ? '▼ ' : '▲ ') + fmt(Math.abs(pn.pct)) + '%' : '–') + '</td>' +
-        '<td class="sub">' + esc(p.l_tarikh || '–') + '</td><td class="sub">' + (lg ? (hariLalu(lg) === 0 ? 'Hari ini' : hariLalu(lg) + ' hari lalu') : '–') + '</td>' +
+      var pn = penanda(p), b0 = num(p.b_berat), bl = num(p.l_berat), lg = p.log_akhir ? new Date(p.log_akhir) : null, w = pn.pct != null ? Math.max(0, Math.min(100, pn.pct * 10)) : 0;
+      return '<tr class="click" data-id="' + esc(p.id) + '"><td><div class="pcell">' + avatar(p.nama) + '<div><b>' + esc(p.nama) + '</b><div class="sub">' + esc(p.id) + ' · ' + esc(p.umur) + ' th · ' + esc((p.jantina || '').charAt(0)) + '</div></div></div></td>' +
+        '<td class="sub">' + esc(String(p.fasiliti).replace('KLINIK KESIHATAN', 'KK')) + '</td><td><b>' + esc(p.b_bmi) + '</b> <span class="chip t">' + esc(p.kat) + '</span></td>' +
+        '<td class="num">' + fmt(b0) + ' → <b>' + (bl != null ? fmt(bl) : '–') + '</b></td>' +
+        '<td><div class="row" style="gap:8px;flex-wrap:nowrap"><span class="num ' + (pn.pct > 0 ? 'down' : pn.pct < 0 ? 'up' : '') + '" style="min-width:56px;font-weight:700">' + (pn.pct != null ? (pn.pct > 0 ? '▼ ' : '▲ ') + fmt(Math.abs(pn.pct)) + '%' : '–') + '</span><span class="mini" title="Kemajuan ke 10%"><i style="width:' + w + '%"></i></span></div></td>' +
+        '<td class="sub">' + esc(p.l_tarikh || '–') + '</td><td class="sub">' + (lg ? (hariLalu(lg) === 0 ? '<span class="chip g">Hari ini</span>' : hariLalu(lg) + ' hari lalu') : '–') + '</td>' +
         '<td>' + pn.c.map(function (x) { return '<span class="chip ' + x[0] + '">' + esc(x[1]) + '</span>'; }).join('') + '</td></tr>';
-    }).join('') : '<tr><td colspan="8" class="empty">Tiada pesakit sepadan.</td></tr>';
-    $('#cnt').textContent = L.length + ' daripada ' + S.list.length + ' pesakit';
-    var akt = L.filter(function (p) { return p.status === 'AKTIF'; }), pcts = L.map(function (p) { return penanda(p).pct; }).filter(function (x) { return x != null; });
-    var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : null;
-    var perhatian = L.filter(function (p) { return penanda(p).c.some(function (x) { return x[0] !== 'g'; }); }).length;
-    $('#kpis').innerHTML = [['Pesakit aktif', akt.length], ['Purata penurunan berat', avg == null ? '–' : fmt(avg) + '%'],
-      ['Capai ≥5% penurunan', pcts.filter(function (x) { return x >= 5; }).length + ' / ' + pcts.length], ['Perlu perhatian', perhatian]]
-      .map(function (k) { return '<div class="card kpi"><div class="v">' + k[1] + '</div><div class="l">' + k[0] + '</div></div>'; }).join('');
+    }).join('') : '<tr><td colspan="8" class="empty">Tiada pesakit sepadan dengan carian.</td></tr>';
+    $('#cnt').textContent = 'Memaparkan ' + L.length + ' daripada ' + S.list.length + ' pesakit';
     $$('#tb tr.click').forEach(function (tr) { tr.onclick = function () { bukaPesakit(tr.dataset.id); }; });
   }
   $('#fq').oninput = function (e) { S.f.q = e.target.value; draw(); };
   $('#ffas').onchange = function (e) { S.f.fas = e.target.value; draw(); };
   $('#fst').onchange = function (e) { S.f.st = e.target.value; draw(); };
   $('#fal').onchange = function (e) { S.f.al = e.target.value; draw(); };
-  $('#bNew').onclick = function () { pesakitBaru(); };
-  $('#bImp').onclick = modalImport;
-  $('#bExp').onclick = function () { modalEksport(tapis().map(function (p) { return p.id; }), 'senarai ditapis (' + tapis().length + ' pesakit)'); };
   draw();
 }
-
+function viewRingkasan() {
+  S.cur = null; S.page = 'ringkasan';
+  var L = S.list, akt = L.filter(function (p) { return p.status === 'AKTIF'; });
+  tajuk('Ringkasan program', (S.user.skop || 'Peringkat negeri') + ' · dikemas kini ' + new Date().toLocaleString('ms-MY'), 'ringkasan');
+  var pcts = L.map(function (p) { return penanda(p).pct; }).filter(function (x) { return x != null; }), avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : null;
+  var c5 = pcts.filter(function (x) { return x >= 5; }).length, perh = L.filter(function (p) { return penanda(p).c.some(function (x) { return x[0] !== 'g'; }); });
+  var aktif7 = akt.filter(function (p) { return p.log_akhir && hariLalu(new Date(p.log_akhir)) < 7; }).length, belum = akt.filter(function (p) { return !p.log_akhir; }).length, senyap = akt.length - aktif7 - belum;
+  var KAT = ['OVERWEIGHT', 'OBES I', 'OBES II', 'OBES III'], KC = ['#8fb0e3', '#5b7fe0', '#2f4a9a', '#1b2a5e'], kc = KAT.map(function (k) { return L.filter(function (p) { return p.kat === k; }).length; }), km = Math.max.apply(null, kc.concat([1]));
+  var BAND = [['Naik', function (x) { return x < 0; }, '#c23a3a'], ['0–<5%', function (x) { return x >= 0 && x < 5; }, '#b8c6e4'], ['5–<10%', function (x) { return x >= 5 && x < 10; }, '#3fb07f'], ['≥10%', function (x) { return x >= 10; }, '#1a8f62']];
+  var bc = BAND.map(function (b) { return pcts.filter(b[1]).length; }), bm = Math.max.apply(null, bc.concat([1]));
+  var fas = {}; L.forEach(function (p) { var f = fas[p.fasiliti] = fas[p.fasiliti] || { n: 0, akt: 0, p: [] }; f.n++; if (p.status === 'AKTIF') f.akt++; var x = penanda(p).pct; if (x != null) f.p.push(x); });
+  var t = akt.length || 1, d1 = aktif7 / t * 360, d2 = d1 + senyap / t * 360;
+  $('#app').innerHTML =
+    '<div class="kpis">' + [['👥', '#eaf0fb', akt.length, 'Pesakit aktif', L.length + ' jumlah berdaftar'], ['📉', '#e3f6ee', avg == null ? '–' : fmt(avg) + '%', 'Purata penurunan berat', pcts.length + ' pesakit ada susulan'],
+      ['🎯', '#fff3df', c5 + ' / ' + pcts.length, 'Capai ≥5% penurunan', pcts.length ? Math.round(c5 / pcts.length * 100) + '% daripada pesakit' : ''], ['⚠️', '#fdeaea', perh.length, 'Perlu perhatian', 'lihat senarai di bawah']]
+      .map(function (k) { return '<div class="card kpi"><div class="ic" style="background:' + k[1] + '">' + k[0] + '</div><div><div class="v">' + k[2] + '</div><div class="l">' + k[3] + '</div><div class="sub" style="font-size:11.5px">' + k[4] + '</div></div></div>'; }).join('') + '</div>' +
+    '<div class="grid3">' +
+    '<div class="card"><h3>Kategori BMI semasa daftar</h3><p class="sub" style="margin:0 0 6px">Kriteria Asia (CPG 2023)</p>' + KAT.map(function (k, i) { return '<div class="hbar"><span>' + k + '</span><span class="tr"><i style="width:' + (kc[i] / km * 100) + '%;background:' + KC[i] + '"></i></span><b class="num">' + kc[i] + '</b></div>'; }).join('') + '</div>' +
+    '<div class="card"><h3>Perubahan berat badan</h3><p class="sub" style="margin:0">Berbanding berat asas</p><div class="cols">' + BAND.map(function (b, i) { return '<div><b>' + bc[i] + '</b><i style="height:' + Math.max(6, bc[i] / bm * 120) + 'px;background:' + b[2] + '"></i>' + b[0] + '</div>'; }).join('') + '</div></div>' +
+    '<div class="card"><h3>Penggunaan app pesakit</h3><p class="sub" style="margin:0 0 12px">Pesakit aktif sahaja</p><div class="row" style="gap:18px;flex-wrap:nowrap"><div class="donut" style="background:conic-gradient(#1a8f62 0 ' + d1 + 'deg,#e8a33d ' + d1 + 'deg ' + d2 + 'deg,#d5ddec ' + d2 + 'deg 360deg)"><span><b>' + Math.round(aktif7 / t * 100) + '%</b><small class="sub">aktif</small></span></div>' +
+    '<div class="leg"><div><i style="background:#1a8f62"></i>Log dalam 7 hari: <b>' + aktif7 + '</b></div><div><i style="background:#e8a33d"></i>Senyap ≥7 hari: <b>' + senyap + '</b></div><div><i style="background:#d5ddec"></i>Belum guna: <b>' + belum + '</b></div></div></div></div></div>' +
+    '<div class="grid2" style="margin-top:16px;grid-template-columns:1.3fr 1fr">' +
+    '<div class="card"><div class="row" style="margin-bottom:8px"><h3 class="grow">Perlu perhatian</h3><button class="btn sm" id="gPer">Lihat semua</button></div>' + (perh.length ? '<table><tbody>' + perh.slice(0, 8).map(function (p) { return '<tr class="click" data-id="' + esc(p.id) + '"><td><div class="pcell">' + avatar(p.nama) + '<div><b>' + esc(p.nama) + '</b><div class="sub">' + esc(p.fasiliti) + '</div></div></div></td><td style="text-align:right">' + penanda(p).c.filter(function (x) { return x[0] !== 'g'; }).map(function (x) { return '<span class="chip ' + x[0] + '">' + esc(x[1]) + '</span>'; }).join('') + '</td></tr>'; }).join('') + '</tbody></table>' : '<div class="empty">Tiada pesakit memerlukan perhatian. 👏</div>') + '</div>' +
+    '<div class="card"><h3>Mengikut fasiliti</h3><table style="margin-top:6px"><thead><tr><th>Fasiliti</th><th class="num">Aktif</th><th class="num">Purata turun</th></tr></thead><tbody>' + Object.keys(fas).sort().map(function (f) { var x = fas[f], a = x.p.length ? x.p.reduce(function (m, n) { return m + n; }, 0) / x.p.length : null; return '<tr><td>' + esc(f.replace('KLINIK KESIHATAN', 'KK')) + '</td><td class="num">' + x.akt + ' / ' + x.n + '</td><td class="num ' + (a > 0 ? 'down' : a < 0 ? 'up' : '') + '">' + (a == null ? '–' : fmt(a) + '%') + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
+  $$('tr.click').forEach(function (tr) { tr.onclick = function () { bukaPesakit(tr.dataset.id); }; });
+  $('#gPer').onclick = function () { S.f.al = 'perhatian'; viewSenarai(); };
+}
 /* ---------------- Kad pesakit ---------------- */
 function bukaPesakit(id, tab) {
   $('#app').innerHTML = '<div class="empty">Memuatkan kad rawatan…</div>';
@@ -2078,26 +2254,76 @@ function bukaPesakit(id, tab) {
     S.cur = r; S.tab = tab || S.tab || 'ringkasan'; viewKad();
   }).catch(function (e) { gagal(e); muatSenarai(); });
 }
-function pesakitBaru() {
-  var k = {}; KKM_SCHEMA.forEach(function (c) { k[c.k] = ''; });
-  k.NEGERI = 'KEDAH'; k.STATUS = 'AKTIF'; k.STATUS_RUJUKAN = 'SETUJU SERTAI MIMO';
-  if (S.user.fasiliti !== 'SEMUA') k.FASILITI = S.user.fasiliti;
-  S.cur = { baru: true, kkm: k, app: {}, lawatan: [], kecergasan: [], logs: [] }; S.tab = 'kkm'; viewKad();
-}
 var TABS = [['ringkasan', 'Ringkasan'], ['lawatan', 'Lawatan & BCA'], ['kecergasan', 'Ujian kecergasan'], ['log', 'Log pesakit'], ['kkm', 'Data KKM'], ['app', 'App & temujanji']];
+var TABS = [['ringkasan', 'Ringkasan'], ['lawatan', 'Lawatan & BCA'], ['penilaian', 'Penilaian awal'], ['kecergasan', 'Ujian kecergasan'], ['log', 'Log makan & emosi'], ['program', 'Program & buku kerja'], ['kkm', 'Data KKM'], ['app', 'App & temujanji']];
 function viewKad() {
-  var c = S.cur, k = c.kkm;
-  $('#app').innerHTML = '<div class="row" style="margin-bottom:10px"><button class="btn" id="bBack">← Senarai</button></div>' +
-    '<div class="card"><div class="ph"><div class="grow"><h2>' + (c.baru ? 'Daftar pesakit baru' : esc(k.NAMA)) + '</h2>' +
-    (c.baru ? '<div class="meta">Isi bahagian Data KKM, kemudian simpan. Kod app pesakit dijana automatik.</div>' :
+  var c = S.cur, k = c.kkm, pen = c.penilaian || {}, akj = (c.logs || []).filter(function (l) { return l.JENIS === 'AKUJANJI'; })[0];
+  tajuk(c.baru ? 'Daftar pesakit baru' : 'Kad rawatan', c.baru ? 'Isi Data KKM kemudian simpan' : esc(k.FASILITI), c.baru ? 'baru' : 'pesakit');
+  var item9 = pen.PHQ9_ITEM9 === 'YA';
+  $('#app').innerHTML = (c.baru ? '' : '<div class="row" style="margin-bottom:12px"><button class="btn" id="bBack">← Senarai pesakit</button></div>') +
+    (c.baru ? '<div class="info" style="margin-bottom:6px">Isi bahagian Data KKM di bawah, kemudian tekan <b>Daftar pesakit</b>. Kod akses app pesakit dijana automatik.</div>' :
+    '<div class="hero">' + avatar(k.NAMA).replace('class="av"', 'class="av" ') + '<div class="grow" style="position:relative;z-index:1"><h2>' + esc(k.NAMA) + '</h2>' +
       '<div class="meta">' + esc(k.MIMO_ID) + ' · No. KP ' + esc(k.NOKP) + ' · ' + esc(k.UMUR) + ' tahun · ' + esc(k.JANTINA) + ' · ' + esc(k.BANGSA) + '</div>' +
-      '<div class="meta">' + esc(k.FASILITI) + ' · Daftar ' + esc((k.TARIKH_DAFTAR || '').slice(0, 10)) + ' · Tel ' + esc(k.TELEFON) + '</div>') + '</div>' +
-    (c.baru ? '' : '<div><span class="chip t">' + esc(k.STATUS) + '</span> ' + ['SP_DM:DM', 'SP_HPT:HPT', 'SP_DLP:DLP', 'SP_CVD:CVD'].filter(function (x) { return k[x.split(':')[0]] === 'YA'; }).map(function (x) { return '<span class="chip">' + x.split(':')[1] + '</span>'; }).join('') +
-      (k.B_MENTAL_KEP === 'PERLU DIRUJUK' ? '<span class="chip a">Rujukan kesihatan mental</span>' : '') + '</div>') + '</div>' +
-    '<div class="tabs">' + TABS.filter(function (t) { return !c.baru || t[0] === 'kkm'; }).map(function (t) { return '<button data-t="' + t[0] + '" class="' + (S.tab === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join('') + '</div><div id="tabc"></div></div>';
-  $('#bBack').onclick = function () { muatSenarai(); };
+      '<div class="meta">' + esc(k.FASILITI) + ' · Daftar ' + esc((k.TARIKH_DAFTAR || '').slice(0, 10)) + ' · Tel ' + esc(k.TELEFON) + '</div>' +
+      '<div style="margin-top:8px"><span class="chip">' + esc(k.STATUS) + '</span>' + ['SP_DM:DM', 'SP_HPT:HPT', 'SP_DLP:DLP', 'SP_CVD:CVD'].filter(function (x) { return k[x.split(':')[0]] === 'YA'; }).map(function (x) { return '<span class="chip">' + x.split(':')[1] + '</span>'; }).join('') +
+      (akj || pen.AKUJANJI_KERTAS ? '<span class="chip g">Akujanji ✓' + (akj ? ' (app)' : ' (kertas)') + '</span>' : '<span class="chip a">Belum akujanji</span>') +
+      (k.B_MENTAL_KEP === 'PERLU DIRUJUK' ? '<span class="chip a">Rujukan kesihatan mental</span>' : '') + (item9 ? '<span class="chip r">PHQ-9 item 9 positif</span>' : '') + '</div></div>' +
+      '<div style="position:relative;z-index:1;text-align:right"><div class="meta">BMI asas</div><div style="font-size:28px;font-weight:800">' + esc(k.B_BMI || '–') + '</div><span class="chip">' + esc(k.B_KATBMI) + '</span></div></div>') +
+    '<div class="tabs">' + TABS.filter(function (t) { return !c.baru || t[0] === 'kkm'; }).map(function (t) { return '<button data-t="' + t[0] + '" class="' + (S.tab === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join('') + '</div><div id="tabc"></div>';
+  if ($('#bBack')) $('#bBack').onclick = function () { S.page = 'pesakit'; muatSenarai(); };
   $$('.tabs button').forEach(function (b) { b.onclick = function () { S.tab = b.dataset.t; viewKad(); }; });
-  ({ ringkasan: tabRingkasan, lawatan: tabLawatan, kecergasan: tabKec, log: tabLog, kkm: tabKkm, app: tabApp })[S.tab]();
+  ({ ringkasan: tabRingkasan, lawatan: tabLawatan, penilaian: tabPenilaian, kecergasan: tabKec, log: tabLog, program: tabProgram, kkm: tabKkm, app: tabApp })[S.tab]();
+}
+
+/* ---- Tab: Penilaian awal (staf sahaja) ---- */
+function tabPenilaian() {
+  var p = Object.assign({ MIMO_ID: S.cur.kkm.MIMO_ID }, S.cur.penilaian || {}), k = S.cur.kkm;
+  function inp(id, lbl, t, extra) { var v = p[id] || ''; return '<div><label for="pn_' + id + '">' + lbl + '</label>' + (t === 'yt' ? '<select id="pn_' + id + '" data-p="' + id + '"><option value=""></option><option' + (v === 'YA' ? ' selected' : '') + '>YA</option><option' + (v === 'TIDAK' ? ' selected' : '') + '>TIDAK</option></select>' : t === 'date' ? '<input type="date" id="pn_' + id + '" data-p="' + id + '" data-date="1" value="' + dmyToIso(v) + '">' : '<input type="number" step="any" id="pn_' + id + '" data-p="' + id + '" value="' + esc(v) + '" ' + (extra || '') + '>') + '</div>'; }
+  $('#tabc').innerHTML = '<div class="grid2"><div class="card"><h3>Antropometri & akujanji</h3><div class="fgrid" style="padding:10px 0 0">' +
+    inp('TARIKH', 'Tarikh penilaian', 'date') + '<div><label>Tinggi (cm)</label><input readonly value="' + esc(k.B_TINGGI) + '"></div>' + inp('LILIT_LEHER', 'Ukur lilit leher (cm)', 'num') + inp('AKUJANJI_KERTAS', 'Akujanji bertulis ditandatangani', 'date') + '</div>' +
+    '<p class="sub" style="margin-bottom:0">Akujanji digital dalam app: ' + ((S.cur.logs || []).filter(function (l) { return l.JENIS === 'AKUJANJI'; }).map(function (l) { var d = {}; try { d = JSON.parse(l.DATA_JSON); } catch (e) { } return '<b>' + esc(d.nama) + '</b>, ' + new Date(d.masa).toLocaleString('ms-MY'); })[0] || 'belum') + '</p></div>' +
+    '<div class="card"><h3>Saringan kesihatan mental</h3><p class="sub" style="margin:0">Skor kekal dalam kad rawatan dan tidak dihantar ke app pesakit.</p><div class="fgrid" style="padding:10px 0 0">' +
+    inp('WHOOLEY_Q1', 'Whooley 1: rasa murung / putus harapan (sebulan lepas)', 'yt') + inp('WHOOLEY_Q2', 'Whooley 2: kurang minat / keseronokan', 'yt') +
+    inp('GAD2', 'GAD-2 (0–6)', 'num', 'min="0" max="6"') + inp('PHQ9', 'PHQ-9 (0–27), jika perlu', 'num', 'min="0" max="27"') + inp('PHQ9_ITEM9', 'PHQ-9 item 9 (fikiran mencederakan diri) positif', 'yt') + inp('GAD7', 'GAD-7 (0–21), jika perlu', 'num', 'min="0" max="21"') +
+    '</div><div id="tafsir" style="margin-top:12px"></div></div></div>' +
+    '<div class="card" style="margin-top:16px"><label class="sub" for="pn_CATATAN" style="font-weight:600">Catatan</label><textarea id="pn_CATATAN" data-p="CATATAN" rows="2">' + esc(p.CATATAN) + '</textarea>' +
+    '<div class="row" style="margin-top:12px"><button class="btn pri" id="pnS">Simpan penilaian</button><span class="sub">Masukkan keputusan penilaian mental dalam Google Form KKM.</span><span class="sub">' + (p.KEMASKINI ? 'Kali terakhir: ' + esc(p.KEMASKINI) + ' oleh ' + esc(p.OLEH) : '') + '</span></div></div>';
+  function baca() { $$('[data-p]', $('#tabc')).forEach(function (i) { p[i.dataset.p] = i.dataset.date ? isoToDmy(i.value) : i.value.trim(); }); return p; }
+  function rujuk() { return p.PHQ9_ITEM9 === 'YA' || num(p.PHQ9) >= 10 || num(p.GAD7) >= 10; }
+  function tafsir() {
+    baca(); var w = tafsirWhooley(p.WHOOLEY_Q1, p.WHOOLEY_Q2), g2 = tafsirGAD2(p.GAD2), ph = tafsirPHQ9(p.PHQ9), g7 = tafsirGAD7(p.GAD7);
+    $('#tafsir').innerHTML = (p.PHQ9_ITEM9 === 'YA' ? '<div class="alert" style="margin-bottom:8px">⚠ PHQ-9 item 9 positif: lakukan penilaian risiko bunuh diri segera dan rujuk mengikut protokol.</div>' : '') +
+      [['Whooley', w], ['GAD-2', g2], ['PHQ-9', ph], ['GAD-7', g7]].filter(function (x) { return x[1]; }).map(function (x) { return '<span class="chip ' + (/Positif|Sederhana|Teruk/.test(x[1]) ? 'a' : 'g') + '">' + x[0] + ': ' + x[1] + '</span>'; }).join('') +
+      (w || g2 ? '<div class="sub" style="margin-top:6px">Cadangan status KKM: <b>' + (rujuk() ? 'PERLU DIRUJUK' : 'TIDAK PERLU DIRUJUK') + '</b></div>' : '');
+  }
+  $('#tabc').addEventListener('input', tafsir); $('#tabc').addEventListener('change', tafsir); tafsir();
+  $('#pnS').onclick = function () { baca(); call('savePen', { rec: p }).then(function () { toast('Penilaian disimpan'); bukaPesakit(p.MIMO_ID, 'penilaian'); }).catch(gagal); };
+}
+
+/* ---- Tab: Program & buku kerja (dari app) ---- */
+function tabProgram() {
+  var c = S.cur, mula = dmyToIso((c.app || {}).TARIKH_MULA ? isoToDmy(c.app.TARIKH_MULA) : c.kkm.TARIKH_DAFTAR) || iso2(new Date());
+  function iso2(d) { return dmyToIso(dateToDmy(d)); }
+  var hari = []; for (var i = 13; i >= 0; i--) hari.push(iso2(new Date(Date.now() - i * 864e5)));
+  var tb = {}, lt = {}, td = {}; logsJenis('TABIAT').forEach(function (l) { tb[l.kunci] = l.data; }); logsJenis('LATIHAN').forEach(function (l) { lt[l.kunci] = l.data; }); logsJenis('TIDUR').forEach(function (l) { td[l.kunci] = l.data; });
+  var wk = mingguProgram(mula, iso2(new Date())), F = PROGRAM_SENAMAN.filter(function (b) { return wk >= b.m[0] && wk <= b.m[1]; })[0] || PROGRAM_SENAMAN[5];
+  var hn = ['Ah', 'Is', 'Se', 'Ra', 'Kh', 'Ju', 'Sa'];
+  function cell(on, txt, bg) { return '<span class="c" style="background:' + (on ? bg : '#eef2f8') + ';color:' + (on ? '#fff' : '#9aa6c0') + '">' + (txt == null ? '' : txt) + '</span>'; }
+  var gridT = '<div style="overflow:auto"><table style="width:auto"><thead><tr><th>Tabiat</th>' + hari.map(function (h) { return '<th style="text-align:center;padding:6px 3px">' + hn[new Date(h + 'T00:00').getDay()] + '<br>' + (+h.slice(8)) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    TABIAT.map(function (t) { return '<tr><td style="font-size:12.5px;white-space:nowrap">' + t.n + '. ' + esc(t.t) + '</td>' + hari.map(function (h) { var w2 = mingguProgram(mula, h), k = w2 <= 12 ? h : mingguIso(new Date(h + 'T00:00')), d = tb[k], aktif = t.mula <= w2; return '<td style="padding:3px;text-align:center">' + (aktif ? cell(d && (d.ok || []).indexOf(t.n) >= 0, d && (d.ok || []).indexOf(t.n) >= 0 ? '✓' : '', '#1a8f62') : '<span class="sub">·</span>') + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+  var gridL = '<div style="overflow:auto"><table style="width:auto"><thead><tr><th></th>' + hari.map(function (h) { return '<th style="text-align:center;padding:6px 3px">' + hn[new Date(h + 'T00:00').getDay()] + '<br>' + (+h.slice(8)) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    '<tr><td>Kardio (min)</td>' + hari.map(function (h) { var d = lt[h]; return '<td style="padding:3px;text-align:center">' + cell(d && num(d.kardio), d && num(d.kardio) ? d.kardio : '', '#2f4a9a') + '</td>'; }).join('') + '</tr>' +
+    '<tr><td>Kekuatan (/9)</td>' + hari.map(function (h) { var d = lt[h], n = d ? (d.done || []).length : 0; return '<td style="padding:3px;text-align:center">' + cell(n, n || '', '#7a4cc2') + '</td>'; }).join('') + '</tr>' +
+    '<tr><td>Tidur (jam)</td>' + hari.map(function (h) { var d = td[h]; return '<td style="padding:3px;text-align:center">' + cell(d && num(d.jam), d && num(d.jam) ? Math.round(num(d.jam)) : '', num(d && d.jam) >= 7 ? '#1a8f62' : '#b86e00') + '</td>'; }).join('') + '</tr></tbody></table></div>';
+  var tl = logsJenis('TINGKAHLAKU')[0], hdef = logsJenis('HABIT').filter(function (l) { return l.kunci === 'DEF'; })[0], hw = logsJenis('HABIT').filter(function (l) { return l.kunci !== 'DEF'; })[0], pk = logsJenis('PERSEKITARAN')[0];
+  var H7 = ['Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu', 'Ahad'];
+  $('#tabc').innerHTML = '<div class="info" style="margin-bottom:14px">Data di tab ini diisi oleh pesakit melalui app (paparan sahaja). Program bermula ' + esc(dateToDmy(new Date(mula + 'T00:00'))) + ', kini <b>minggu ' + wk + '</b> (' + esc(F.fasa) + ').</div>' +
+    '<div class="card"><h3>Cabaran makan sihat (weekly challenge), 14 hari</h3><p class="sub" style="margin:0 0 10px">Tabiat diperkenalkan setiap 2 minggu. Bulan 4–6 direkod mengikut minggu. Titik bermaksud tabiat belum bermula.</p>' + gridT + '</div>' +
+    '<div class="card" style="margin-top:16px"><h3>Program senaman berfasa & tidur, 14 hari</h3><p class="sub" style="margin:0 0 10px">Preskripsi semasa: ' + esc(F.kardio.jenis) + ' ' + F.kardio.minit + ' min × ' + F.kardio.hari + ' hari; kekuatan ' + PRESKRIPSI_KEKUATAN + '.</p>' + gridL + '</div>' +
+    '<div class="grid3" style="margin-top:16px">' +
+    '<div class="card"><h3>Carta tingkah laku positif</h3>' + (tl ? '<p class="sub" style="margin:0 0 6px">' + esc(tl.kunci) + (tl.data.ganjaran ? ' · 🎁 ' + esc(tl.data.ganjaran) : '') + '</p>' + (tl.data.hari || []).map(function (h, i) { return h && h.a ? '<div style="font-size:13px;margin:4px 0">' + (h.ok ? '✅' : '⬜') + ' <b>' + H7[i] + ':</b> ' + esc(h.a) + '</div>' : ''; }).join('') : '<p class="sub">Belum diisi.</p>') + '</div>' +
+    '<div class="card"><h3>Habit tracker</h3>' + (hdef ? (hdef.data.names || []).map(function (n, i) { if (!n) return ''; var row = hw ? (hw.data.t || [])[i] || [] : []; return '<div style="font-size:13px;margin:6px 0"><b>' + esc(n) + '</b><div class="row" style="gap:3px;margin-top:3px">' + [0, 1, 2, 3, 4, 5, 6].map(function (j) { return cell(row[j] === 1, row[j] === 1 ? '✓' : row[j] === 0 ? '✕' : '', '#1a8f62'); }).join('') + '</div></div>'; }).join('') + (hw ? '<p class="sub">Minggu ' + esc(hw.kunci) + '</p>' : '') : '<p class="sub">Belum diisi.</p>') + '</div>' +
+    '<div class="card"><h3>Modifikasi persekitaran</h3>' + (pk ? [['rumah', '🏠 Rumah'], ['kerja', '🏢 Tempat kerja'], ['sosial', '👥 Sosial']].map(function (x) { return pk.data[x[0]] ? '<p style="font-size:13px;margin:6px 0"><b>' + x[1] + '</b><br>' + esc(pk.data[x[0]]).replace(/\n/g, '<br>') + '</p>' : ''; }).join('') : '<p class="sub">Belum diisi.</p>') + '</div></div>';
 }
 function logsJenis(j) { return S.cur.logs.filter(function (l) { return l.JENIS === j; }).map(function (l) { var d = {}; try { d = JSON.parse(l.DATA_JSON); } catch (e) { } return { kunci: l.KUNCI, data: d, masa: l.KEMASKINI }; }).sort(function (a, b) { return a.kunci < b.kunci ? 1 : -1; }); }
 
@@ -2147,12 +2373,12 @@ function tabRingkasan() {
       ['Lilit pinggang', wcl != null ? fmt(wcl) + ' cm <span class="sub">(' + (wcl - wc0 > 0 ? '+' : '') + fmt(wcl - wc0) + ')</span>' : (wc0 ? fmt(wc0) + ' cm' : '–')],
       ['Senaman 7 hari', minit + ' minit', '<span class="sub">sasaran ≥150 minit</span>']
     ].map(function (t) { return '<div class="tile"><div class="l">' + t[0] + '</div><div class="v">' + t[1] + '</div>' + (t[2] ? '<div class="sub">' + t[2] + '</div>' : '') + '</div>'; }).join('') + '</div>' +
-    '<div class="grid2" style="margin-top:14px;grid-template-columns:2fr 1fr"><div class="card"><b>Trend berat badan</b><div class="lg" style="margin:6px 0"><span><i style="background:#0f6e74"></i>Timbangan klinik</span><span><i style="background:#e08a00"></i>Timbang sendiri (app)</span></div>' +
-    carta([{ pts: klinik, c: '#0f6e74' }, { pts: rumah, c: '#e08a00', line: false, hollow: true, r: 3 }], { hl: hl }) + '</div>' +
+    '<div class="grid2" style="margin-top:14px;grid-template-columns:2fr 1fr"><div class="card"><b>Trend berat badan</b><div class="lg" style="margin:6px 0"><span><i style="background:#2f4a9a"></i>Timbangan klinik</span><span><i style="background:#e08a00"></i>Timbang sendiri (app)</span></div>' +
+    carta([{ pts: klinik, c: '#2f4a9a' }, { pts: rumah, c: '#e08a00', line: false, hollow: true, r: 3 }], { hl: hl }) + '</div>' +
     '<div class="card"><b>Penglibatan app</b><p>Log makanan: <b>' + h7 + '/7</b> hari minggu ini · <b>' + h30 + '/30</b> hari sebulan</p>' +
     '<p>Emosi kerap (14 hari): ' + (moodTop.length ? moodTop.map(function (m) { return '<span class="chip">' + esc(m) + ' ×' + moods[m] + '</span>'; }).join('') : '–') + '</p>' +
     (ref ? '<p class="sub" style="margin-bottom:4px">Refleksi terkini (' + esc(ref.kunci) + ')</p><div style="font-size:13px"><b>Bila makan walaupun tak lapar:</b> ' + esc(ref.data.q1) + '<br><b>Emosi pencetus:</b> ' + esc(ref.data.q2) + '<br><b>Tindakan alternatif:</b> ' + esc(ref.data.q3) + '</div>' : '<p class="sub">Tiada refleksi.</p>') +
-    '<div class="info" style="margin-top:10px">Log emosi bukan saringan klinikal. Saringan Whooley/GAD-2/PHQ-9 kekal dalam rekod klinik.</div></div></div>';
+    '<div class="info" style="margin-top:10px">Log emosi bukan saringan klinikal. Skor Whooley, GAD-2, PHQ-9 dan GAD-7 direkod dalam tab Penilaian awal.</div></div></div>';
 }
 
 /* ---- Tab: Lawatan ---- */
@@ -2250,47 +2476,28 @@ function tabLog() {
 
 /* ---- Tab: Data KKM ---- */
 function tabKkm() {
-  var k = S.cur.kkm, groups = [], gi = {};
-  KKM_SCHEMA.forEach(function (c, i) { if (!(c.g in gi)) { gi[c.g] = groups.length; groups.push({ g: c.g, f: [] }); } groups[gi[c.g]].f.push(c); });
-  var buka = { 'Fasiliti': 1, 'Pesakit': 1, 'Baseline': 1 };
-  $('#tabc').innerHTML = '<div class="row" style="margin-bottom:12px"><div class="grow sub">Medan mengikut susunan lajur sheet KKM MIMO. Medan berwarna dikira automatik (BMI, kategori, FIB-4, perbezaan).</div>' +
-    (S.cur.baru ? '' : '<button class="btn" id="f6">Isi 6 bulan dari lawatan</button><button class="btn" id="f12">Isi 12 bulan dari lawatan</button><button class="btn" id="bEx1">⬇ Eksport baris KKM</button>') +
-    '<button class="btn pri" id="kkmSave">' + (S.cur.baru ? 'Daftar pesakit' : 'Simpan') + '</button></div>' +
-    groups.map(function (G) {
-      return '<details class="sec"' + (buka[G.g] || (S.cur.baru && /Sejarah|Rujukan/.test(G.g)) ? ' open' : '') + '><summary>' + esc(G.g) + ' <span class="sub" style="font-weight:400;margin-left:auto;margin-right:8px">' + G.f.filter(function (c) { return k[c.k]; }).length + '/' + G.f.length + '</span></summary><div class="fgrid">' +
-        G.f.map(function (c) {
-          var v = k[c.k] || '', id = 'k_' + c.k, inp;
-          if (c.t === 'calc' || c.t === 'ro') inp = '<input readonly id="' + id + '" data-k="' + c.k + '" value="' + esc(v) + '">';
-          else if (c.t === 'date') inp = '<input type="date" id="' + id + '" data-k="' + c.k + '" data-date="1" value="' + dmyToIso(v) + '">';
-          else if (c.o) inp = '<input id="' + id + '" data-k="' + c.k + '" list="dl_' + c.k + '" value="' + esc(v) + '"><datalist id="dl_' + c.k + '">' + c.o.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('') + '</datalist>';
-          else inp = '<input ' + (c.t === 'num' ? 'type="number" step="any" ' : '') + 'id="' + id + '" data-k="' + c.k + '" value="' + esc(v) + '">';
-          return '<div class="' + (c.t === 'calc' ? 'calc' : '') + '"><label for="' + id + '">' + (KKM_IDX[c.k] + 1) + '. ' + esc(c.l) + '</label>' + inp + '</div>';
-        }).join('') + '</div></details>';
+  var k = S.cur.kkm, groups = [], gi = {}, kosong = !!S.tunjukKosong;
+  KKM_SCHEMA.forEach(function (c) { if (!(c.g in gi)) { gi[c.g] = groups.length; groups.push({ g: c.g, f: [] }); } groups[gi[c.g]].f.push(c); });
+  // Cadangan nilai susulan dari rekod lawatan (untuk diisi dalam Google Form KKM)
+  function cadang(b) {
+    var o = JSON.parse(JSON.stringify(k)), t = isiSusulan(o, S.cur.lawatan, b), P = b == 6 ? 'F6_' : 'F12_';
+    if (!t) return '<div class="sub">Tiada lawatan dalam ±60 hari dari tarikh ' + b + ' bulan.</div>';
+    return '<div class="sub" style="margin-bottom:6px">Dari lawatan <b>' + esc(t.MINGGU) + '</b> (' + esc(t.TARIKH) + ')</div><table><tbody>' +
+      [['BERAT', 'Berat (kg)'], ['BMI', 'BMI'], ['KATBMI', 'Kategori BMI'], ['WC', 'Lilit pinggang (cm)'], ['SIS', 'BP sistolik'], ['DIA', 'BP diastolik'], ['BCA_PLEMAK', '% lemak badan'], ['BCA_VISC', 'Lemak viseral'], ['BCA_JLEMAK', 'Jisim lemak'], ['BCA_SMM', 'Jisim otot rangka']]
+        .filter(function (x) { return o[P + x[0]]; }).map(function (x) { var v = o[P + x[0]], dlm = k[P + x[0]]; return '<tr><td>' + x[1] + '</td><td class="num"><b>' + esc(v) + '</b></td><td class="sub">' + (dlm ? (String(dlm) === String(v) ? '✓ sama dengan KKM' : 'KKM: ' + esc(dlm)) : '<span style="color:var(--amber)">belum dalam KKM</span>') + '</td><td><button class="btn sm" data-cp="' + esc(v) + '">Salin</button></td></tr>'; }).join('') + '</tbody></table>';
+  }
+  $('#tabc').innerHTML = '<div class="info" style="margin-bottom:14px">Data ini dibaca terus daripada <b>sheet KKM MIMO</b> (paparan sahaja). Untuk mengemas kini, gunakan <b>Google Form KKM</b>; perubahan akan muncul di sini selepas sheet KKM dikemas kini.</div>' +
+    '<div class="grid2" style="margin-bottom:16px"><div class="card"><h3>Nilai 6 bulan untuk Google Form KKM</h3>' + cadang(6) + '</div><div class="card"><h3>Nilai 12 bulan untuk Google Form KKM</h3>' + cadang(12) + '</div></div>' +
+    '<div class="row" style="margin-bottom:10px"><b class="grow">Rekod dalam sheet KKM (baris ' + esc(k._baris || '') + ')</b><label class="row sub" style="gap:6px"><input type="checkbox" id="tkK"' + (kosong ? ' checked' : '') + ' style="width:auto"> Tunjuk medan kosong</label></div>' +
+    groups.map(function (G, gi2) {
+      var f = G.f.filter(function (c) { return kosong || (k[c.k] && k[c.k] !== 'TIDAK BERKAITAN'); });
+      if (!f.length) return '';
+      return '<details class="sec"' + (gi2 < 5 ? ' open' : '') + '><summary>' + esc(G.g) + ' <span class="sub" style="font-weight:600;margin-left:auto;margin-right:8px">' + G.f.filter(function (c) { return k[c.k]; }).length + '/' + G.f.length + '</span></summary><div class="fgrid">' +
+        f.map(function (c) { return '<div><label>' + (KKM_IDX[c.k] + 1) + '. ' + esc(c.l) + '</label><input readonly value="' + esc(k[c.k]) + '"></div>'; }).join('') + '</div></details>';
     }).join('');
-  function baca() { var o = Object.assign({}, k); $$('[data-k]', $('#tabc')).forEach(function (i) { o[i.dataset.k] = i.dataset.date ? isoToDmy(i.value) : i.value.trim(); }); return o; }
-  function tulisCalc(o) { KKM_SCHEMA.forEach(function (c) { if (c.t === 'calc') { var el = $('#k_' + c.k); if (el) el.value = o[c.k] || ''; } }); }
-  $('#tabc').addEventListener('change', function () { var o = kiraKkm(baca()); tulisCalc(o); });
-  if (!S.cur.baru) {
-    $('#f6').onclick = function () { susulan(6); }; $('#f12').onclick = function () { susulan(12); };
-    $('#bEx1').onclick = function () { modalEksport([k.MIMO_ID], k.NAMA); };
-  }
-  function susulan(b) {
-    var o = baca(), t = isiSusulan(o, S.cur.lawatan, b);
-    if (!t) return toast('Tiada lawatan dalam ±60 hari dari tarikh ' + b + ' bulan');
-    KKM_SCHEMA.forEach(function (c) { var el = $('#k_' + c.k); if (el && c.k.indexOf(b == 6 ? 'F6_' : 'F12_') === 0) el.value = el.dataset.date ? dmyToIso(o[c.k]) : (o[c.k] || ''); });
-    tulisCalc(o); $$('details.sec').forEach(function (d) { if (d.textContent.indexOf(b + ' bulan') >= 0) d.open = true; });
-    toast('Diisi dari lawatan ' + t.MINGGU + ' (' + t.TARIKH + '). Semak & lengkapkan keputusan makmal, kemudian Simpan.');
-  }
-  $('#kkmSave').onclick = function () {
-    var o = kiraKkm(baca());
-    if (!o.NAMA || !o.NOKP) return toast('Nama dan No. KP diperlukan');
-    if (!o.FASILITI) return toast('Fasiliti diperlukan');
-    $('#kkmSave').disabled = true;
-    call('saveKkm', { kkm: o }).then(function (r) { toast(S.cur.baru ? 'Pesakit didaftarkan' : 'Data KKM disimpan'); bukaPesakit(r.id, S.cur.baru ? 'app' : 'kkm'); })
-      .catch(function (e) { $('#kkmSave').disabled = false; gagal(e); });
-  };
+  $('#tkK').onchange = function () { S.tunjukKosong = this.checked; tabKkm(); };
+  $$('[data-cp]').forEach(function (b) { b.onclick = function () { navigator.clipboard.writeText(b.dataset.cp).then(function () { toast('Disalin: ' + b.dataset.cp); }); }; });
 }
-
 /* ---- Tab: App & temujanji ---- */
 function pautanApp(t) { return (APP_URL || 'https://<alamat-app-pesakit>/') + '?k=' + t; }
 function svgQR(text) {
@@ -2310,6 +2517,7 @@ function tabApp() {
     '<div class="row"><button class="btn" id="cpL">Salin pautan</button><button class="btn" id="prC">🖨 Cetak kad akses</button><button class="btn dng" id="rsT">Jana kod baru</button></div>' +
     '<p class="sub">Pesakit imbas QR atau masukkan kod dalam app. Jana kod baru jika telefon hilang — kod lama terus tidak sah. App tidak memaparkan No. KP, telefon, sejarah perubatan atau keputusan makmal.</p>' +
     '<div class="fgrid" style="padding:6px 0 0"><div><label>Nama panggilan dalam app</label><input id="aNama" value="' + esc(a.NAMA_PANGGILAN) + '"></div><div><label>Sasaran berat (kg)</label><input id="aSas" type="number" step="any" value="' + esc(a.SASARAN_BERAT) + '"><div class="sub">5% = ' + fmt(num(k.B_BERAT) * 0.95) + ' · 10% = ' + fmt(num(k.B_BERAT) * 0.9) + '</div></div>' +
+    '<div><label>Tarikh mula program (minggu 1)</label><input type="date" id="aMula" value="' + esc(a.TARIKH_MULA || dmyToIso(k.TARIKH_DAFTAR)) + '"><div class="sub">Menentukan fasa senaman & cabaran dalam app</div></div>' +
     '<div><label>Akses app</label><select id="aAkt"><option' + (a.AKTIF !== 'TIDAK' ? ' selected' : '') + '>YA</option><option' + (a.AKTIF === 'TIDAK' ? ' selected' : '') + '>TIDAK</option></select></div></div></div>' +
     '<div class="card"><b>Tarikh temujanji (dipaparkan dalam app pesakit)</b><div class="tbl-wrap" style="margin-top:10px;max-height:none"><table><thead><tr><th>Disiplin</th>' + [1, 2, 3, 4, 5, 6].map(function (s) { return '<th>Sesi ' + s + '</th>'; }).join('') + '</tr></thead><tbody>' +
     DISIPLIN.map(function (d) { return '<tr><td>' + esc(d) + '</td>' + [0, 1, 2, 3, 4, 5].map(function (s) { return '<td><input type="date" data-tj="' + esc(d) + '" data-s="' + s + '" value="' + esc((tj[d] || [])[s] || '') + '" style="min-width:130px"></td>'; }).join('') + '</tr>'; }).join('') +
@@ -2323,7 +2531,7 @@ function tabApp() {
   };
   $('#aSave').onclick = function () {
     var t = {}; DISIPLIN.forEach(function (d) { t[d] = [0, 1, 2, 3, 4, 5].map(function (s) { return $('[data-tj="' + d + '"][data-s="' + s + '"]').value; }); });
-    call('saveApp', { app: { MIMO_ID: k.MIMO_ID, NAMA_PANGGILAN: $('#aNama').value.trim(), SASARAN_BERAT: $('#aSas').value, AKTIF: $('#aAkt').value, TEMUJANJI_JSON: JSON.stringify(t) } })
+    call('saveApp', { app: { MIMO_ID: k.MIMO_ID, NAMA_PANGGILAN: $('#aNama').value.trim(), SASARAN_BERAT: $('#aSas').value, AKTIF: $('#aAkt').value, TARIKH_MULA: $('#aMula').value, TEMUJANJI_JSON: JSON.stringify(t) } })
       .then(function () { toast('Disimpan'); bukaPesakit(k.MIMO_ID, 'app'); }).catch(gagal);
   };
 }
@@ -2331,70 +2539,39 @@ function tabApp() {
 /* ---------------- Import / Eksport KKM ---------------- */
 function ask(msg, ok) { var m = modal('<p style="margin-top:0">' + esc(msg) + '</p><div class="row"><button class="btn pri" id="askY">Ya, teruskan</button><button class="btn" id="askN">Batal</button></div>'); m.querySelector('.card').style.maxWidth = '420px'; $('#askN', m).onclick = function () { m.remove(); }; $('#askY', m).onclick = function () { m.remove(); ok(); }; }
 function modal(html) { var m = document.createElement('div'); m.className = 'modal'; m.innerHTML = '<div class="card">' + html + '</div>'; m.onclick = function (e) { if (e.target === m) m.remove(); }; document.body.appendChild(m); return m; }
-function parseTSV(t) {
-  var rows = [], row = [], cell = '', q = false;
-  for (var i = 0; i < t.length; i++) {
-    var ch = t[i];
-    if (q) { if (ch === '"') { if (t[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
-    else if (ch === '"' && cell === '') q = true;
-    else if (ch === '\t') { row.push(cell); cell = ''; }
-    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
-    else cell += ch;
-  }
-  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter(function (r) { return r.some(function (x) { return x.trim(); }); });
-}
-function modalImport() {
-  var m = modal('<h3>Import dari sheet KKM MIMO</h3><ol class="sub" style="margin-top:0"><li>Buka sheet KKM, pilih baris pesakit (dari lajur A hingga lajur terakhir, <b>tanpa baris tajuk</b>) dan salin (Ctrl+C).</li><li>Tampal di bawah (Ctrl+V). Padanan dibuat ikut No. KP: pesakit sedia ada dikemas kini, yang baru didaftarkan.</li></ol>' +
-    '<textarea id="imT" rows="9" placeholder="Tampal baris dari sheet KKM di sini…" style="font-family:ui-monospace,monospace;font-size:12px"></textarea><div id="imP" class="sub" style="margin:8px 0"></div>' +
-    '<div class="row"><button class="btn pri" id="imGo" disabled>Import</button><button class="btn" id="imX">Tutup</button></div>');
-  var rows = [];
-  $('#imT', m).oninput = function () {
-    rows = parseTSV(this.value).filter(function (r) { return !/^NEGERI$/i.test((r[0] || '').trim()); }).map(function (r) { r = r.slice(0, KKM_N); while (r.length < KKM_N) r.push(''); return r; });
-    var sah = rows.filter(function (r) { return r[KKM_IDX.NOKP] && r[KKM_IDX.NAMA]; });
-    var ada = {}; S.list.forEach(function (p) { ada[p.nokp] = 1; });
-    $('#imP', m).innerHTML = rows.length ? '<b>' + rows.length + '</b> baris dikesan · ' + sah.length + ' sah (ada nama & No. KP) · ' + sah.filter(function (r) { return ada[r[KKM_IDX.NOKP]]; }).length + ' sudah wujud (akan dikemas kini)<br>Contoh: ' + sah.slice(0, 3).map(function (r) { return esc(r[KKM_IDX.NAMA]) + ' — ' + esc(r[KKM_IDX.FASILITI]); }).join('; ') : '';
-    $('#imGo', m).disabled = !sah.length;
-  };
-  $('#imX', m).onclick = function () { m.remove(); };
-  $('#imGo', m).onclick = function () {
-    this.disabled = true;
-    call('importKkm', { rows: rows }).then(function (r) { m.remove(); toast('Import selesai: ' + r.baru + ' baru, ' + r.kemaskini + ' dikemas kini' + (r.langkau ? ', ' + r.langkau + ' dilangkau' : '')); muatSenarai(); }).catch(gagal);
-  };
-}
-function modalEksport(ids, label) {
-  var m = modal('<h3>Eksport format KKM — ' + esc(label) + '</h3><div class="row" style="margin-bottom:8px"><label class="row" style="gap:6px"><input type="checkbox" id="exP"> Kosongkan lajur PERBEZAAN (jika sheet KKM mengira sendiri)</label><label class="row" style="gap:6px"><input type="checkbox" id="exH"> Sertakan baris tajuk</label></div>' +
-    '<textarea id="exT" rows="9" readonly style="font-family:ui-monospace,monospace;font-size:12px">Memuatkan…</textarea>' +
-    '<p class="sub">Tampal di lajur A pada baris kosong pertama sheet KKM. Susunan 202 lajur sama seperti sheet KKM.</p><div class="row"><button class="btn pri" id="exC">Salin ke papan klip</button><button class="btn" id="exD">Muat turun CSV</button><button class="btn" id="exX">Tutup</button></div>');
-  var rows = [];
-  function bina() {
-    var out = rows.map(function (r) { r = r.slice(); if ($('#exP', m).checked) for (var i = KKM_IDX.P06_BERAT; i <= KKM_IDX.P012_HBA1C_ST; i++) r[i] = ''; return r; });
-    if ($('#exH', m).checked) out.unshift(KKM_SCHEMA.map(function (c) { return c.g + ' | ' + c.l; }));
-    return out;
-  }
-  function tsv() { return bina().map(function (r) { return r.map(function (c) { c = String(c); return /[\t\n"]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join('\t'); }).join('\n'); }
-  function upd() { $('#exT', m).value = tsv(); }
-  call('exportKkm', { ids: ids }).then(function (r) { rows = r.rows; upd(); }).catch(gagal);
-  $('#exP', m).onchange = upd; $('#exH', m).onchange = upd;
-  $('#exC', m).onclick = function () { navigator.clipboard.writeText(tsv()).then(function () { toast(rows.length + ' baris disalin'); }); };
-  $('#exD', m).onclick = function () {
-    var csv = '﻿' + bina().map(function (r) { return r.map(function (c) { c = String(c); return /[",\n]/.test(c) || /^0\d/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(','); }).join('\n');
-    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'MIMO_KKM_eksport_' + dmyToIso(dateToDmy(new Date())) + '.csv'; a.click();
-  };
-  $('#exX', m).onclick = function () { m.remove(); };
-}
-
 /* ---------------- Tetapan ---------------- */
 $('#btnSet').onclick = function () {
-  var adm = S.user && S.user.peranan === 'ADMIN';
-  var m = modal('<h3>Tetapan</h3><div class="grid2"><div><b>Tukar kata laluan</b><div class="fgrid" style="padding:8px 0"><div><label>Kata laluan lama</label><input type="password" id="pw0"></div><div><label>Kata laluan baru (≥8 aksara)</label><input type="password" id="pw1"></div></div><button class="btn pri" id="pwGo">Tukar</button></div>' +
-    (adm ? '<div><b>Tambah / set semula petugas</b><div class="fgrid" style="padding:8px 0"><div><label>Nama pengguna</label><input id="nu"></div><div><label>Nama penuh</label><input id="nn"></div><div><label>Fasiliti (atau SEMUA)</label><input id="nf" list="dlF"><datalist id="dlF"><option>SEMUA</option>' + Array.from(new Set(S.list.map(function (p) { return p.fasiliti; }))).map(function (f) { return '<option>' + esc(f) + '</option>'; }).join('') + '</datalist></div><div><label>Kata laluan sementara</label><input id="np"></div><div><label>Peranan</label><select id="nr"><option>PETUGAS</option><option>ADMIN</option></select></div></div><button class="btn pri" id="nuGo">Simpan petugas</button></div>' : '') +
-    '</div><div class="row" style="margin-top:14px"><button class="btn" id="stX">Tutup</button>' + (DEMO ? '<button class="btn dng" id="dmR">Set semula data demo</button>' : '') + '</div>');
+  var m = modal('<h3>Tetapan akaun</h3><div class="fgrid" style="padding:8px 0"><div><label>Kata laluan lama</label><input type="password" id="pw0"></div><div><label>Kata laluan baru (≥8 aksara)</label><input type="password" id="pw1"></div></div>' +
+    '<div class="row"><button class="btn pri" id="pwGo">Tukar kata laluan</button><button class="btn" id="stX">Tutup</button>' + (DEMO ? '<button class="btn dng" id="dmR">Set semula data demo</button>' : '') + '</div>');
+  m.querySelector('.card').style.maxWidth = '560px';
   $('#stX', m).onclick = function () { m.remove(); };
   $('#pwGo', m).onclick = function () { call('tukarPassword', { lama: $('#pw0', m).value, baru: $('#pw1', m).value }).then(function () { toast('Kata laluan ditukar'); m.remove(); }).catch(gagal); };
-  if (adm) $('#nuGo', m).onclick = function () { call('tambahPetugas', { username: $('#nu', m).value.trim(), nama: $('#nn', m).value.trim(), fasiliti: $('#nf', m).value.trim().toUpperCase(), password: $('#np', m).value, peranan: $('#nr', m).value }).then(function () { toast('Petugas disimpan'); m.remove(); }).catch(gagal); };
   if (DEMO) $('#dmR', m).onclick = function () { GAS_EMU.reset(); m.remove(); logout(true); toast('Data demo dijana semula'); };
 };
+function viewPengguna() {
+  S.cur = null; tajuk('Pengguna sistem', 'Tahap akses: negeri, daerah atau fasiliti', 'pengguna');
+  $('#app').innerHTML = '<div class="empty">Memuatkan…</div>';
+  var R = S.rujukan || { daerah: [], fasiliti: [] };
+  call('senaraiPetugas').then(function (r) {
+    var TC = { NEGERI: 't', DAERAH: 'a', FASILITI: 'g' };
+    $('#app').innerHTML = '<div class="grid2" style="grid-template-columns:1.4fr 1fr"><div class="card"><h3>Senarai pengguna</h3><table style="margin-top:8px"><thead><tr><th>Pengguna</th><th>Tahap</th><th>Skop akses</th><th>Peranan</th></tr></thead><tbody>' +
+      r.petugas.map(function (p) { return '<tr><td><div class="pcell">' + avatar(p.nama) + '<div><b>' + esc(p.nama) + '</b><div class="sub">' + esc(p.username) + (p.aktif === 'YA' ? '' : ' · tidak aktif') + '</div></div></div></td><td><span class="chip ' + TC[p.tahap] + '">' + esc(p.tahap) + '</span></td><td class="sub">' + esc(p.skop) + '</td><td class="sub">' + esc(p.peranan) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+      '<div class="card"><h3>Tambah atau set semula pengguna</h3><p class="sub" style="margin:0 0 10px">Nama pengguna yang sama akan dikemas kini (contohnya untuk set semula kata laluan).</p><div class="fgrid" style="padding:0;grid-template-columns:1fr 1fr">' +
+      '<div><label>Nama pengguna</label><input id="nu" placeholder="cth: kkbsp1"></div><div><label>Nama penuh</label><input id="nn"></div>' +
+      '<div><label>Tahap akses</label><select id="nt"><option value="FASILITI">Fasiliti (klinik)</option><option value="DAERAH">Daerah</option><option value="NEGERI">Negeri</option></select></div>' +
+      '<div id="wD"><label>Daerah</label><select id="nd">' + R.daerah.map(function (d) { return '<option>' + esc(d) + '</option>'; }).join('') + '</select></div>' +
+      '<div id="wF" style="grid-column:1/-1"><label>Fasiliti</label><select id="nf">' + R.fasiliti.map(function (g) { return '<optgroup label="' + esc(g.daerah) + '">' + g.fasiliti.map(function (f) { return '<option>' + esc(f) + '</option>'; }).join('') + '</optgroup>'; }).join('') + '</select></div>' +
+      '<div><label>Kata laluan sementara</label><input id="np" placeholder="≥8 aksara"></div><div><label>Peranan</label><select id="nr"><option value="PETUGAS">Petugas</option><option value="ADMIN">Admin (urus pengguna)</option></select></div></div>' +
+      '<div style="height:12px"></div><button class="btn pri" id="nuGo">Simpan pengguna</button><p class="sub">Senarai daerah dan fasiliti diambil daripada data KKM.</p></div></div>';
+    function tukar() { var t = $('#nt').value; $('#wD').hidden = t !== 'DAERAH'; $('#wF').hidden = t !== 'FASILITI'; }
+    $('#nt').onchange = tukar; tukar();
+    $('#nuGo').onclick = function () {
+      var t = $('#nt').value;
+      call('tambahPetugas', { username: $('#nu').value.trim().toLowerCase(), nama: $('#nn').value.trim(), tahap: t, daerah: t === 'DAERAH' ? $('#nd').value : '', fasiliti: t === 'FASILITI' ? $('#nf').value : '', password: $('#np').value, peranan: $('#nr').value })
+        .then(function () { toast('Pengguna disimpan'); viewPengguna(); }).catch(gagal);
+    };
+  }).catch(gagal);
+}
 
 /* ---------------- Mula ---------------- */
 (function () {
