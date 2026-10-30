@@ -500,6 +500,7 @@ var GAS_EMU = (function () {
   Sheet.prototype = {
     _d: function () { return load().sheets[this.name]; },
     getLastRow: function () { var d = this._d(); for (var i = d.length - 1; i >= 0; i--) if (d[i].some(function (x) { return x !== ''; })) return i + 1; return 0; },
+    getLastColumn: function () { return this._d().reduce(function (m, r) { return Math.max(m, r.length); }, 0); },
     getMaxRows: function () { return Math.max(this._d().length, 1000); },
     setFrozenRows: function () { return this; },
     getDataRange: function () {
@@ -518,6 +519,9 @@ var GAS_EMU = (function () {
         },
         getDisplayValues: function () { var d = self._d(), out = []; for (var i = 0; i < nr; i++) { var rw = []; for (var j = 0; j < nc; j++) { var r = d[row - 1 + i] || []; rw.push(r[col - 1 + j] == null ? '' : r[col - 1 + j]); } out.push(rw); } return out; },
         setFormula: function (f) { return R.setValues([[f]]); },
+        getValues: function () { return R.getDisplayValues(); },
+        clearContent: function () { var e = []; for (var i = 0; i < nr; i++) { var r = []; for (var j = 0; j < nc; j++) r.push(''); e.push(r); } return R.setValues(e); },
+        createTextFinder: function (t) { var F = { matchEntireCell: function () { return F; }, matchCase: function () { return F; }, findNext: function () { var d = self._d(); for (var i = 0; i < nr; i++) { var r = d[row - 1 + i] || []; for (var j = 0; j < nc; j++) if (String(r[col - 1 + j]) === String(t)) { var rr = row + i; return { getRow: function () { return rr; } }; } } return null; } }; return F; },
         setFontWeight: function () { return R; }, setBackground: function () { return R; }, setFontColor: function () { return R; }, setNumberFormat: function () { return R; }
       };
       return R;
@@ -596,7 +600,9 @@ var ADMIN_PASSWORD_AWAL = 'demo1234';
 var KKM_URL = 'https://docs.google.com/spreadsheets/d/1Zn7JHkTrfol2G0Sl4b0oazryk2Syhbp0Xj74HPD1PXU';
 var KKM_TAB_SUMBER = 'KEDAH';      // nama tab dalam sheet KKM
 var KKM_BARIS_DATA = 8;            // baris pertama data pesakit (baris 1-7 tajuk)
-var KKM_CACHE = null;
+var KKM_CACHE = null, HEAD_CACHE = {};
+var HARI_SIMPAN_LOG = 180;      // log lebih lama dipindah ke tab LOG_ARKIB setiap malam
+var LIST_CACHE_SAAT = 120;      // senarai pesakit disimpan sementara (cache) 2 minit
 var TZ = 'Asia/Kuala_Lumpur';
 var SESI_SAAT = 6 * 3600;
 
@@ -620,6 +626,8 @@ function setup() {
     objs_('APP_PESAKIT').forEach(function (a) { if (!a.NOKP && map[a.MIMO_ID]) upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: a.MIMO_ID, NOKP: map[a.MIMO_ID] }, 'MIMO_ID'); });
   }
   var s1 = ss.getSheetByName('Sheet1'); if (s1 && s1.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(s1);
+  if (typeof ScriptApp !== 'undefined' && !ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === 'arkibLog'; }))
+    ScriptApp.newTrigger('arkibLog').timeBased().everyDays(1).atHour(2).create();
   Logger.log('Setup selesai. Buka tab KKM dan klik "Allow access" jika diminta.');
 }
 function buatTab_(ss, nama, head) {
@@ -640,10 +648,15 @@ function tambahPetugas(username, nama, fasiliti, password, peranan, tahap, daera
 function sh_(n) { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(n); }
 function semua_(n) { var v = sh_(n).getDataRange().getDisplayValues(); return { head: v[0], rows: v.slice(1) }; }
 function objs_(n) { var d = semua_(n); return d.rows.filter(function (r) { return r[0] !== ''; }).map(function (r) { var o = {}; d.head.forEach(function (h, i) { o[h] = r[i]; }); return o; }); }
+function head_(n) { if (HEAD_CACHE[n]) return HEAD_CACHE[n]; var s = sh_(n); return HEAD_CACHE[n] = s.getRange(1, 1, 1, Math.max(s.getLastColumn(), 1)).getDisplayValues()[0]; }
+/* Carian pantas satu baris menggunakan TextFinder (tidak membaca seluruh tab) */
 function cariBaris_(n, kol, nilai) {
-  var d = semua_(n), i = d.head.indexOf(kol);
-  for (var r = 0; r < d.rows.length; r++) if (d.rows[r][i] === String(nilai)) return { baris: r + 2, data: d.rows[r], head: d.head };
-  return null;
+  var s = sh_(n), head = head_(n), i = head.indexOf(kol), last = s.getLastRow();
+  if (i < 0 || last < 2 || nilai == null || nilai === '') return null;
+  var c = s.getRange(2, i + 1, last - 1, 1).createTextFinder(String(nilai)).matchEntireCell(true).matchCase(true).findNext();
+  if (!c) return null;
+  var r = c.getRow();
+  return { baris: r, data: s.getRange(r, 1, 1, head.length).getDisplayValues()[0], head: head };
 }
 function upsert_(n, head, obj, kunci) {
   var f = cariBaris_(n, kunci, obj[kunci]), s = sh_(n);
@@ -653,6 +666,22 @@ function upsert_(n, head, obj, kunci) {
   return row;
 }
 function padam_(n, kol, nilai) { var f = cariBaris_(n, kol, nilai); if (f) sh_(n).deleteRow(f.baris); return !!f; }
+/* ---------- Cache (CacheService, dipecah kepada 90KB) ---------- */
+function cacheSet_(k, str, saat) {
+  var c = CacheService.getScriptCache(), n = Math.ceil(str.length / 90000) || 1;
+  if (n > 20) return;
+  for (var i = 0; i < n; i++) c.put(k + '#' + i, str.substr(i * 90000, 90000), saat);
+  c.put(k, String(n), saat);
+}
+function cacheGet_(k) {
+  var c = CacheService.getScriptCache(), n = +(c.get(k) || 0), out = '';
+  if (!n) return null;
+  for (var i = 0; i < n; i++) { var x = c.get(k + '#' + i); if (x == null) return null; out += x; }
+  return out;
+}
+function cacheDel_(k) { CacheService.getScriptCache().remove(k); }
+function ver_() { return CacheService.getScriptCache().get('ver') || '0'; }
+function bumpVer_() { CacheService.getScriptCache().put('ver', String(Date.now()), 21600); }
 function kini_() { return Utilities.formatDate(new Date(), TZ, 'dd/MM/yyyy HH:mm:ss'); }
 function hash_(salt, pw) { return Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + '|' + pw, Utilities.Charset.UTF_8)); }
 function rawak_(n) { var a = '23456789ABCDEFGHJKMNPQRSTUVWXYZ', s = ''; for (var i = 0; i < n; i++) s += a.charAt(Math.floor(Math.random() * a.length)); return s; }
@@ -684,14 +713,18 @@ function statusKkm_() {
 }
 /* Cipta rekod app (ID MIMO + kod akses) secara automatik untuk pesakit baharu dalam tab KKM */
 function pastikanSemuaApp_() {
-  var baru = kkmSemua_().filter(function (o) { return !o.MIMO_ID; });
+  if (!kkmSemua_().some(function (o) { return !o.MIMO_ID; })) return 0;
+  var lock = LockService.getScriptLock(); lock.waitLock(25000);
+  try {
+  KKM_CACHE = null; var baru = kkmSemua_().filter(function (o) { return !o.MIMO_ID; });
   if (!baru.length) return 0;
   var s = sh_('APP_PESAKIT'), rows = baru.map(function (o) {
     var a = { MIMO_ID: idBaru_(), TOKEN: rawak_(8), NAMA_PANGGILAN: '', SASARAN_BERAT: '', TEMUJANJI_JSON: '{}', AKTIF: 'YA', CIPTA: kini_(), TARIKH_MULA: dmyToIso(o.TARIKH_DAFTAR || ''), NOKP: o.NOKP };
     return TAB_APP.map(function (h) { return a[h]; });
   });
   s.getRange(s.getLastRow() + 1, 1, rows.length, TAB_APP.length).setNumberFormat('@').setValues(rows);
-  KKM_CACHE = null; return rows.length;
+  KKM_CACHE = null; bumpVer_(); return rows.length;
+  } finally { lock.releaseLock(); }
 }
 
 function tahap_(u) { return u.t || (u.f === 'SEMUA' ? 'NEGERI' : 'FASILITI'); }
@@ -708,12 +741,14 @@ function pastikanApp_(id) {
 }
 /* ---------- Penghala API ---------- */
 function doGet() { return json_({ ok: true, app: 'MIMO Kedah API', masa: kini_() }); }
+var TULIS = { p_save: 1, saveLawatan: 1, delLawatan: 1, saveKec: 1, saveApp: 1, savePen: 1, resetToken: 1, tukarPassword: 1, tambahPetugas: 1 };
 function doPost(e) {
   var req; try { req = JSON.parse(e.postData.contents); } catch (x) { return json_({ ok: false, ralat: 'Permintaan tidak sah' }); }
-  var lock = LockService.getScriptLock();
+  KKM_CACHE = null; HEAD_CACHE = {};
+  var a = req.action, lock = null;
   try {
-    lock.waitLock(20000); KKM_CACHE = null;
-    var a = req.action, h;
+    if (TULIS[a]) { lock = LockService.getScriptLock(); lock.waitLock(25000); }   // kunci hanya untuk operasi menulis
+    var h;
     if (a === 'login') h = login_(req);
     else if (a === 'p_get') h = pGet_(req);
     else if (a === 'p_save') h = pSave_(req);
@@ -723,10 +758,11 @@ function doPost(e) {
       if (!F) return json_({ ok: false, ralat: 'Tindakan tidak dikenali' });
       h = F(req, u);
     }
+    if (TULIS[a] && h && h.ok) bumpVer_();
     return json_(h);
   } catch (err) {
-    return json_({ ok: false, ralat: String(err && err.message || err) });
-  } finally { try { lock.releaseLock(); } catch (x) { } }
+    return json_({ ok: false, ralat: /lock|timeout|Lock/i.test(String(err)) ? 'Sistem sibuk, sila cuba sebentar lagi' : String(err && err.message || err) });
+  } finally { if (lock) try { lock.releaseLock(); } catch (x) { } }
 }
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
@@ -765,9 +801,12 @@ function senaraiPetugas_(q, u) {
 }
 /* ---------- API petugas ---------- */
 function list_(q, u) {
+  var kc = 'list|' + ver_() + '|' + tahap_(u) + '|' + (u.d || '') + '|' + (u.f || '');
+  if (!q.segar) { var c = cacheGet_(kc); if (c) return JSON.parse(c); }
   var st = statusKkm_(); if (!st.ok) return { ok: true, pesakit: [], kkm: st, rujukan: { daerah: [], fasiliti: [] } };
-  pastikanSemuaApp_();
-  var lw = objs_('LAWATAN'), lg = objs_('LOG_PESAKIT'), ap = objs_('APP_PESAKIT');
+  if (pastikanSemuaApp_()) kc = 'list|' + ver_() + '|' + tahap_(u) + '|' + (u.d || '') + '|' + (u.f || '');
+  var lw = objs_('LAWATAN'), ap = objs_('APP_PESAKIT'), ls = sh_('LOG_PESAKIT'), ln = ls.getLastRow();
+  var lg = ln < 2 ? [] : ls.getRange(2, 2, ln - 1, 3).getValues().map(function (r) { return { MIMO_ID: String(r[0]), JENIS: String(r[1]), KUNCI: String(r[2]) }; });
   var akhirLw = {}, akhirLg = {}, apMap = {};
   lw.forEach(function (r) { var k = r.MIMO_ID; if (!akhirLw[k] || tk_(r.TARIKH) >= tk_(akhirLw[k].TARIKH)) akhirLw[k] = r; });
   var akj = {}; lg.forEach(function (r) { if (r.JENIS === 'AKUJANJI') akj[r.MIMO_ID] = 1; });
@@ -781,7 +820,9 @@ function list_(q, u) {
       l_berat: l.BERAT || '', l_tarikh: l.TARIKH || '', log_akhir: akhirLg[o.MIMO_ID] || '', app: !!apMap[o.MIMO_ID], akujanji: !!akj[o.MIMO_ID] };
   });
   var dmap = {}; semua.forEach(function (o) { dmap[o.DAERAH] = dmap[o.DAERAH] || {}; dmap[o.DAERAH][o.FASILITI] = 1; });
-  return { ok: true, pesakit: out, kkm: { ok: true, pesakit: semua.length }, rujukan: { daerah: Object.keys(dmap).sort(), fasiliti: Object.keys(dmap).sort().map(function (d) { return { daerah: d, fasiliti: Object.keys(dmap[d]).sort() }; }) } };
+  var hasil = { ok: true, pesakit: out, kkm: { ok: true, pesakit: semua.length }, dikemaskini: kini_(), rujukan: { daerah: Object.keys(dmap).sort(), fasiliti: Object.keys(dmap).sort().map(function (d) { return { daerah: d, fasiliti: Object.keys(dmap[d]).sort() }; }) } };
+  cacheSet_(kc, JSON.stringify(hasil), LIST_CACHE_SAAT);
+  return hasil;
 }
 function tk_(s) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?: (\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)).getTime() : 0; }
 function kkmById_(id) { var a = kkmSemua_(); for (var i = 0; i < a.length; i++) if (a[i].MIMO_ID === id) return a[i]; return null; }
@@ -793,7 +834,7 @@ function get_(q, u) {
     lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === q.id; }),
     kecergasan: objs_('KECERGASAN').filter(function (r) { return r.MIMO_ID === q.id; }),
     penilaian: (objs_('PENILAIAN').filter(function (r) { return r.MIMO_ID === q.id; })[0] || {}),
-    logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === q.id; }) };
+    logs: logPesakit_(q.id) };
 }
 
 function saveLawatan_(q, u) {
@@ -841,7 +882,7 @@ function pGet_(q) {
   var o = kkmById_(a.MIMO_ID) || {}; delete o._app;
   return { ok: true, profil: profilPesakit_(o, a),
     lawatan: objs_('LAWATAN').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { delete r.OLEH; delete r.MIMO_ID; return r; }),
-    logs: objs_('LOG_PESAKIT').filter(function (r) { return r.MIMO_ID === a.MIMO_ID; }).map(function (r) { return { jenis: r.JENIS, kunci: r.KUNCI, data: r.DATA_JSON, kemaskini: r.KEMASKINI }; }) };
+    logs: logPesakit_(a.MIMO_ID).map(function (r) { return { jenis: r.JENIS, kunci: r.KUNCI, data: r.DATA_JSON, kemaskini: r.KEMASKINI }; }) };
 }
 /* Hanya maklumat minimum dihantar ke telefon pesakit — tiada No. KP, telefon, sejarah perubatan atau makmal */
 function profilPesakit_(o, a) {
@@ -850,18 +891,49 @@ function profilPesakit_(o, a) {
     temujanji: a.TEMUJANJI_JSON || '{}', mula: a.TARIKH_MULA || dmyToIso(o.TARIKH_DAFTAR || ''), status: o.STATUS || '' };
 }
 var JENIS_LOG = ['MAKAN', 'REFLEKSI', 'STRATEGI', 'SENAMAN', 'BERAT', 'AKUJANJI', 'LATIHAN', 'TABIAT', 'HABIT', 'TIDUR', 'TINGKAHLAKU', 'PERSEKITARAN'];
+/* Log seorang pesakit (disimpan sementara dalam cache sehingga pesakit menghantar log baharu) */
+function logPesakit_(id) {
+  var k = 'plog|' + id, c = cacheGet_(k); if (c) return JSON.parse(c);
+  var s = sh_('LOG_PESAKIT'), n = s.getLastRow(), out = [];
+  if (n >= 2) s.getRange(2, 1, n - 1, TAB_LOG.length).getValues().forEach(function (r) {
+    if (String(r[1]) === id) { var o = {}; TAB_LOG.forEach(function (h, i) { o[h] = String(r[i]); }); out.push(o); }
+  });
+  cacheSet_(k, JSON.stringify(out), 6 * 3600);
+  return out;
+}
 function pSave_(q) {
   var a = appDariToken_(q.token); if (!a) return { ok: false, ralat: 'Kod tidak sah' };
-  var n = 0;
+  var s = sh_('LOG_PESAKIT'), baru = [], idx = {}, n = 0, t = kini_();
   (q.logs || []).slice(0, 60).forEach(function (l) {
     if (JENIS_LOG.indexOf(l.jenis) < 0) return;
     var data = typeof l.data === 'string' ? l.data : JSON.stringify(l.data);
     if (data.length > 8000) return;
-    var kunci = String(l.kunci || '').slice(0, 20);
-    upsert_('LOG_PESAKIT', TAB_LOG, { LOG_ID: a.MIMO_ID + '|' + l.jenis + '|' + kunci, MIMO_ID: a.MIMO_ID, JENIS: l.jenis, KUNCI: kunci, DATA_JSON: data, KEMASKINI: kini_() }, 'LOG_ID');
+    var kunci = String(l.kunci || '').slice(0, 20), o = { LOG_ID: a.MIMO_ID + '|' + l.jenis + '|' + kunci, MIMO_ID: a.MIMO_ID, JENIS: l.jenis, KUNCI: kunci, DATA_JSON: data, KEMASKINI: t };
+    var row = TAB_LOG.map(function (h) { return o[h]; });
+    if (idx[o.LOG_ID] != null) { baru[idx[o.LOG_ID]] = row; n++; return; }   // kunci sama dalam satu hantaran
+    var f = cariBaris_('LOG_PESAKIT', 'LOG_ID', o.LOG_ID);
+    if (f) s.getRange(f.baris, 1, 1, TAB_LOG.length).setValues([row]); else { idx[o.LOG_ID] = baru.length; baru.push(row); }
     n++;
   });
+  if (baru.length) s.getRange(s.getLastRow() + 1, 1, baru.length, TAB_LOG.length).setNumberFormat('@').setValues(baru);
+  cacheDel_('plog|' + a.MIMO_ID);
   return { ok: true, disimpan: n };
+}
+/* Dijalankan setiap malam (trigger): pindahkan log harian/mingguan lama ke LOG_ARKIB */
+function arkibLog() {
+  var lock = LockService.getScriptLock(); lock.waitLock(60000);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), s = sh_('LOG_PESAKIT'), n = s.getLastRow(); if (n < 2) return 0;
+    var had = new Date(Date.now() - HARI_SIMPAN_LOG * 864e5), hD = dmyToIso(dateToDmy(had)), hW = mingguIso(had);
+    var v = s.getRange(2, 1, n - 1, TAB_LOG.length).getValues(), simpan = [], lama = [];
+    v.forEach(function (r) { var k = String(r[3]); ((/^\d{4}-\d{2}-\d{2}$/.test(k) && k < hD) || (/^\d{4}-W\d{2}$/.test(k) && k < hW) ? lama : simpan).push(r); });
+    if (!lama.length) return 0;
+    var ar = ss.getSheetByName('LOG_ARKIB') || buatTab_(ss, 'LOG_ARKIB', TAB_LOG);
+    ar.getRange(ar.getLastRow() + 1, 1, lama.length, TAB_LOG.length).setNumberFormat('@').setValues(lama);
+    s.getRange(2, 1, n - 1, TAB_LOG.length).clearContent();
+    if (simpan.length) s.getRange(2, 1, simpan.length, TAB_LOG.length).setValues(simpan);
+    bumpVer_(); return lama.length;
+  } finally { lock.releaseLock(); }
 }
 
 /* ===== Data contoh PALSU untuk mod demo ===== */
@@ -985,8 +1057,8 @@ function getLog(j, k) { return (ST.logs || {})[j + '|' + k]; }
 function setLog(j, k, data) { ST.logs = ST.logs || {}; ST.logs[j + '|' + k] = { data: data, dirty: 1, t: Date.now() }; save(); jadualSync(); }
 function dirtyN() { return Object.keys(ST.logs || {}).filter(function (k) { return ST.logs[k].dirty; }).length; }
 var syncT = null, syncing = false;
-function jadualSync() { clearTimeout(syncT); syncT = setTimeout(sync, 1500); paparSync(); }
-function sync() {
+function jadualSync() { clearTimeout(syncT); syncT = setTimeout(sync, 2500); paparSync(); }
+function sync(full) {
   if (syncing || !ST.token) return Promise.resolve();
   syncing = true; paparSync();
   var kot = Object.keys(ST.logs || {}).filter(function (k) { return ST.logs[k].dirty; }).slice(0, 60);
@@ -995,12 +1067,14 @@ function sync() {
   return p.then(function (r) {
     if (!r.ok) throw new Error(r.ralat);
     hantar.forEach(function (h) { var x = ST.logs[h.jenis + '|' + h.kunci]; if (x && x.t === h._t) x.dirty = 0; });
+    if (!full && ST.lastFull && Date.now() - ST.lastFull < 30 * 60e3) return null;   // muat turun penuh hanya bila perlu
     return api({ action: 'p_get', token: ST.token });
   }).then(function (r) {
+    if (!r) { ST.lastSync = Date.now(); save(); return; }
     if (!r.ok) { if (r.ralat === 'Kod tidak sah') { keluar(true); toast('Kod akses tidak lagi sah. Hubungi petugas MIMO.'); } throw new Error(r.ralat); }
     ST.profil = r.profil; ST.lawatan = r.lawatan;
     r.logs.forEach(function (l) { var k = l.jenis + '|' + l.kunci, x = ST.logs[k]; if (!x || !x.dirty) { var d; try { d = JSON.parse(l.data); } catch (e) { d = {}; } ST.logs[k] = { data: d, dirty: 0, t: 0 }; } });
-    ST.lastSync = Date.now(); save();
+    ST.lastSync = ST.lastFull = Date.now(); save();
   }).catch(function () { }).then(function () { syncing = false; if (dirtyN()) { clearTimeout(syncT); syncT = setTimeout(sync, 30000); } paparSync(); });
 }
 function paparSync() {
@@ -1027,7 +1101,7 @@ function viewLogin(kod) {
     $('#go').disabled = true; $('#go').textContent = 'Menyemak kod…';
     api({ action: 'p_get', token: k }).then(function (r) {
       if (!r.ok) throw new Error(r.ralat || 'Kod tidak sah');
-      ST = { token: k, logs: {} }; save(); return sync().then(function () { history.replaceState(null, '', location.pathname); mula(); });
+      ST = { token: k, logs: {} }; save(); return sync(true).then(function () { history.replaceState(null, '', location.pathname); mula(); });
     }).catch(function () { $('#go').disabled = false; $('#go').textContent = 'Masuk'; toast(navigator.onLine ? 'Kod tidak sah. Semak semula atau tanya petugas.' : 'Tiada internet. Cuba lagi.'); });
   }
   $('#go').onclick = go; $('#kod').onkeydown = function (e) { if (e.key === 'Enter') go(); };
@@ -1041,7 +1115,7 @@ function gelap(on) { document.documentElement.classList.toggle('dark', on); docu
 function platSvg(n) { return '<svg width="' + n + '" height="' + n + '" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fff" opacity=".12"/><circle cx="32" cy="32" r="24" fill="#fff"/><path d="M32 8a24 24 0 0 1 0 48z" fill="#22b07d"/><path d="M32 32V8A24 24 0 0 0 8 32z" fill="#ffb627"/><path d="M32 32H8a24 24 0 0 0 24 24z" fill="#ff5a5f"/><circle cx="32" cy="32" r="9" fill="#fff"/></svg>'; }
 
 /* ---------- Rangka ---------- */
-function topBar(t, p) { setTimeout(paparSync, 0); return '<div class="top"><div class="bar"><div><h1>' + t + '</h1>' + (p ? '<p>' + p + '</p>' : '') + '</div><button class="sync" id="syncB" onclick="sync()"></button></div></div>'; }
+function topBar(t, p) { setTimeout(paparSync, 0); return '<div class="top"><div class="bar"><div><h1>' + t + '</h1>' + (p ? '<p>' + p + '</p>' : '') + '</div><button class="sync" id="syncB" onclick="sync(true)"></button></div></div>'; }
 function go(v, arg) { V = v; var tab = { cabaran: 'makan', program: 'senaman', refleksi: 'lagi', sub: 'lagi' }[v] || v; $$('nav [data-v]').forEach(function (b) { b.classList.toggle('on', b.dataset.v === tab); }); window.scrollTo(0, 0); gelap(false); ({ utama: vUtama, makan: vMakan, senaman: vSenaman, refleksi: vRefleksi, lagi: vLagi, cabaran: vCabaran, program: vProgram, sub: vSub })[v](arg); paparSync(); }
 $$('nav [data-v]').forEach(function (b) { b.onclick = function () { go(b.dataset.v); }; });
 $('#plus').onclick = function () { sheet(); };
@@ -1113,7 +1187,7 @@ function vUtama() {
   var s = sasaranHari(), j = new Date().getHours(), td = iso(hariIni()), st = streak();
   var tjs = temujanji().filter(function (x) { return x.t >= td; }).slice(0, 2), lc = lencana();
   setTimeout(paparSync, 0);
-  $('#app').innerHTML = '<div class="hero"><div class="bar"><div><h1>' + (j < 12 ? 'Selamat pagi' : j < 19 ? 'Selamat petang' : 'Selamat malam') + ', ' + esc(P.nama || '') + '</h1><div class="date">' + tarikhPanjang(td) + (st ? ', 🔥 ' + st + ' hari berturut-turut' : '') + '</div></div><button class="sync" id="syncB" onclick="sync()"></button></div>' +
+  $('#app').innerHTML = '<div class="hero"><div class="bar"><div><h1>' + (j < 12 ? 'Selamat pagi' : j < 19 ? 'Selamat petang' : 'Selamat malam') + ', ' + esc(P.nama || '') + '</h1><div class="date">' + tarikhPanjang(td) + (st ? ', 🔥 ' + st + ' hari berturut-turut' : '') + '</div></div><button class="sync" id="syncB" onclick="sync(true)"></button></div>' +
     '<div class="plate">' + dial(s) + '<div class="legend">' + GOALS.map(function (g) { return '<button data-g="' + g[0] + '"><span class="sw" style="background:' + g[2] + '"></span><span class="t">' + g[1] + '<br><span style="color:#c9d6f5;font-size:12px">' + s.txt[g[0]] + '</span></span>' + (s[g[0]] >= 1 ? '<span class="v">✓</span>' : '') + '</button>'; }).join('') + '</div></div></div>' +
     '<main><section>' + (P.status === 'TAMAT PROGRAM' ? '<div class="celebrate">🎉<b>Tahniah kerana telah menamatkan program MIMO!</b>Obesiti bukan penghalang, anda mampu. Teruskan amalan gaya hidup sihat setiap hari.</div>' : '') +
     '<div class="scroll"><button class="qa" data-q="makan"><span style="background:#fff4dc">🍛</span>Catat makan</button><button class="qa" data-q="air"><span style="background:#e4f3fe">💧</span>+1 gelas air</button><button class="qa" data-q="gerak"><span style="background:#e3f7ef">🏃</span>Catat gerak</button><button class="qa" data-q="timbang"><span style="background:#e8eeff">⚖️</span>Timbang</button></div>' +
@@ -1321,7 +1395,7 @@ function vAkujanji(gate) {
 }
 
 /* ---------- Saya ---------- */
-function topBarBack(t, p) { setTimeout(paparSync, 0); return '<div class="top"><div class="bar"><div style="display:flex;align-items:flex-start"><button class="back" onclick="go(\'lagi\')" aria-label="Kembali">‹</button><div><h1>' + t + '</h1>' + (p ? '<p>' + p + '</p>' : '') + '</div></div><button class="sync" id="syncB" onclick="sync()"></button></div></div>'; }
+function topBarBack(t, p) { setTimeout(paparSync, 0); return '<div class="top"><div class="bar"><div style="display:flex;align-items:flex-start"><button class="back" onclick="go(\'lagi\')" aria-label="Kembali">‹</button><div><h1>' + t + '</h1>' + (p ? '<p>' + p + '</p>' : '') + '</div></div><button class="sync" id="syncB" onclick="sync(true)"></button></div></div>'; }
 function menu(id, ic, bg, t, sub, extra) { return '<button class="menu" data-sub="' + id + '"><span class="ic" style="background:' + bg + '">' + ic + '</span><span class="t">' + t + '<small>' + sub + '</small></span>' + (extra || '') + '</button>'; }
 function vLagi() {
   var tj = temujanji(), td = iso(hariIni()), dpn = tj.filter(function (x) { return x.t >= td; }), lps = tj.filter(function (x) { return x.t < td; }).reverse(), P = ST.profil || {};
@@ -1348,7 +1422,7 @@ function vLagi() {
     '<button class="btn full" id="sgk">Segerak sekarang</button><div style="height:8px"></div><button class="btn full" style="color:var(--chilli)" onclick="keluar()">Log keluar dan padam data dari telefon ini</button>' +
     '<p class="small soft" style="margin-bottom:0">Pasang di skrin utama: buka menu pelayar, kemudian pilih "Add to Home Screen" atau "Tambah ke Skrin Utama".</p></div></section></main>';
   $$('[data-sub]').forEach(function (b) { b.onclick = function () { var x = b.dataset.sub; if (x === 'refleksi') go('refleksi'); else go('sub', x); }; });
-  $('#sgk').onclick = function () { sync().then(function () { toast('Disegerak'); vLagi(); }); };
+  $('#sgk').onclick = function () { sync(true).then(function () { toast('Disegerak'); vLagi(); }); };
 }
 
 var FIFOT = [['diet', 'Diet dan pemakanan', 'cth: craving, porsi besar, skip makan'], ['gaya', 'Gaya hidup dan masa', 'cth: kerja syif, penat, tiada masa masak'], ['sosial', 'Faktor luaran dan sosial', 'cth: makan ramai-ramai, kenduri, kawan ajak'], ['emosi', 'Emosi dan lain-lain', 'cth: stres, bosan, "healing" dengan makanan']];
@@ -1441,7 +1515,7 @@ function vSub(id) {
   if (k && (!ST.token || ST.token !== k.toUpperCase())) return tutupSplash(function () { viewLogin(k); });
   if (!ST.token) return tutupSplash(function () { viewLogin(); });
   if (k) history.replaceState(null, '', location.pathname);
-  var siap = false; sync().then(function () { siap = true; });
+  var siap = false; sync(true).then(function () { siap = true; });
   tutupSplash(function () { mula(); if (!siap) { var c = setInterval(function () { if (siap) { clearInterval(c); if (V === 'utama' && !$('#nav').hidden) vUtama(); } }, 400); } });
 })();
 </script>
