@@ -85,7 +85,7 @@ main section{padding:0 16px}
 .ticket{display:flex;align-items:stretch;border-radius:var(--r-m);overflow:hidden;background:linear-gradient(120deg,#e8eeff,#e6f6ff);margin-top:10px}
 .ticket .d{background:var(--plum);color:#fff;width:70px;display:grid;place-content:center;text-align:center;padding:10px 0}
 .ticket .d b{font-size:24px;line-height:1}.ticket .d span{font-size:12px;color:#c9d6f5}
-.ticket .i{padding:11px 14px;flex:1}.ticket .i b{display:block;font-size:14px}.ticket .i span{font-size:12px;color:var(--soft)}
+.ticket .i{padding:11px 14px;flex:1;min-width:0}.tjb{font-style:normal;font-size:10.5px;font-weight:800;background:#ffd166;color:#4a3500;border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:2px}.tjcal{border:0;background:rgba(255,255,255,.7);width:46px;font-size:20px;cursor:pointer;flex:none}.ticket.past .tjcal{display:none}.ticket .i b{display:block;font-size:14px}.ticket .i span{font-size:12px;color:var(--soft)}
 .ticket.past{opacity:.5}
 
 /* date strip */
@@ -995,7 +995,7 @@ function seedDemo() {
     kiraKkm(o); ROWS.push(kkmToRow(o)); NOKPS.push(o.NOKP);
     CTX.push(function (idSebenar) { o.MIMO_ID = idSebenar; lw.forEach(function (rec) { rec.MIMO_ID = idSebenar; saveLawatan_({ rec: rec }, U); });
     if (minggu2 >= 1) saveKec_({ rec: { MIMO_ID: o.MIMO_ID, FASA: 'PRE', TARIKH: dateToDmy(daftar), BERAT: o.B_BERAT, OTOT: o.B_BCA_SMM, LEMAK_PCT: o.B_BCA_PLEMAK, GRIP_R: String(18 + Math.round(rnd() * 12)), GRIP_L: String(16 + Math.round(rnd() * 12)), STEP_PRE: '82', STEP_PEAK: '138', STEP_1: '118', STEP_2: '104', STEP_3: '96', PUSHUP: String(3 + Math.round(rnd() * 8)), SITUP_REPS: String(5 + Math.round(rnd() * 10)), PLANK: String(15 + Math.round(rnd() * 30)), SITREACH: String(10 + Math.round(rnd() * 15)) } }, U);
-    var tj = {}; DISIPLIN.forEach(function (ds, k) { tj[ds] = []; for (var s = 0; s < 6; s++) { var d = new Date(daftar.getTime() + (s * 28 + k * 2) * hari); tj[ds].push(k < 3 || s < 3 ? dmyToIso(dateToDmy(d)) : ''); } });
+    var tj = {}; DISIPLIN.forEach(function (ds, k) { tj[ds] = []; for (var s = 0; s < 6; s++) { var d = new Date(daftar.getTime() + (s * 28 + k * 2) * hari); tj[ds].push(k < 3 || s < 3 ? dmyToIso(dateToDmy(d)) + (k < 2 ? 'T' + ['09:00', '10:30', '14:30'][s % 3] : '') : ''); } });
     var ap = pastikanApp_(o.MIMO_ID);
     saveApp_({ app: { MIMO_ID: o.MIMO_ID, NAMA_PANGGILAN: nama.split(' ')[pr && /^NUR|^SITI|^NOR|^FARAH/.test(nama) ? 1 : 0].replace(/^(.)(.*)$/, function (a, b, c) { return b + c.toLowerCase(); }), SASARAN_BERAT: String(Math.round(berat0 * 0.93)), TEMUJANJI_JSON: JSON.stringify(tj) } }, U);
     if (i === 0) upsert_('APP_PESAKIT', TAB_APP, { MIMO_ID: o.MIMO_ID, TOKEN: 'KEDAH234' }, 'MIMO_ID');
@@ -1210,7 +1210,53 @@ function vUtama() {
   $$('.legend [data-g], .qa').forEach(function (b) { b.onclick = function () { tindakan(b.dataset.g || b.dataset.q); }; });
   $$('[data-go]').forEach(function (b) { b.onclick = function () { go(b.dataset.go); }; });
 }
-function tiket(x) { var d = new Date(x.t + 'T00:00'), lalu = x.t < iso(hariIni()); return '<div class="ticket' + (lalu ? ' past' : '') + '"><div class="d"><b>' + d.getDate() + '</b><span>' + BLN[d.getMonth()] + '</span></div><div class="i"><b>' + esc(x.ds) + '</b><span>Sesi ' + x.s + ', ' + HARI[d.getDay()] + '</span></div></div>'; }
+function tjMasa(t) { if (t.length <= 10) return ''; var h = +t.slice(11, 13), m = t.slice(14, 16); return (h % 12 || 12) + ':' + m + (h < 12 ? ' pagi' : h < 14 ? ' tengah hari' : h < 19 ? ' petang' : ' malam'); }
+function tiket(x) {
+  var d = new Date(x.t.slice(0, 10) + 'T00:00'), td = iso(hariIni()), lalu = x.t.slice(0, 10) < td, esok = iso(new Date(hariIni().getTime() + 864e5)), dt = x.t.slice(0, 10);
+  var lbl = dt === td ? '<em class="tjb">Hari ini</em>' : dt === esok ? '<em class="tjb">Esok</em>' : '';
+  return '<div class="ticket' + (lalu ? ' past' : '') + '"><div class="d"><b>' + d.getDate() + '</b><span>' + BLN[d.getMonth()] + '</span></div><div class="i"><b>' + esc(x.ds) + lbl + '</b><span>Sesi ' + x.s + ', ' + HARI[d.getDay()] + (tjMasa(x.t) ? ' · ' + tjMasa(x.t) : '') + '</span></div>' +
+    (lalu ? '' : '<button class="tjcal" onclick="kalSheet(\'' + x.t + '\',\'' + esc(x.ds).replace(/'/g, '') + '\',' + x.s + ')" aria-label="Tambah ke kalendar">📅</button>') + '</div>';
+}
+/* ---- Kalendar: Google Calendar (pautan) atau fail .ics dengan peringatan ---- */
+function kalAcara(t, ds, s) {
+  var P = ST.profil || {}, dt = t.slice(0, 10).replace(/-/g, ''), ada = t.length > 10;
+  var mula = ada ? dt + 'T' + t.slice(11, 13) + t.slice(14, 16) + '00' : dt;
+  var tamat; if (ada) { var h = +t.slice(11, 13) + 1, m = t.slice(14, 16); tamat = dt + 'T' + (h < 10 ? '0' : '') + Math.min(h, 23) + m + '00'; } else { var n = new Date(t.slice(0, 10) + 'T00:00'); n.setDate(n.getDate() + 1); tamat = iso(n).replace(/-/g, ''); }
+  return { tajuk: 'Temujanji MIMO: ' + ds + ' (Sesi ' + s + ')', mula: mula, tamat: tamat, ada: ada, lokasi: P.fasiliti || '', uid: 'mimo-' + dt + '-' + ds.replace(/[^A-Za-z]/g, '').slice(0, 12) + '-' + s + '@mymimo',
+    nota: 'Program MIMO, Jabatan Kesihatan Negeri Kedah. Bawa telefon dengan app MyMIMO. Jika tidak dapat hadir, sila maklumkan kepada klinik.' };
+}
+function kalGoogle(e) {
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.tajuk) + '&dates=' + e.mula + '/' + e.tamat + (e.ada ? '&ctz=Asia/Kuala_Lumpur' : '') +
+    '&details=' + encodeURIComponent(e.nota) + '&location=' + encodeURIComponent(e.lokasi);
+}
+function kalIcs(list) {
+  var utc = function (v) { return new Date(v.slice(0, 4) + '-' + v.slice(4, 6) + '-' + v.slice(6, 8) + 'T' + v.slice(9, 11) + ':' + v.slice(11, 13) + ':00+08:00').toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z'; };
+  var x = function (s) { return String(s).replace(/[\;,]/g, function (c) { return '\\' + c; }); }, now = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  var L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//JKN Kedah//MyMIMO//MS', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  list.forEach(function (e) {
+    L.push('BEGIN:VEVENT', 'UID:' + e.uid, 'DTSTAMP:' + now,
+      e.ada ? 'DTSTART:' + utc(e.mula) : 'DTSTART;VALUE=DATE:' + e.mula, e.ada ? 'DTEND:' + utc(e.tamat) : 'DTEND;VALUE=DATE:' + e.tamat,
+      'SUMMARY:' + x(e.tajuk), 'LOCATION:' + x(e.lokasi), 'DESCRIPTION:' + x(e.nota),
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + x('Esok: ' + e.tajuk), 'TRIGGER:' + (e.ada ? '-P1D' : '-PT15H'), 'END:VALARM');
+    if (e.ada) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + x(e.tajuk), 'TRIGGER:-PT2H', 'END:VALARM');
+    L.push('END:VEVENT');
+  });
+  L.push('END:VCALENDAR'); return L.join('\r\n');
+}
+function muatIcs(list, nama) {
+  var blob = new Blob([kalIcs(list)], { type: 'text/calendar;charset=utf-8' }), u = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = u; a.download = nama; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); URL.revokeObjectURL(u); }, 4000);
+}
+function kalSheet(t, ds, s) {
+  var e = kalAcara(t, ds, s), sem = temujanji().filter(function (x) { return x.t.slice(0, 10) >= iso(hariIni()); });
+  var bg = bukaSheet('<h2 style="font-size:20px">Tambah ke kalendar</h2><p class="small soft" style="margin:4px 0 14px">' + esc(e.tajuk) + '<br>' + esc(t.slice(0, 10).split('-').reverse().join('/')) + (tjMasa(t) ? ', ' + tjMasa(t) : '') + '</p>' +
+    '<button class="btn pri full" id="kgG">📅 Google Calendar (Android)</button><div style="height:10px"></div>' +
+    '<button class="btn full" id="kgI">🍎 Kalendar iPhone / lain (.ics)</button>' + (sem.length > 1 ? '<div style="height:10px"></div><button class="btn full" id="kgA">Semua ' + sem.length + ' temujanji akan datang (.ics)</button>' : '') +
+    '<p class="small soft" style="margin:14px 0 0">Fail .ics menetapkan peringatan sehari sebelum' + (e.ada ? ' dan 2 jam sebelum' : '') + '. Untuk Google Calendar, selepas acara dibuka tekan <b>Simpan</b>, dan tambah pemberitahuan "1 hari sebelum" jika belum ada.</p>');
+  $('#kgG', bg).onclick = function () { window.open(kalGoogle(e), '_blank'); bg.remove(); };
+  $('#kgI', bg).onclick = function () { muatIcs([e], 'temujanji-mimo-' + t.slice(0, 10) + '.ics'); bg.remove(); toast('Buka fail untuk tambah ke kalendar'); };
+  if ($('#kgA', bg)) $('#kgA', bg).onclick = function () { muatIcs(sem.map(function (x) { return kalAcara(x.t, x.ds, x.s); }), 'temujanji-mimo.ics'); bg.remove(); toast('Buka fail untuk tambah ke kalendar'); };
+}
 function tindakan(g) {
   var td = iso(hariIni());
   if (g === 'makan') { hariPilih = td; go('makan'); }
