@@ -33,7 +33,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .pill{font-size:11px;padding:3px 10px;border-radius:99px;background:#ffd166;color:#4a3500;font-weight:800}
 main{max-width:1320px;margin:0 auto;padding:22px 28px 60px}
 body.nolog .side,body.nolog .topbar{display:none}body.nolog .mainwrap{margin-left:0}body.nolog main{max-width:none;padding:0}
-@media(max-width:980px){.side{position:static;width:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:10px}.side .brand{padding:6px}.side .brand img{width:64px}.side .sys{display:none}.side nav{flex-direction:row;flex-wrap:wrap}.side nav .sep{display:none}.side .who{margin:0}.mainwrap{margin-left:0}main{padding:16px}}
+.burger{display:none;border:1px solid var(--line);background:#fff;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;flex:none}.burger svg{width:22px;height:22px}
+.scrim{display:none}
+@media(max-width:980px){.side{width:264px;transform:translateX(-102%);transition:transform .22s ease;overflow-y:auto;z-index:60;box-shadow:12px 0 40px -10px rgba(0,0,0,.4)}body.drawer .side{transform:none}body.drawer .scrim{display:block;position:fixed;inset:0;background:rgba(14,22,48,.45);z-index:50}.burger{display:inline-flex}.mainwrap{margin-left:0}.topbar{padding:10px 14px;gap:10px}.topbar h1{font-size:17px;line-height:1.25}.topbar .crumb{font-size:12px;line-height:1.3}main{padding:14px}}
+@media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr!important}.fgrid{grid-template-columns:1fr 1fr!important;padding:4px 12px 12px}.kpis{grid-template-columns:1fr 1fr;gap:10px}main table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}main th,main td{white-space:nowrap}.card{padding:14px}.pill{font-size:9.5px;padding:2px 7px}.hbar{grid-template-columns:96px 1fr 36px}.modal .card,.mdl .card{max-width:calc(100vw - 24px)!important}}
+@media(max-width:420px){.fgrid{grid-template-columns:1fr!important}}
 /* primitives */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
 .card h3,.h3{margin:0 0 4px;font-size:15px;font-weight:700}
@@ -64,6 +68,7 @@ tbody tr.click{cursor:pointer}tbody tr.click:hover{background:#f5f8ff}
 .hero::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06)}
 .hero .av{width:58px;height:58px;font-size:20px;border-radius:16px;background:rgba(255,255,255,.16)}
 .hero h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.01em}.hero .meta{color:#c9d6f5;font-size:13px}
+@media(max-width:760px){.hero{padding:16px;gap:12px}.hero h2{font-size:18px}.hero .av{width:46px;height:46px;font-size:16px}.hero .meta{font-size:12px}.kpi .ic{width:38px;height:38px;font-size:18px}.kpi .v{font-size:21px}.kpi{gap:10px}}
 .hero .chip{background:rgba(255,255,255,.14);color:#fff}.hero .chip.a{background:#ffd166;color:#4a3500}.hero .chip.g{background:#9ff0c9;color:#0b4d34}.hero .chip.r{background:#ffb4b4;color:#6b1111}
 .ph{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}.ph h2{margin:0;font-size:20px}.meta{color:var(--muted);font-size:13px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid2>*{min-width:0}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid3>*{min-width:0}
@@ -127,9 +132,10 @@ span.c{display:inline-grid;width:24px;height:24px;border-radius:7px;place-items:
   <div class="who"><b id="whoN"></b><span id="who"></span><button id="btnOut">Log keluar</button></div>
 </aside>
 <div class="mainwrap">
-  <div class="topbar"><div class="grow"><h1 id="pgT">Ringkasan</h1><div class="crumb" id="pgS"></div></div><span id="demoPill" class="pill" hidden>MOD DEMO · DATA PALSU</span></div>
+  <div class="topbar"><button class="burger" id="burger" aria-label="Buka menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="grow"><h1 id="pgT">Ringkasan</h1><div class="crumb" id="pgS"></div></div><span id="demoPill" class="pill" hidden>MOD DEMO · DATA PALSU</span></div>
   <main id="app"></main>
 </div>
+<div class="scrim" id="scrim"></div>
 <div id="printCard"></div>
 
 <script>
@@ -2234,9 +2240,12 @@ function chrome() {
 }
 function tajuk(t, sub, pg) { $('#pgT').textContent = t; $('#pgS').textContent = sub || ''; $$('.side [data-pg]').forEach(function (b) { b.classList.toggle('on', b.dataset.pg === pg); }); window.scrollTo(0, 0); }
 function logout(silent) { if (!silent && S.sess) call('logout').catch(function () { }); S.sess = S.user = null; try { sessionStorage.removeItem('mimo_s'); } catch (e) { } chrome(); viewLogin(); }
-$('#btnOut').onclick = function () { logout(); };
+$('#btnOut').onclick = function () { tutupMenu(); logout(); };
+function tutupMenu() { document.body.classList.remove('drawer'); }
+$('#burger').onclick = function () { document.body.classList.add('drawer'); };
+$('#scrim').onclick = tutupMenu;
 $$('.side [data-pg]').forEach(function (b) { b.onclick = function () {
-  var g = b.dataset.pg;
+  var g = b.dataset.pg; tutupMenu();
   if (g === 'ringkasan' || g === 'pesakit') { S.page = g; if (S.list.length && !S.cur) (g === 'pesakit' ? viewSenarai : viewRingkasan)(); else muatSenarai(); }
   else if (g === 'muat') { S.cur = null; muatSenarai(true).then(function () { toast('Data KKM dimuat semula'); }); }
   else if (g === 'pengguna') viewPengguna();
@@ -2632,7 +2641,7 @@ function tabApp() {
 function ask(msg, ok) { var m = modal('<p style="margin-top:0">' + esc(msg) + '</p><div class="row"><button class="btn pri" id="askY">Ya, teruskan</button><button class="btn" id="askN">Batal</button></div>'); m.querySelector('.card').style.maxWidth = '420px'; $('#askN', m).onclick = function () { m.remove(); }; $('#askY', m).onclick = function () { m.remove(); ok(); }; }
 function modal(html) { var m = document.createElement('div'); m.className = 'modal'; m.innerHTML = '<div class="card">' + html + '</div>'; m.onclick = function (e) { if (e.target === m) m.remove(); }; document.body.appendChild(m); return m; }
 /* ---------------- Tetapan ---------------- */
-$('#btnSet').onclick = function () {
+$('#btnSet').onclick = function () { tutupMenu();
   var m = modal('<h3>Tetapan akaun</h3><div class="fgrid" style="padding:8px 0"><div><label>Kata laluan lama</label><input type="password" id="pw0"></div><div><label>Kata laluan baru (≥8 aksara)</label><input type="password" id="pw1"></div></div>' +
     '<div class="row"><button class="btn pri" id="pwGo">Tukar kata laluan</button><button class="btn" id="stX">Tutup</button>' + (DEMO ? '<button class="btn dng" id="dmR">Set semula data demo</button>' : '') + '</div>');
   m.querySelector('.card').style.maxWidth = '560px'; mata(m);
